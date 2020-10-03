@@ -76,7 +76,7 @@ try:
     file_addon_type_ex = []
     tmp = ""
     history = []
-    info = ["ver=b1.1","rever=0"]
+    info = ["ver=b0.1","rever=0"]
     openning = []
     tema = 0
     saved = 0

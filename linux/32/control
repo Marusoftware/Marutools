@@ -1,0 +1,15 @@
+Package: maruediter
+Version: 0.0.2beta
+Architecture: i386
+Maintainer: Marusoftware <marusoftware@outlook.jp>
+Installed-Size: 272
+Depends: python3 (>= 3.5), python3-tk, python3-psutil, python3-numpy, python3-pillow, ffmpeg, python3-pydub, libportaudio2, python3-cffi, python3-psutil, python3-babel, python3-imageio
+Conflicts:
+Breaks:
+Replaces: maruediter (<< 0.0.1)
+Section: stable
+Priority: optional
+Homepage: http://marusoftware.ddns.net
+Description: The best GUI editer.
+ Easy to use and Lightweight editer.
+ You can edit easily.

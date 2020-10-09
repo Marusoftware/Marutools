@@ -678,9 +678,19 @@ try:
     try:
         root = Tk(className='Maruediter')
     except:
-        cui()
+        if endnd:
+            try:
+                root = tkinter.Tk(className='Maruediter')
+            except:
+                cui()
+        else:
+            cui()
     root.withdraw()
-    root.style = Style()
+    try:
+        root.style = Style()
+    except:
+        from tkinter.ttk import Style as oStyle
+        root.style = oStyle()
     print("[info] Theme:"+conf["theme"])
     if "theme" in conf:
         root.style.theme_use(conf["theme"])

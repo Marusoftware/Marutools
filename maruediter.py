@@ -17,16 +17,17 @@ if os.name == "nt":
         sys.path.append(os.path.join(cd,"share_os","win32"))
         os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
 elif os.name == "posix":
-    if is64bit:
-        sys.path.append(os.path.join(cd,"share_os","linux64"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
-    else:
-        if platform.machine() == "armv7":
-            sys.path.append(os.path.join(cd,"share_os","linux32"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")
-        else:
-            sys.path.append(os.path.join(cd,"share_os","linux32"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")
+    if platform.machine() == "armv7":
+            sys.path.append(os.path.join(cd,"share_os","raspi"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
+        else: 
+            if is64bit:
+                sys.path.append(os.path.join(cd,"share_os","linux64"))
+                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
+            else:
+                sys.path.append(os.path.join(cd,"share_os","linux32"))
+                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")
+        
 else:
     sys.path.append(os.path.join(cd,"share_os","macos"))
     os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")

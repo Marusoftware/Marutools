@@ -18,16 +18,15 @@ if os.name == "nt":
         os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
 elif os.name == "posix":
     if platform.machine() == "armv7":
-            sys.path.append(os.path.join(cd,"share_os","raspi"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
-        else: 
-            if is64bit:
-                sys.path.append(os.path.join(cd,"share_os","linux64"))
-                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
-            else:
-                sys.path.append(os.path.join(cd,"share_os","linux32"))
-                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")
-        
+        sys.path.append(os.path.join(cd,"share_os","raspi"))
+        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
+    else: 
+        if is64bit:
+            sys.path.append(os.path.join(cd,"share_os","linux64"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
+        else:
+            sys.path.append(os.path.join(cd,"share_os","linux32"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")        
 else:
     sys.path.append(os.path.join(cd,"share_os","macos"))
     os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
@@ -586,18 +585,24 @@ try:
             s.note.add(s.frames["Main"],text="Main")
             s.frames["Main"].note = ttk.Notebook(s.frames["Main"])
             s.frames["Main"].note.pack(fill="both",expand=True)
-            Main = {"Appearance" : "", "Addons" : ""}
+            Main = {"Appearance" : "", "File" : "", "Addons" : ""}
             for i in Main.keys():
                 Main[i] = (ttk.Frame(s.frames["Main"].note))
                 s.frames["Main"].note.add(Main[i], text=i)
             s_b1 = ttk.Button(s, text=txt["done"], command=done)
             s_b2 = ttk.Button(s, text=txt["cancel"], command=cancel)
             if "open_other" in conf:
-                s_v1 = tkinter.IntVar(Main["Appearance"], value=conf["open_other"])
+                s_v1 = tkinter.IntVar(Main["File"], value=conf["open_other"])
             else:
-                s_v1 = tkinter.IntVar(Main["Appearance"], value=0)
-            s_c1 = ttk.Checkbutton(Main["Appearance"], text=txt["st_open_from"], variable=s_v1)
-            s_c1.pack()
+                s_v1 = tkinter.IntVar(Main["File"], value=0)
+            if "en_dnd" in conf:
+                s_v2 = tkinter.IntVar(Main["File"], value=conf["en_dnd"])
+            else:
+                s_v2 = tkinter.IntVar(Main["File"], value=0)
+            s_c1 = ttk.Checkbutton(Main["File"], text=txt["st_open_from"], variable=s_v1)
+            s_c1.pack(side="top",fill="x")
+            s_c2 = ttk.Checkbutton(Main["File"], text=txt["st_dnd"], variable=s_v2)
+            s_c2.pack(side="top",fill="x")
             s_b1.pack(side="left",fill="both",expand=True)
             s_b2.pack(side="left",fill="both",expand=True)
             def remove():

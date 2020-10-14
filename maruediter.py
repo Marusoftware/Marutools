@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-print("[info] import core librry")
+print("[info] import core library")
 import sys
 import os
 import tkinter
@@ -30,7 +30,7 @@ elif os.name == "posix":
 else:
     sys.path.append(os.path.join(cd,"share_os","macos"))
     os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
-print("[info] import additional librry")
+print("[info] import additional library")
 import tkinter.filedialog
 try:
     from tkdnd import *

@@ -12,6 +12,8 @@ Do not copy these files.
 Now we serve these languages:
  ja-JP : Japanese
  en-US : English(US)
+ af : Afrikaans
+ zh* : Chinese(Hant and Hans)
 
 If you want another one, please contact
 here.

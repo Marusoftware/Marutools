@@ -7,7 +7,7 @@ import babel, googletrans, traceback, pickle, os, sys
 os.chdir(cd)
 translator=googletrans.Translator()
 b={}
-if len(sys.argv) > 0:
+if len(sys.argv) > 1:
     l1 = {}
     print("process"+str(sys.argv))
     for i in range(len(sys.argv)-1):
@@ -19,11 +19,14 @@ print(langs)
 src = pickle.load(open(src_lang[0]+".lang","rb"))
 for l in babel.localedata.locale_identifiers():
     if l in langs:
+        if os.path.exists(l+".lang"):
+            b = pickle.load(open(l+".lang","rb"))
         for t in src.keys():
-            try:
-                b[t]=translator.translate(src[t], src=src_lang[1], dest=langs[l]).text
-            except ValueError:
-                print([langs[l],t])
-                break
+            if not t in b:
+                try:
+                    b[t]=translator.translate(src[t], src=src_lang[1], dest=langs[l]).text
+                except ValueError:
+                    print([langs[l],t])
+                    break
         pickle.dump(b, open(l+".lang","wb"))
         b = {}

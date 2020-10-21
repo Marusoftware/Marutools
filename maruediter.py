@@ -475,6 +475,8 @@ try:
             self.n_b2.pack(side="right")
             self.n_b3.pack(side="right")
             self.widgets = []
+            self.directory = ""
+            self.filename = ""
             while 1:
                 self.wait_variable(self.nstep)
                 if self.nstep.get() == -1:
@@ -507,57 +509,51 @@ try:
                     for i in range(len(self.filetypes)):
                         self.widgets[0].insert("end", self.filetypes[i])
                 elif self.nstep.get() == 3:
-                    if type(self.directory) == str and os.path.exists(self.directory):
-                        if not len(self.widgets[0].curselection()) == 0:
-                            if not len(self.filename) == 0:
-                                self.filetype = self.widgets[0].get(self.widgets[0].curselection())
-                                if "." in self.filename:
-                                    if tkmsg.askyesno(txt["check"], txt["new_check"].replace("(_path_)",self.directory+"/"+self.filename+file_addon_type[int(self.widgets[0].curselection()[0])]).replace("(_type_)",str(self.filetype)), parent=win):
-                                        self.open_path = self.directory +"/" + self.filename
-                                        print("[file][new]:Path" + self.directory +"/" + self.filename + "\n[file][new]Type:" + str(self.filetype))
-                                        delaw(self)
-                                        self.n_l.configure(text=txt["wait"])
-                                        for i in range(len(file_addon_list)):
-                                            if file_addon_list[i] in self.open_path:
-                                                file_addons[i].file_new(self.open_path)
-                                                break
-                                        self.n_l.configure(text=txt["done_msg"])
-                                        self.n_b2.destroy()
-                                        self.n_b3.destroy()
-                                        self.n_b1.configure(text=txt["done"], command=lambda:(mfile.open_file(open_path=self.open_path),self.nstep.set(-1)))
-                                    else:
-                                        self.nstep.set(2)
-                                else:
-                                    if tkmsg.askyesno(txt["check"], txt["new_check"].replace("(_path_)",self.directory+"/"+self.filename+file_addon_type[int(self.widgets[0].curselection()[0])]).replace("(_type_)",str(self.filetype)), parent=win):
-                                        self.open_path = self.directory +"/" + self.filename + file_addon_type[int(self.widgets[0].curselection()[0])]
-                                        print("[file][new]Path:" + self.directory +"/" + self.filename + file_addon_type[int(self.widgets[0].curselection()[0])] + "\n[file][new]Type:" + str(self.filetype))
-                                        delaw(self)
-                                        self.n_l.configure(text=txt["wait"])
-                                        for i in range(len(file_addon_list)):
-                                            if file_addon_list[i] in self.open_path:
-                                                file_addons[i].file_new(self.open_path)
-                                                break
-                                        self.n_l.configure(text=txt["done_msg"])
-                                        self.n_b2.destroy()
-                                        self.n_b3.destroy()
-                                        self.n_b1.configure(text=txt["done"], command=lambda:(mfile.open_file(open_path=self.open_path),self.nstep.set(-1)))
-                                    else:
-                                        self.nstep.set(2)
-                            else:
-                                tkmsg.showerror(txt["error"],txt["new_e1"],parent=win)
-                                self.n_b2.configure(command=None)
-                                self.nstep.set(2)
-                                self.filename=tkinter.simpledialog.askstring(txt["file_name"],txt["new_e1_msg"],parent=win)
-                        else:
-                            self.n_b2.configure(command=None)
-                            self.nstep.set(2)
-                            tkmsg.showerror(txt["error"],txt["new_e2"],parent=win)
-                    else:
+                    if type(self.directory) != str or not os.path.exists(self.directory):
                         tkmsg.showerror(txt["error"],txt["new_e3"],parent=win)
                         self.n_b2.configure(command=None)
                         self.nstep.set(2)
                         self.directory = filedialog.askdirectory(parent=win)
-            #win.mainloop()
+                    elif len(self.widgets[0].curselection()) == 0:
+                        self.n_b2.configure(command=None)
+                        self.nstep.set(2)
+                        tkmsg.showerror(txt["error"],txt["new_e2"],parent=win)
+                    elif len(self.filename) == 0:
+                        tkmsg.showerror(txt["error"],txt["new_e1"],parent=win)
+                        self.n_b2.configure(command=None)
+                        self.nstep.set(2)
+                        self.filename=tkinter.simpledialog.askstring(txt["file_name"],txt["new_e1_msg"],parent=win)
+                        print(self.filename)
+                    else:
+                        if "." in self.filename:
+                            self.open_path = self.directory +"/" + self.filename
+                        else:
+                            self.open_path = self.directory +"/" + self.filename + file_addon_type[int(self.widgets[0].curselection()[0])]
+                        if os.path.exists(self.open_path):
+                            if not tkmsg.askyesno(txt["check"], txt["new_check2"], parent=win):
+                                self.n_b2.configure(command=None)
+                                self.nstep.set(2)
+                            else:
+                                self.nstep.set(4)
+                        else:
+                            self.nstep.set(4)
+                        if self.nstep.get() == 4:
+                            self.filetype = self.widgets[0].get(self.widgets[0].curselection())
+                            if tkmsg.askyesno(txt["check"], txt["new_check"].replace("(_path_)",self.open_path).replace("(_type_)",str(self.filetype)), parent=win):
+                                print("[file][new]:Path" + self.directory +"/" + self.filename + "\n[file][new]Type:" + str(self.filetype))
+                                delaw(self)
+                                self.n_l.configure(text=txt["wait"])
+                                for i in range(len(file_addon_list)):
+                                    if file_addon_list[i] in self.open_path:
+                                        file_addons[i].file_new(self.open_path)
+                                        break
+                                self.n_l.configure(text=txt["done_msg"])
+                                self.n_b2.destroy()
+                                self.n_b3.destroy()
+                                self.n_b1.configure(text=txt["done"], command=lambda:(mfile.open_file(open_path=self.open_path),self.nstep.set(-1)))
+                            else:
+                                self.nstep.set(2)                               
+
         # setting
         def setting():
             def done():
@@ -706,8 +702,8 @@ try:
         root.iconphoto(True, tkinter.PhotoImage(file='./image/maruediter.png'))
     else:
         print("[info] Icon file not found.")
-    
-    root.report_callback_exception=tkerror
+    if not "--debug" in sys.argv:
+        root.report_callback_exception=tkerror
     root.protocol("WM_DELETE_WINDOW", mfile.exit)
     root.menu = tkinter.Menu(root)
     root.menu.m_f = tkinter.Menu(root.menu, tearoff=0)

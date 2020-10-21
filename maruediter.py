@@ -670,7 +670,7 @@ try:
     
     ##if not os.path.exists("./addonlist.txt"):
     ##try:
-    ##    urllib.request.urlretrieve("http://raspi-maru2004.ddns.net/downloads/data_pool/maruediter_addon/addonlist.txt","./addonlist.txt")
+    ##    urllib.request.urlretrieve("http://marusoftware.ddns.net/downloads/data_pool/maruediter_addon/addonlist.txt","./addonlist.txt")
     ##except:
     ##    pass
 

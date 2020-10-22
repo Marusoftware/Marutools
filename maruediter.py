@@ -46,6 +46,7 @@ from custom_note import CustomNotebook
 from importlib import import_module
 import tkinter.messagebox as tkmsg
 import filedialog as filedialog
+from scrolledtext import ScrolledText
 #from tkfontchooser import askfont
 import tkinter.simpledialog
 import tkinter.ttk as ttk
@@ -424,7 +425,7 @@ try:
                     except:
                         pass
                     openning.pop(select)
-                select = root.note.index("current")
+                select = root.note.indScrolledTextex("current")
                 e = tkmsg.askyesnocancel(txt["check"], txt["save_check"])
                 if e == True:
                     mfile.save()
@@ -638,6 +639,12 @@ try:
             h_l1.pack(side="top")
             h_l2 = ttk.Label(h._h, text="version:" + info[0].lstrip("ver=") + "  reversion:" + info[1].lstrip("rever=") + "  2019-2020 Marusoftware")
             h_l2.pack(side="bottom")
+            h._h2 = ttk.Frame(h)
+            h.note.add(h._h2,text=txt["licence"])
+            h_t1 = ScrolledText(h._h2)
+            h_t1.pack(fill="both",expand=True)
+            h_t1.insert("end",open("./LICENCE","r").read())
+            h_t1.configure(state="disabled")
         #show help
         def help():
             pass

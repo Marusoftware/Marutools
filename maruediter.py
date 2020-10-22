@@ -168,10 +168,7 @@ try:
     
     if "lang" in conf:
         print("[info] Language:"+conf["lang"])
-        req = ["maruediter","welcome","exit","close_all","close_tab","save","save_as","open_from","open","new","file","open_new","full_screen","version","help",
-               "window","setting","addon","file_addon","delete","maruediter_file","all","error","error_cant_open","select_file_type","next","check","save_check",
-               "were_sorry","new_main","back","cancel","dir_name","file_name","choose_dir","file_name","new_sub1","new_sub2","new_check","wait","done","new_e1",
-               "new_e2","new_e3","done_msg","new_e1_msg"]
+        req = ['welcome', 'maruediter', 'exit', 'close_all', 'close_tab', 'save', 'save_as', 'save_from', 'open_from', 'open', 'new', 'file', 'open_new', 'full_screen', 'help', 'window', 'setting', 'addon', 'file_addon', 'delete', 'maruediter_file', 'all', 'error', 'error_cant_open', 'select_file_type', 'next', 'check', 'save_check', 'were_sorry', 'new_main', 'back', 'cancel', 'dir_name', 'choose_dir', 'file_name', 'new_sub1', 'new_sub2', 'new_check', 'wait', 'done', 'new_e1', 'new_e2', 'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'st_open_from', 'st_dnd', 'new_check2', 'about']
         if os.path.exists("./language/"+conf["lang"]+".lang"):
             txt = pickle.load(open("./language/"+conf["lang"]+".lang","rb"))
             #print(txt)
@@ -631,10 +628,11 @@ try:
         def var():
             print("[info] show version")
             h = tkinter.Toplevel(root)
-            h.title(txt["version"])
-            h._h = ttk.Label(h)
-            h._h.pack(fill="both",expand=True)
-            #h.img = tkinter.PhotoImage(file='./image/maruediter.gif', master=h)
+            h.title(txt["about"])
+            h.note = ttk.Notebook(h)
+            h.note.pack(fill="both",expand=True)
+            h._h = ttk.Frame(h)
+            h.note.add(h._h,text=txt["version"])
             h.img = tkinter.PhotoImage(file='./image/init.png', master=h._h)
             h_l1 = ttk.Label(h._h, image=h.img)
             h_l1.pack(side="top")
@@ -721,7 +719,7 @@ try:
     root.menu.m_d.add_command(label=txt["open_new"]+" (N)", command=window.newwin,under=len(txt["open_new"])+2)
     root.menu.m_d.add_checkbutton(label=txt["full_screen"]+" (F)", variable=fl, command=window.fullscreen,under=len(txt["full_screen"])+2)
     root.menu.m_h = tkinter.Menu(root.menu, tearoff=0)
-    root.menu.m_h.add_command(label=txt["version"]+" (V)", command=hlp.var,under=len(txt["version"])+2)
+    root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
     root.menu.m_h.add_command(label=txt["help"]+" (H)", command=hlp.help,under=len(txt["help"])+2)
     root.menu.m_h.add_command(label=txt["chk_upd"]+" (C)", command=hlp.help,under=len(txt["chk_upd"])+2)
     root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f,under=len(txt["file"])+2)

@@ -10,32 +10,40 @@ cp -r ../image/ ./maruediter/usr/share/maruediter/image
 cp -r ../share/ ./maruediter/usr/share/maruediter/share
 cp -r ../language/ ./maruediter/usr/share/maruediter/language
 cp -r ../share_os/linux64/ ./maruediter/usr/share/maruediter/share_os/linux64
+cp -r ../share_os/linux64/ ./maruediter/usr/share/maruediter/share_os/linux32
+cp -r ../share_os/linux64/ ./maruediter/usr/share/maruediter/share_os/raspi
 sudo chmod -R 777 ./maruediter/usr/
 rm ./maruediter/DEBIAN/control
-cp ./64/control ./maruediter/DEBIAN/control
-pyarmor obfuscate -O ./maruediter/usr/share/maruediter --exact --platform linux.x86_64 ../maruediter.py
-fakeroot dpkg-deb --build maruediter ./64
-#fakeroot dpkg-deb --build maruediter ./64
-cd 64
+cp ./all/control ./maruediter/DEBIAN/control
+#pyarmor obfuscate -O ./maruediter/usr/share/maruediter --exact --platform linux.x86_64 ../maruediter.py
+cp ../maruediter.py ./maruediter/usr/share/maruediter/
+fakeroot dpkg-deb --build maruediter ./all
+#fakeroot dpkg-deb --build maruediter ./all
+cd all
 fakeroot alien -r ./maruediter*.deb
 fakeroot alien -t ./maruediter*.deb
-cd ..
-rm ./maruediter/usr/share/maruediter/pytransform/_pytransform.so
-rm ./maruediter/DEBIAN/control
-rm -r ./maruediter/usr/share/maruediter/share_os/linux64
-cp ./32/control ./maruediter/DEBIAN/control
-cp -r ../share_os/linux32/ ./maruediter/usr/share/maruediter/share_os/linux32
-pyarmor obfuscate -O ./maruediter/usr/share/maruediter --exact --platform linux.x86 ../maruediter.py
-fakeroot dpkg-deb --build maruediter ./32/
-cd 32
-fakeroot alien -r ./maruediter*.deb
-fakeroot alien -t ./maruediter*.deb
-cd ..
-rm ./maruediter/DEBIAN/control
-cp ./armv7/control ./maruediter/DEBIAN/control
-pyarmor obfuscate -O ./maruediter/usr/share/maruediter --exact --platform linux.armv7 ../maruediter.py
-fakeroot dpkg-deb --build maruediter ./armv7/
-cd ..
+cd ../../
+
+# cd 64
+# fakeroot alien -r ./maruediter*.deb
+# fakeroot alien -t ./maruediter*.deb
+# cd ..
+# rm ./maruediter/usr/share/maruediter/pytransform/_pytransform.so
+# rm ./maruediter/DEBIAN/control
+# rm -r ./maruediter/usr/share/maruediter/share_os/linux64
+# cp ./32/control ./maruediter/DEBIAN/control
+# cp -r ../share_os/linux32/ ./maruediter/usr/share/maruediter/share_os/linux32
+# pyarmor obfuscate -O ./maruediter/usr/share/maruediter --exact --platform linux.x86 ../maruediter.py
+# fakeroot dpkg-deb --build maruediter ./32/
+# cd 32
+# fakeroot alien -r ./maruediter*.deb
+# fakeroot alien -t ./maruediter*.deb
+# cd ..
+# rm ./maruediter/DEBIAN/control
+# cp ./armv7/control ./maruediter/DEBIAN/control
+# pyarmor obfuscate -O ./maruediter/usr/share/maruediter --exact --platform linux.armv7 ../maruediter.py
+# fakeroot dpkg-deb --build maruediter ./armv7/
+# cd ..
 sudo rm -r win32
 mkdir win32
 cd ./win32

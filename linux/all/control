@@ -2,7 +2,7 @@ Package: maruediter
 Version: 0.0.2beta
 Architecture: all
 Maintainer: Marusoftware <marusoftware@outlook.jp>
-Installed-Size: 272
+Installed-Size: 
 Depends: python3 (>= 3.5), python3-tk, python3-psutil, python3-numpy, python3-pillow, ffmpeg, libportaudio2, python3-cffi, python3-psutil, python3-babel, python3-imageio
 Conflicts:
 Breaks:

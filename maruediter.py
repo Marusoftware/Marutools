@@ -1,72 +1,93 @@
 #! /usr/bin/python3
-print("[info] import core library")
-import sys
-import os
-import tkinter
-import platform
-sys.dont_write_bytecode = True
-cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-os.chdir(cd)
-sys.path.append(os.path.join(cd,"share"))
-is64bit = sys.maxsize > 2 ** 32
-if os.name == "nt":
-    if is64bit:
-        sys.path.append(os.path.join(cd,"share_os","win64"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win64","tkdnd")
-    else:
-        sys.path.append(os.path.join(cd,"share_os","win32"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
-elif os.name == "posix":
-    if platform.machine() == "armv7":
-        sys.path.append(os.path.join(cd,"share_os","raspi"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
-    else: 
-        if is64bit:
-            sys.path.append(os.path.join(cd,"share_os","linux64"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
-        else:
-            sys.path.append(os.path.join(cd,"share_os","linux32"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")        
+import libtools, logging, os
+config = libtools.Config()
+lang = libtools.Lang()
+conf = config.readConf()
+txt = lang.getText(conf["lang"])
+first = config.first
+if "log_dir" in conf:
+    log_dir = conf["log_dir"]
 else:
-    sys.path.append(os.path.join(cd,"share_os","macos"))
-    os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
-print("[info] import additional library")
-import tkinter.filedialog
+    log_dir = os.path.join(config.conf_dir,"log/")
+os.makedirs(log_dir ,exist_ok=True)
+logging.basicConfig(filename=os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"), format='%(levelname)s:%(asctime)s:%(name)s| ')
+logger = logging.getLogger(__name__)
+logger.info("start")
+
 try:
-    from tkdnd import *
-    en_dnd = True
+    print("[info] import core library.....", end="")
+    import sys, os
+    sys.dont_write_bytecode = True
+    cd = os.path.abspath(os.path.dirname(sys.argv[0]))
+    os.chdir(cd)
+    sys.path.append(os.path.join(cd,"share"))
+    import random, string, locale, time, platform, threading, datetime, getpass, shutil, pickle, traceback, subprocess
+    from importlib import import_module
+    setup_info = {}
 except:
-    from tkinter import Tk
-    en_dnd = False
+    print("[error]=====Unknown big problem huppun. Please reinstall Maruediter.=====(critical)")
+    exit()
+else:
+    print("done.")
+
 try:
-    from ttkthemes import ThemedStyle as Style
+    print("[info] import GUI library.....",end="")
+    import tkinter
 except:
-    from tkinter.ttk import Style
-from custom_note import CustomNotebook
-from importlib import import_module
-import tkinter.messagebox as tkmsg
-import filedialog as filedialog
-from scrolledtext import ScrolledText
-#from tkfontchooser import askfont
-import tkinter.simpledialog
-import tkinter.ttk as ttk
-#from pathlib import Path
-import urllib.request
-import subprocess
+    print("[error] can't import gui libraly.")
+    if "--debug" in argv:
+        print(traceback.format_exc())
+    setup_info.update(gui=False)
+else:
+    print("done.")
+    setup_info.update(gui=True)
+    is64bit = sys.maxsize > 2 ** 32
+    if os.name == "nt":
+        if is64bit:
+            sys.path.append(os.path.join(cd,"share_os","win64"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win64","tkdnd")
+        else:
+            sys.path.append(os.path.join(cd,"share_os","win32"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
+    elif os.name == "posix":
+        if platform.machine() == "armv7":
+            sys.path.append(os.path.join(cd,"share_os","raspi"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
+        else: 
+            if is64bit:
+                sys.path.append(os.path.join(cd,"share_os","linux64"))
+                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
+            else:
+                sys.path.append(os.path.join(cd,"share_os","linux32"))
+                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")        
+    else:
+        sys.path.append(os.path.join(cd,"share_os","macos"))
+        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
+    import tkinter.filedialog
+    #tkdnd(dnd suppport)
+    try:
+        from tkdnd import *
+    except:
+        from tkinter import Tk
+        setup_info.update(gui_dnd = False)
+    else:
+        setup_info.update(gui_dnd = True)
+    try:
+        from ttkthemes import ThemedStyle as Style
+    except:
+        from tkinter.ttk import Style
+    from custom_note import CustomNotebook
+    import tkinter.simpledialog
+    import tkinter.ttk as ttk
+    import tkinter.messagebox as tkmsg
+    import filedialog as filedialog
+    from scrolledtext import ScrolledText
+    import media
+
+print("[info] import addon")
 import file_addon
 import gui_addon
-import threading
-import datetime
-import getpass
-import shutil
-import pickle
-import media
-import random
-import string
-import locale
-import random
-import string
-import time
+
 try:
     print("[info] start")
     
@@ -135,54 +156,7 @@ try:
     #current directory
     os.chdir(cd)
     
-    #load conf
-    #conf_path = "./"+ getpass.getuser() + "maruediter.conf"
-    if os.name == "posix":
-        conf_path = os.path.join(os.path.expanduser("~"),".config","maruediter",getpass.getuser()+ "maruediter.conf")
-        os.makedirs(os.path.dirname(conf_path),exist_ok=True)
-    elif os.name == "nt":
-        conf_path = os.path.join(os.path.expanduser("~"),"Appdata","maruediter",getpass.getuser()+ "maruediter.conf")
-        os.makedirs(os.path.dirname(conf_path),exist_ok=True)
-    else:
-        conf_path = "./"+ getpass.getuser() + "maruediter.conf"
-    if os.path.exists(conf_path):
-        try:
-            conf = pickle.load(open(conf_path,"rb"))
-        except:
-            os.remove(conf_path)
-        first = 0
-    else:
-        conf = {}
-        conf.update(welcome=1)
-        if os.name == "nt":
-            conf.update(theme="winnative")
-        else:
-            conf.update(theme="default")
-        if None in locale.getlocale():
-            conf.update([("lang",locale.getlocale()[0]),("encode",locale.getlocale()[1])])
-        else:
-            conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
-        if conf["lang"] == None:
-            conf.update(lang="ja_JP")
-        pickle.dump(conf,open(conf_path,"wb"))
-        first = 1
     
-    if "lang" in conf:
-        print("[info] Language:"+conf["lang"])
-        req = ['welcome', 'maruediter', 'exit', 'close_all', 'close_tab', 'save', 'save_as', 'save_from', 'open_from', 'open', 'new', 'file', 'open_new', 'full_screen', 'help', 'window', 'setting', 'addon', 'file_addon', 'delete', 'maruediter_file', 'all', 'error', 'error_cant_open', 'select_file_type', 'next', 'check', 'save_check', 'were_sorry', 'new_main', 'back', 'cancel', 'dir_name', 'choose_dir', 'file_name', 'new_sub1', 'new_sub2', 'new_check', 'wait', 'done', 'new_e1', 'new_e2', 'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'st_open_from', 'st_dnd', 'new_check2', 'about']
-        if os.path.exists("./language/"+conf["lang"]+".lang"):
-            txt = pickle.load(open("./language/"+conf["lang"]+".lang","rb"))
-            #print(txt)
-            for i in range(len(req)):
-                if req[i] in txt:
-                    tmp = 1
-                else:
-                    tmp = 0
-                    break
-            if not tmp:
-                raise
-    else:
-        raise
 
     if first:
         first = tkinter.Tk(className="Maruediter")
@@ -246,7 +220,7 @@ try:
                 root.menu.m_f.entryconfigure(txt["save"]+" (S)",state="disabled")
                 root.menu.m_f.entryconfigure(txt["save_as"]+" (A)",state="disabled")
                 root.menu.m_f.entryconfigure(txt["close_tab"]+" (C)",state="disabled")
-                if en_dnd:
+                if setup_info["gui_dnd"]:
                     root.note.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
                     root.note.dnd_frame.pack(anchor="c",fill="both",expand=True)
                     root.note.dnd_frame.drop_target_register(DND_FILES)
@@ -740,7 +714,7 @@ try:
     root.note.pack(fill="both",expand=True)
     root.note.enable_traversal()
     root.bind("<<NotebookTabClosed>>",lambda null: mfile.close_tab())
-    if en_dnd:
+    if setup_info["gui_dnd"]:
         print("[info] tkdnd enable")
     if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:
         print("[info] open from argv("+sys.argv[-1]+")")
@@ -751,7 +725,7 @@ try:
     root.deiconify()
     root.mainloop()
 except Exception as e:
-    import traceback
+
     import sys
     import os
     print("We're sorry. Error is huppun.")

@@ -262,9 +262,9 @@ try:
             print("[file][open] run")
             if ofps == 1:
                 if os.name == "posix":
-                    ftype = [(txt["maruediter_file"],str(file_addon_type).lstrip("[").rstrip("]").replace(".","*.").replace("'","").replace(", ","|"))]
+                    ftype = [(txt["marueditor_file"],str(file_addon_type).lstrip("[").rstrip("]").replace(".","*.").replace("'","").replace(", ","|"))]
                 elif os.name == "nt":
-                    ftype = [(txt["maruediter_file"],tuple(file_addon_type))]
+                    ftype = [(txt["marueditor_file"],tuple(file_addon_type))]
                 else:
                     ftype = []
                 for i in range(len(file_addons)):
@@ -645,7 +645,7 @@ try:
     
     ##if not os.path.exists("./addonlist.txt"):
     ##try:
-    ##    urllib.request.urlretrieve("http://marusoftware.ddns.net/downloads/data_pool/maruediter_addon/addonlist.txt","./addonlist.txt")
+    ##    urllib.request.urlretrieve("http://marusoftware.ddns.net/downloads/data_pool/marueditor_addon/addonlist.txt","./addonlist.txt")
     ##except:
     ##    pass
 

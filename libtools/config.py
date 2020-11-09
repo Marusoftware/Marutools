@@ -1,4 +1,4 @@
-import os, getpass, pickle
+import os, getpass, pickle, locale
 __all__ = ["Config"]
 
 class Config():
@@ -33,9 +33,12 @@ class Config():
                 self.conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
             if self.conf["lang"] == None:
                 self.conf.update(lang="ja_JP")
-            pickle.dump(conf,open(self.conf_path,"wb"))
+            pickle.dump(self.conf,open(self.conf_path,"wb"))
             self.first = 1
         return self.conf
     def addConf(self, key, value):
         self.conf.update([(key,value)])
-        pickle.dump(conf,open(self.conf_path,"wb"))
+        pickle.dump(self.conf ,open(self.conf_path,"wb"))
+    def setConfig(self, dictionary):
+        self.conf = dictionary
+        pickle.dump(self.conf ,open(self.conf_path,"wb"))

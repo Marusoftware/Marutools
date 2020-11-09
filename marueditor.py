@@ -532,9 +532,10 @@ try:
                 conf.update(theme=s.style.get())
                 conf.update(open_other=s_v1.get())
                 if conf["lang"] != s.lang.get():
-                    tkmsg.showinfo("Info","Language Changing will apply when you start marueditor next time.", parent=s)
+                    tkmsg.showinfo("Info","Language Changing will apply when you start Marueditor next time.", parent=s)
                     conf.update(lang=s.lang.get())
-                pickle.dump(conf, open(conf_path, "wb"))
+                config.setConfig(conf)
+                #pickle.dump(conf, open(conf_path, "wb"))
                 s.destroy()
             def cancel():
                 root.style.theme_use(conf["theme"])

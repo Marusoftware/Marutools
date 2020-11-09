@@ -1,5 +1,5 @@
 import os
-print("==START MARUEDITER==")
-import maruediter
+print("==START MARUEDITOR==")
+import marueditor
 
-maruediter.Main()
+marueditor.Main()

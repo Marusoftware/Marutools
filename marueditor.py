@@ -25,7 +25,7 @@ try:
     from importlib import import_module
     setup_info = {}
 except:
-    print("[error]=====Unknown big problem huppun. Please reinstall Maruediter.=====(critical)")
+    print("[error]=====Unknown big problem huppun. Please reinstall Marueditor.=====(critical)")
     exit()
 else:
     print("done.")
@@ -159,7 +159,7 @@ try:
     
 
     if first:
-        first = tkinter.Tk(className="Maruediter")
+        first = tkinter.Tk(className="Marueditor")
         first.title(txt["welcome"])
         first.l1 = ttk.Label(first, text="==="+txt["welcome"]+"===")
         first.l1.pack()
@@ -532,7 +532,7 @@ try:
                 conf.update(theme=s.style.get())
                 conf.update(open_other=s_v1.get())
                 if conf["lang"] != s.lang.get():
-                    tkmsg.showinfo("Info","Language Changing will apply when you start maruediter next time.", parent=s)
+                    tkmsg.showinfo("Info","Language Changing will apply when you start marueditor next time.", parent=s)
                     conf.update(lang=s.lang.get())
                 pickle.dump(conf, open(conf_path, "wb"))
                 s.destroy()
@@ -631,7 +631,7 @@ try:
     def tkerror(exception, value, t):
         import tkinter
         sorry = tkinter.Toplevel()
-        sorry.title("Maruediter - Error")
+        sorry.title("Marueditor - Error")
         tkinter.Label(sorry,text="We're sorry.\n\nError is huppun.").pack()
         t = tkinter.Text(sorry)
         t.pack()
@@ -657,11 +657,11 @@ try:
             sys.exit()
 
     try:
-        root = Tk(className='Maruediter')
+        root = Tk(className='Marueditor')
     except:
         if endnd:
             try:
-                root = tkinter.Tk(className='Maruediter')
+                root = tkinter.Tk(className='Marueditor')
             except:
                 cui()
         else:
@@ -675,10 +675,10 @@ try:
     print("[info] Theme:"+conf["theme"])
     if "theme" in conf:
         root.style.theme_use(conf["theme"])
-    root.title(txt["maruediter"])
+    root.title(txt["marueditor"])
 
-    if os.path.exists("./image/maruediter.png"):
-        root.iconphoto(True, tkinter.PhotoImage(file='./image/maruediter.png'))
+    if os.path.exists("./image/marueditor.png"):
+        root.iconphoto(True, tkinter.PhotoImage(file='./image/marueditor.png'))
     else:
         print("[info] Icon file not found.")
     if not "--debug" in sys.argv:
@@ -731,8 +731,8 @@ except Exception as e:
     print("We're sorry. Error is huppun.")
     print(traceback.format_exc())
     import tkinter
-    sorry = tkinter.Tk(className="Maruediter")
-    sorry.title("Maruediter - Error")
+    sorry = tkinter.Tk(className="Marueditor")
+    sorry.title("Marueditor - Error")
     tkinter.Label(sorry,text="We're sorry.\n\nError is huppun.").pack()
     t = tkinter.Text(sorry)
     t.pack()

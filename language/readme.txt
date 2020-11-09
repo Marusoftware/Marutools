@@ -1,12 +1,12 @@
 ##########################################
-# Marusoftware Maruediter Language Files #
+# Marusoftware Marueditor Language Files #
 #                                        # 
 #        2020 - Marusoftware             #
 ##########################################
 
 This directory include Language Files for
-Marusoftware Maruediter.
-This is only for Maruediter.
+Marusoftware Marueditor.
+This is only for Marueditor.
 Do not copy these files.
 
 Now we serve these languages:

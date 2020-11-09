@@ -10,12 +10,12 @@ import sys
 import subprocess
 
 ############add APP info here###############
-APP_NAME = "maruediter"
+APP_NAME = "marueditor"
 APP_NAME_TITLE = "Maruediter"
 APP_LUA_JP = [""]
 APP_LUA_EN = [""]
 APP_TYPE = "32" # 64 , 32 , select
-APP_ICON = "./maruediter.png"
+APP_ICON = "./marueditor.png"
 APP_VER = "1.0"
 APP_COMPANY = "Marusoftare"
 ############################################

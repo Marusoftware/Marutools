@@ -4,13 +4,13 @@ __all__ = ["Config"]
 class Config():
     def __init__(self):
         if os.name == "posix":
-            self.conf_path = os.path.join(os.path.expanduser("~"),".config","maruediter",getpass.getuser()+ "maruediter.conf")
+            self.conf_path = os.path.join(os.path.expanduser("~"),".config","marueditor",getpass.getuser()+ "marueditor.conf")
             os.makedirs(os.path.dirname(self.conf_path),exist_ok=True)
         elif os.name == "nt":
-            self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","maruediter",getpass.getuser()+ "maruediter.conf")
+            self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","marueditor",getpass.getuser()+ "marueditor.conf")
             os.makedirs(os.path.dirname(self.conf_path),exist_ok=True)
         else:
-            self.conf_path = "./"+ getpass.getuser() + "maruediter.conf"
+            self.conf_path = "./"+ getpass.getuser() + "marueditor.conf"
             os.makedirs(os.path.dirname(self.conf_path),exist_ok=True)
         self.conf_dir = os.path.dirname(self.conf_path)
     def readConf(self):

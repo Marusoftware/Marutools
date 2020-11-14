@@ -82,6 +82,7 @@ else:
     import tkinter.messagebox as tkmsg
     import filedialog as filedialog
     from scrolledtext import ScrolledText
+    import tkintertable
     import media
 
 print("[info] import addon")
@@ -156,8 +157,6 @@ try:
     #current directory
     os.chdir(cd)
     
-    
-
     if first:
         first = tkinter.Tk(className="Marueditor")
         first.title(txt["welcome"])

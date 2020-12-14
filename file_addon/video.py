@@ -66,7 +66,7 @@ class edit():
             if os.path.exists(file):
                 if os.path.splitext(file)[1] in [".mp4",".webm"]:
                     if os.path.getsize(file):
-                        if tkinter.messagebox.askyesno("確認","このファイルをプロジェクトファイルの内部に\n配置しますか?"):
+                        if tkinter.messagebox.askyesno("確認","このファイルをプロジェクトファイルの内部に配置しますか?"):
                             shutil.copy(file,master.temp_dir)
                             file = os.path.join(master.temp_dir,file)
                         else:

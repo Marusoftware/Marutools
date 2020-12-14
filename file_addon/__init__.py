@@ -3,6 +3,7 @@ import pickle
 import sys
 import os
 import urllib.request
+import libtools
 
 #os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
 
@@ -15,12 +16,12 @@ def add(file):
     data2 = []
     if os.path.exists("./flist.list"):
         data = pickle.load(open("./flist.list", "rb"))
-        os.remove("./flist.list")
+        #os.remove("./flist.list")
     else:
         pass
     if os.path.exists("./list.list"):
         data2 = pickle.load(open("./list.list", "rb"))
-        os.remove("./list.list")
+        #os.remove("./list.list")
     else:
         pass
     if os.path.exists(file):
@@ -136,37 +137,38 @@ if __name__ in "__main__":
         else:
             if "add" == sys.argv[0]:
                 add(sys.argv[1])
-    while 1:
-        print("command:", end="")
-        iput = input()
-        if "add" in iput:
-            print("name:", end="")
+    if "-shell" in sys.argv:
+        while 1:
+            print("command:", end="")
             iput = input()
-            if iput == "":
-                print("[error]: not found")
+            if "add" in iput:
+                print("name:", end="")
+                iput = input()
+                if iput == "":
+                    print("[error]: not found")
+                else:
+                    add(iput)
+            elif "get_file" in iput:
+                get_file()
+            elif "get" in iput:
+                get()
+            elif "exit" in iput:
+                exit()
+            elif "remove" in iput:
+                print("name:", end="")
+                iput = input()
+                if iput == "":
+                    print("[error]: not found")
+                else:
+                    remove(iput)
+            elif "install" in iput:
+                print("name:", end="")
+                iput = input()
+                if iput == "":
+                    print("[error]: not found")
+                else:
+                    install(iput)
             else:
-                add(iput)
-        elif "get_file" in iput:
-            get_file()
-        elif "get" in iput:
-            get()
-        elif "exit" in iput:
-            exit()
-        elif "remove" in iput:
-            print("name:", end="")
-            iput = input()
-            if iput == "":
-                print("[error]: not found")
-            else:
-                remove(iput)
-        elif "install" in iput:
-            print("name:", end="")
-            iput = input()
-            if iput == "":
-                print("[error]: not found")
-            else:
-                install(iput)
-        else:
-            pass
-        
+                pass
+            
 

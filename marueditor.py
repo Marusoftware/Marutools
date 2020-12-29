@@ -725,7 +725,6 @@ try:
     root.deiconify()
     root.mainloop()
 except Exception as e:
-
     import sys
     import os
     print("We're sorry. Error is huppun.")

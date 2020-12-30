@@ -20,5 +20,6 @@ class Lang():
             if not tmp:
                 raise
         else:
+            print(os.path.abspath("./language/"+lang+".lang"))
             raise FileNotFoundError
         return txt

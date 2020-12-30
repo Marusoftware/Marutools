@@ -1,10 +1,15 @@
 #! /usr/bin/python3
-import libtools, logging, os
+import libtools, logging, os, argparse, sys
+#argv parse
+argv_parser = argparse.ArgumentParser("Maruediter", description="Maruediter. The best editer.")
+argv_parser.add_argument("--shell", dest="Start in shell mode.", action="store_true")
+argv = argv_parser.parse_args(sys.argv)
 config = libtools.Config()
 lang = libtools.Lang()
 conf = config.readConf()
 txt = lang.getText(conf["lang"])
 first = config.first
+libtools.Config = config
 if "log_dir" in conf:
     log_dir = conf["log_dir"]
 else:
@@ -16,7 +21,6 @@ logger.info("start")
 
 try:
     print("[info] import core library.....", end="")
-    import sys, os
     sys.dont_write_bytecode = True
     cd = os.path.abspath(os.path.dirname(sys.argv[0]))
     os.chdir(cd)
@@ -25,31 +29,37 @@ try:
     from importlib import import_module
     setup_info = {}
 except:
-    print("[error]=====Unknown big problem huppun. Please reinstall Marueditor.=====(critical)")
+    print("[error]=====Unknown big problem happen. Please reinstall Marueditor.=====(critical)")
     exit()
 else:
     print("done.")
 
 try:
     print("[info] import GUI library.....",end="")
-    import tkinter
+    if argv.shell:
+        raise ValueError
+    else:
+        import tkinter
+except ValueError:
+    setup_info.update(gui=False)
+    print("[info] open in shell mode.")
 except:
     print("[error] can't import gui libraly.")
-    if "--debug" in argv:
+    if "--debug" in sys.argv:
         print(traceback.format_exc())
     setup_info.update(gui=False)
 else:
     print("done.")
     setup_info.update(gui=True)
     is64bit = sys.maxsize > 2 ** 32
-    if os.name == "nt":
+    if platform.system() == "Windows":
         if is64bit:
             sys.path.append(os.path.join(cd,"share_os","win64"))
             os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win64","tkdnd")
         else:
             sys.path.append(os.path.join(cd,"share_os","win32"))
             os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
-    elif os.name == "posix":
+    elif platform.system() == "Linux":
         if platform.machine() == "armv7":
             sys.path.append(os.path.join(cd,"share_os","raspi"))
             os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
@@ -109,7 +119,7 @@ try:
             try:
                 file_addons.append(import_module("." + file_addon_list[len(file_addons)], "file_addon").edit)
             except:
-                print("Error is huppun in progress on import addon.\nNow in restarting.")
+                print("Error is happen in progress on import addon.\nNow in restarting.")
                 if "--debug" in sys.argv:
                     import traceback
                     print("error report=====\n"+traceback.format_exc())
@@ -121,7 +131,7 @@ try:
             else:
                 try:
                     if file_addons[-1].get_info("enable") == 0:
-                        raise
+                        raise Exception
                     if type(file_addons[-1].get_info("type")) == str:
                         file_addon_type.append(file_addons[-1].get_info("type"))
                         file_addon_type_ex.append(file_addons[-1].get_info("type_ex"))
@@ -144,7 +154,7 @@ try:
                         file_addons.pop(len(file_addons)-1)
                     if file_addons[len(file_addons)-1].get_info("__built_in__"):
                         pass
-                except:
+                except Exception:
                     file_addon_list.pop(len(file_addons)-1)
                     file_addons.pop(len(file_addons)-1)
         else:
@@ -167,12 +177,12 @@ try:
         first.mainloop()
 
     #cui tools
+    # def cui_help(a):
+    #         if a == 0:
+    #             print("[Usage] {option} {file}\n \n[options]\n    -c - file_addon_config\n    -cui - cui mode")
+    #         else:
+    #             print("[commands]\nexit or quit - exit.\nhelp or ? - help.")
     def cui():
-        def cui_help(a):
-            if a == 0:
-                print("[Usage] {option} {file}\n \n[options]\n    -c - file_addon_config\n    -cui - cui mode")
-            else:
-                print("[commands]\nexit or quit - exit.\nhelp or ? - help.")
         print("[info]open in cui mode.")
         while 1:
             print(">>>", end="")
@@ -185,10 +195,12 @@ try:
                 pass
             elif input_var == "help":
                 print(info)
-                cui_help(1)
+                #cui_help(1)
+                argv_parser.print_help()
             elif input_var == "?":
                 print(info)
-                cui_help(1)
+                #cui_help(1)
+                argv_parser.print_help()
             else:
                 print("[error] '" + input_var + "' is not available.")
 
@@ -632,7 +644,7 @@ try:
         import tkinter
         sorry = tkinter.Toplevel()
         sorry.title("Marueditor - Error")
-        tkinter.Label(sorry,text="We're sorry.\n\nError is huppun.").pack()
+        tkinter.Label(sorry,text="We're sorry.\n\nError is happen.").pack()
         t = tkinter.Text(sorry)
         t.pack()
         t.insert("end","Error report=========\n")
@@ -649,17 +661,17 @@ try:
     ##except:
     ##    pass
 
-    if not len(sys.argv) == 0:
-        if "-cui" in sys.argv:
-            cui()
-        elif "--help" in sys.argv:
-            cui_help(0)
-            sys.exit()
+    # if not len(sys.argv) == 0:
+    #     if "-cui" in sys.argv:
+    #         cui()
+    #     elif "--help" in sys.argv:
+    #         cui_help(0)
+    #         sys.exit()
 
     try:
         root = Tk(className='Marueditor')
     except:
-        if endnd:
+        if setup_info["gui_dnd"]:
             try:
                 root = tkinter.Tk(className='Marueditor')
             except:
@@ -705,7 +717,10 @@ try:
     root.menu.m_h.add_command(label=txt["chk_upd"]+" (C)", command=hlp.help,under=len(txt["chk_upd"])+2)
     root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f,under=len(txt["file"])+2)
     root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d,under=len(txt["window"])+2)
-    root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
+    if platform.system() == "Darwin":
+        root.menu.m_f.add_command(label=txt["setting"]+" (S)", command=mfile.setting,under=len(txt["setting"])+2)
+    else:
+        root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
     root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)
     root.config(menu=root.menu)
     root.__root = ttk.Frame(root)
@@ -725,15 +740,14 @@ try:
     root.deiconify()
     root.mainloop()
 except Exception as e:
-
     import sys
     import os
-    print("We're sorry. Error is huppun.")
+    print("We're sorry. Error is happen.")
     print(traceback.format_exc())
     import tkinter
     sorry = tkinter.Tk(className="Marueditor")
     sorry.title("Marueditor - Error")
-    tkinter.Label(sorry,text="We're sorry.\n\nError is huppun.").pack()
+    tkinter.Label(sorry,text="We're sorry.\n\nError is happen.").pack()
     t = tkinter.Text(sorry)
     t.pack()
     t.insert("end","Error report=========\n")

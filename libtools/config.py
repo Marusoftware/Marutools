@@ -1,4 +1,4 @@
-import os, getpass, pickle, locale
+import os, getpass, pickle, locale, platform
 __all__ = ["Config"]
 
 class Config():
@@ -23,8 +23,10 @@ class Config():
         else:
             self.conf = {}
             self.conf.update(welcome=1)
-            if os.name == "nt":
+            if platform.system() == "Windows":
                 self.conf.update(theme="winnative")
+            elif platform.system() == "Darwin":
+                self.conf.update(theme="aqua")
             else:
                 self.conf.update(theme="default")
             if None in locale.getlocale():

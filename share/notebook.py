@@ -1,7 +1,7 @@
 from tkinter import ttk
 import tkinter
 
-class NoteBook():
+class NoteBook(ttk.Frame):
     def __init__(self):
         self.tabs = []
     def add(self, widget):
@@ -10,5 +10,5 @@ class NoteBook():
         pass
     def forget(self):
         pass
-    et(self):
-        pass
+    #def (self):
+    #    pass

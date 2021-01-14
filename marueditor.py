@@ -1,9 +1,10 @@
 #! /usr/bin/python3
 import libtools, logging, os, argparse, sys
 #argv parse
-argv_parser = argparse.ArgumentParser("Maruediter", description="Maruediter. The best editer.")
-argv_parser.add_argument("--shell", dest="Start in shell mode.", action="store_true")
-argv = argv_parser.parse_args(sys.argv)
+argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The best editor.")
+argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
+argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
+argv = argv_parser.parse_args()
 config = libtools.Config()
 lang = libtools.Lang()
 conf = config.readConf()
@@ -15,10 +16,12 @@ if "log_dir" in conf:
 else:
     log_dir = os.path.join(config.conf_dir,"log/")
 os.makedirs(log_dir ,exist_ok=True)
+print("Start Logging on ",os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
 logging.basicConfig(filename=os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"), format='%(levelname)s:%(asctime)s:%(name)s| ')
 logger = logging.getLogger(__name__)
 logger.info("start")
 
+#CoreLib
 try:
     print("[info] import core library.....", end="")
     sys.dont_write_bytecode = True
@@ -34,45 +37,46 @@ except:
 else:
     print("done.")
 
-try:
-    print("[info] import GUI library.....",end="")
-    if argv.shell:
-        raise ValueError
+#import path setting
+setup_info.update(is64bit=(sys.maxsize > 2 ** 32))
+sys.path.append(os.path.join(cd,"share"))
+if platform.system() == "Windows":
+    if setup_info["is64bit"]:
+        sys.path.append(os.path.join(cd,"share_os","win64"))
+        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win64","tkdnd")
     else:
-        import tkinter
-except ValueError:
+        sys.path.append(os.path.join(cd,"share_os","win32"))
+        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
+elif platform.system() == "Linux":
+    if platform.machine() == "armv7":
+        sys.path.append(os.path.join(cd,"share_os","raspi"))
+        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
+    else: 
+        if setup_info["is64bit"]:
+            sys.path.append(os.path.join(cd,"share_os","linux64"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
+        else:
+            sys.path.append(os.path.join(cd,"share_os","linux32"))
+            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")        
+else:
+    sys.path.append(os.path.join(cd,"share_os","macos"))
+    os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
+
+#GuiLib
+if argv.shell:        
     setup_info.update(gui=False)
     print("[info] open in shell mode.")
-except:
-    print("[error] can't import gui libraly.")
-    if "--debug" in sys.argv:
-        print(traceback.format_exc())
-    setup_info.update(gui=False)
 else:
-    print("done.")
     setup_info.update(gui=True)
-    is64bit = sys.maxsize > 2 ** 32
-    if platform.system() == "Windows":
-        if is64bit:
-            sys.path.append(os.path.join(cd,"share_os","win64"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win64","tkdnd")
-        else:
-            sys.path.append(os.path.join(cd,"share_os","win32"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
-    elif platform.system() == "Linux":
-        if platform.machine() == "armv7":
-            sys.path.append(os.path.join(cd,"share_os","raspi"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
-        else: 
-            if is64bit:
-                sys.path.append(os.path.join(cd,"share_os","linux64"))
-                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
-            else:
-                sys.path.append(os.path.join(cd,"share_os","linux32"))
-                os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")        
+    print("[info] import GUI library.....",end="")
+    try:
+        import tkinter
+    except:
+        setup_info.update(gui=False)
+        print("[error] can't import gui libraly.")
+        print(traceback.format_exc())
     else:
-        sys.path.append(os.path.join(cd,"share_os","macos"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
+        print("done.")
     import tkinter.filedialog
     #tkdnd(dnd suppport)
     try:
@@ -82,6 +86,7 @@ else:
         setup_info.update(gui_dnd = False)
     else:
         setup_info.update(gui_dnd = True)
+    #ttkthemes
     try:
         from ttkthemes import ThemedStyle as Style
     except:
@@ -92,8 +97,8 @@ else:
     import tkinter.messagebox as tkmsg
     import filedialog as filedialog
     from scrolledtext import ScrolledText
-    import tkintertable
-    import media
+    #import tkintertable
+    #import media
 
 print("[info] import addon")
 import file_addon
@@ -729,6 +734,7 @@ try:
     root.note.pack(fill="both",expand=True)
     root.note.enable_traversal()
     root.bind("<<NotebookTabClosed>>",lambda null: mfile.close_tab())
+    print(setup_info)
     if setup_info["gui_dnd"]:
         print("[info] tkdnd enable")
     if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:

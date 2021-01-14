@@ -18,8 +18,7 @@ class Lang():
                     tmp = 0
                     break
             if not tmp:
-                raise
+                raise KeyError("No Enough Key is in Language File.")
         else:
-            print(os.path.abspath("./language/"+lang+".lang"))
-            raise FileNotFoundError
+            raise FileNotFoundError("Language File is not found.(Path: "+os.path.abspath("./language/"+lang+".lang")+")")
         return txt

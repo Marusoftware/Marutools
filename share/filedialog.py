@@ -2,6 +2,13 @@ import platform
 import tkinter.filedialog as _fd1
 if platform.system() == "Linux":
     import tkfilebrowser as _fd2
+elif platform.system() == "Darwin":
+    import tkfilebrowser as _fd2
+else:
+    try:
+        import tkfilebrowser as _fd2
+    except:
+        pass
 #from TkinterDnD2 import *
 import tkinter
 from tkinter import ttk
@@ -14,8 +21,8 @@ else:
     mode = 0
 
 #tools
-def load_fd2():
-    import tkfilebrowser as _fd2
+#def load_fd2():
+    
 def chg_mode():
     global mode
     if mode:
@@ -24,21 +31,35 @@ def chg_mode():
         mode = 1
 
 #dialogs
-def askdirectory(**argv):
-    print(argv)
-    if mode:
+def askdirectory(fd=None, **argv):
+    if fd == None: fd = mode
+    if fd:
         return _fd2.askopendirname(**argv)
     else:
         return _fd1.askdirectory(**argv)
-def askopenfilename(**argv):
-    print(argv)
-    if mode:
+
+def askopenfilename(fd=None, **argv):
+    if fd == None: fd = mode
+    if platform.system() == "Darwin":
+        #load_fd2()
+        return _fd2.askopenfilename(**argv)
+    if fd:
         return _fd2.askopenfilename(**argv)
     else:
         return _fd1.askopenfilename(**argv)
-def asksaveasfilename(**argv):
-    print(argv)
-    if mode:
+def askopenfilenames(fd=None, **argv):
+    if fd == None: fd = mode
+    if platform.system() == "Darwin":
+        #load_fd2()
+        return _fd2.askopenfilenames(**argv)
+    if fd:
+        return _fd2.askopenfilenames(**argv)
+    else:
+        return _fd1.askopenfilenames(**argv)
+def asksaveasfilename(fd=None, **argv):
+    if fd == None: fd = mode
+    if fd:
         return _fd2.asksaveasfilename(**argv)
     else:
         return _fd1.asksaveasfilename(**argv)
+        

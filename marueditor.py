@@ -1,5 +1,11 @@
 #! /usr/bin/python3
 import libtools, logging, os, argparse, sys
+#setCurrentDirectory
+if ".exe" == os.path.splitext(os.path.dirname(sys.argv[0])) or "Marueditor.app" in os.path.dirname(sys.executable):
+    cd = os.path.abspath(os.path.dirname(sys.executable))
+else:
+    cd = os.path.abspath(os.path.dirname(sys.argv[0]))
+os.chdir(cd)
 #argv parse
 argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The best editor.")
 argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
@@ -25,43 +31,41 @@ logger.info("start")
 try:
     print("[info] import core library.....", end="")
     sys.dont_write_bytecode = True
-    cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-    os.chdir(cd)
     sys.path.append(os.path.join(cd,"share"))
     import random, string, locale, time, platform, threading, datetime, getpass, shutil, pickle, traceback, subprocess
     from importlib import import_module
     setup_info = {}
 except:
     print("[error]=====Unknown big problem happen. Please reinstall Marueditor.=====(critical)")
-    exit()
+    exit(-1)
 else:
     print("done.")
 
 #import path setting
 setup_info.update(is64bit=(sys.maxsize > 2 ** 32))
 sys.path.append(os.path.join(cd,"share"))
+share_os_path=""
 if platform.system() == "Windows":
     if setup_info["is64bit"]:
-        sys.path.append(os.path.join(cd,"share_os","win64"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win64","tkdnd")
+        share_os_path=os.path.join(cd,"share_os","win64")
     else:
-        sys.path.append(os.path.join(cd,"share_os","win32"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","win32","tkdnd")
+        share_os_path=os.path.join(cd,"share_os","win32")
 elif platform.system() == "Linux":
     if platform.machine() == "armv7":
-        sys.path.append(os.path.join(cd,"share_os","raspi"))
-        os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","raspi","tkdnd")
+        share_os_path=os.path.join(cd,"share_os","raspi")
     else: 
         if setup_info["is64bit"]:
-            sys.path.append(os.path.join(cd,"share_os","linux64"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux64","tkdnd")
+            share_os_path=os.path.join(cd,"share_os","linux64")
         else:
-            sys.path.append(os.path.join(cd,"share_os","linux32"))
-            os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","linux32","tkdnd")        
+            share_os_path=os.path.join(cd,"share_os","linux32")    
+elif platform.system() == "Darwin":
+    share_os_path=os.path.join(cd,"share_os","macos")
 else:
-    sys.path.append(os.path.join(cd,"share_os","macos"))
-    os.environ['TKDND_LIBRARY'] = os.path.join(cd,"share_os","macos","tkdnd")
-
+    print("Unknown System. Please report to Marusoftware.")
+    exit(-1)
+os.environ["PATH"] += ":"+share_os_path
+sys.path.append(share_os_path)
+os.environ['TKDND_LIBRARY'] = os.path.join(share_os_path,"tkdnd")
 #GuiLib
 if argv.shell:        
     setup_info.update(gui=False)
@@ -73,7 +77,7 @@ else:
         import tkinter
     except:
         setup_info.update(gui=False)
-        print("[error] can't import gui libraly.")
+        print("[error] can't import gui library.")
         print(traceback.format_exc())
     else:
         print("done.")
@@ -84,6 +88,7 @@ else:
     except:
         from tkinter import Tk
         setup_info.update(gui_dnd = False)
+        traceback.print_exc()
     else:
         setup_info.update(gui_dnd = True)
     #ttkthemes
@@ -221,7 +226,7 @@ try:
                 print("[window]fullscreen off")
         #open new window
         def newwin():
-            subprocess.Popen([sys.argv[0]], shell=True)
+            subprocess.Popen(["python3",sys.argv[0]])
         def welcome():
             if root.note.index("end") == 0:
                 root.note.welcome = ttk.Frame(root.note)
@@ -274,7 +279,7 @@ try:
                     for i in range(len(openning)):
                         threading.Thread(target=lambda:openning[i][1].file_save(openning[i][0],"0")).start()
         #open file
-        def open_file(ofps=0, open_path=None, dnd=None):
+        def open_file(ofps=0, open_path=None, dnd=None):#todo: rebuild
             print("[file][open] run")
             if ofps == 1:
                 if os.name == "posix":
@@ -389,7 +394,7 @@ try:
                             except:
                                 pass
                             break
-            e = tkmsg.askyesnocancel(txt["check"], txt["save_check"])
+            e = tkmsg.askyesnocancel(txt["check"], txt["save_check"], parent=root)
             if e == True:
                 mfile.save()
                 remove()
@@ -416,7 +421,7 @@ try:
                         pass
                     openning.pop(select)
                 select = root.note.index("current")
-                e = tkmsg.askyesnocancel(txt["check"], txt["save_check"])
+                e = tkmsg.askyesnocancel(txt["check"], txt["save_check"], parent=root)
                 if e == True:
                     mfile.save()
                     remove(select)
@@ -436,14 +441,14 @@ try:
         def new():
             def delaw(self):
                 if len(self.widgets) != 0:
-                    for i in range(len(self.widgets)):
-                        self.widgets[i].destroy()
-                    for i in range(len(self.widgets)):
+                    for tmp in self.widgets:
+                        tmp.destroy()
+                    for tmp in range(len(self.widgets)):
                         self.widgets.pop(0)
             def packaw(self):
                 if len(self.widgets) != 0:
-                    for i in range(len(self.widgets)):
-                        self.widgets[i].pack()
+                    for tmp in self.widgets:
+                        tmp.pack()
             print("[file][new] run")
             win = tkinter.Toplevel()
             win.resizable(0,0)
@@ -479,7 +484,8 @@ try:
                     delaw(self)
                     self.widgets.append(ttk.Label(self, text=txt["dir_name"]+":"))
                     self.widgets.append(ttk.Entry(self))
-                    self.widgets.append(ttk.Button(self, text=txt["choose_dir"], command=lambda:(self.widgets[1].delete("-1","end"),self.widgets[1].insert("end",filedialog.askdirectory(master=self)))))
+                    self.widgets.append(ttk.Button(self, text=txt["choose_dir"],
+                    command=lambda:(self.widgets[1].delete("-1","end"),self.widgets[1].insert("end",filedialog.askdirectory(parent=self)))))
                     self.widgets.append(ttk.Label(self, text=txt["file_name"]+":"))
                     self.widgets.append(ttk.Entry(self))
                     self.n_l.configure(text=txt["new_main"]+"\n"+txt["new_sub1"])
@@ -592,8 +598,8 @@ try:
             s_b2.pack(side="left",fill="both",expand=True)
             def remove():
                 try:
-                    file_addon.remove(file_addon.get_file()[adon.a_fl.curselection()[0]-1])
-                    adon.a_fl.delete(adon.a_fl.curselection()[0]-1)
+                    file_addon.remove(file_addon.get_file()[s.a_fl.curselection()[0]-1])
+                    s.a_fl.delete(s.a_fl.curselection()[0]-1)
                 except:
                     pass
                 os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
@@ -628,7 +634,7 @@ try:
             h.img = tkinter.PhotoImage(file='./image/init.png', master=h._h)
             h_l1 = ttk.Label(h._h, image=h.img)
             h_l1.pack(side="top")
-            h_l2 = ttk.Label(h._h, text="version:" + info[0].lstrip("ver=") + "  reversion:" + info[1].lstrip("rever=") + "  2019-2020 Marusoftware")
+            h_l2 = ttk.Label(h._h, text="version:" + info[0].lstrip("ver=") + "  reversion:" + info[1].lstrip("rever=") + "  2019-2021 Marusoftware")
             h_l2.pack(side="bottom")
             h._h2 = ttk.Frame(h)
             h.note.add(h._h2,text=txt["licence"])
@@ -683,7 +689,7 @@ try:
                 cui()
         else:
             cui()
-    root.withdraw()
+    #root.withdraw()
     try:
         root.style = Style()
     except:
@@ -693,7 +699,6 @@ try:
     if "theme" in conf:
         root.style.theme_use(conf["theme"])
     root.title(txt["marueditor"])
-
     if os.path.exists("./image/marueditor.png"):
         root.iconphoto(True, tkinter.PhotoImage(file='./image/marueditor.png'))
     else:
@@ -701,7 +706,9 @@ try:
     if not "--debug" in sys.argv:
         root.report_callback_exception=tkerror
     root.protocol("WM_DELETE_WINDOW", mfile.exit)
+    #create Menu(master)
     root.menu = tkinter.Menu(root)
+    #File Menu
     root.menu.m_f = tkinter.Menu(root.menu, tearoff=0)
     root.menu.m_f.add_command(label=txt["new"]+" (N)", command=mfile.new ,under=len(txt["new"])+2)
     root.menu.m_f.add_command(label=txt["open"]+" (O)", command=lambda: threading.Thread(target=mfile.open_file,args=[1]).start(),under=len(txt["open"])+2)
@@ -712,21 +719,35 @@ try:
     root.menu.m_f.add_command(label=txt["save"]+" (S)", command=mfile.save,under=len(txt["save"])+2)
     root.menu.m_f.add_command(label=txt["close_tab"]+" (C)",command=mfile.close_tab,under=len(txt["close_tab"])+2)
     root.menu.m_f.add_command(label=txt["close_all"]+" (X)", command=mfile.exit,under=len(txt["close_all"])+2)
-    root.menu.m_d = tkinter.Menu(root.menu, tearoff=0)
+    #Window Menu
+    root.menu.m_d = tkinter.Menu(root.menu, tearoff=0, name="window")
     fl = tkinter.BooleanVar()
     root.menu.m_d.add_command(label=txt["open_new"]+" (N)", command=window.newwin,under=len(txt["open_new"])+2)
     root.menu.m_d.add_checkbutton(label=txt["full_screen"]+" (F)", variable=fl, command=window.fullscreen,under=len(txt["full_screen"])+2)
     root.menu.m_h = tkinter.Menu(root.menu, tearoff=0)
-    root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
+    
+    ws = root.tk.call('tk', 'windowingsystem')
+    print(ws)
+    if platform.system() == "Darwin" and ws == "aqua":
+        root.menu.apple = tkinter.Menu(root.menu, name='apple')
+        root.menu.apple.add_command(label='About Marueditor', command=hlp.var)
+        root.menu.apple.add_separator()
+        root.menu.add_cascade(menu=root.menu.apple)
+        root.menu.add_cascade(label=txt["file"], menu=root.menu.m_f)
+        root.menu.add_cascade(label=txt["window"], menu=root.menu.m_d)
+        root.createcommand('tk::mac::ShowPreferences', mfile.setting)
+        root.menu.m_h = tkinter.Menu(root.menu, name='help')
+        root.createcommand('tk::mac::ShowHelp', hlp.help)
+        root.menu.add_cascade(label=txt["help"], menu=root.menu.m_h)
+        root.createcommand('tk::mac::Quit', mfile.exit)
+    else:
+        root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f,under=len(txt["file"])+2)
+        root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d,under=len(txt["window"])+2)
+        root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
+        root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
+        root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)
     root.menu.m_h.add_command(label=txt["help"]+" (H)", command=hlp.help,under=len(txt["help"])+2)
     root.menu.m_h.add_command(label=txt["chk_upd"]+" (C)", command=hlp.help,under=len(txt["chk_upd"])+2)
-    root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f,under=len(txt["file"])+2)
-    root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d,under=len(txt["window"])+2)
-    if platform.system() == "Darwin":
-        root.menu.m_f.add_command(label=txt["setting"]+" (S)", command=mfile.setting,under=len(txt["setting"])+2)
-    else:
-        root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
-    root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)
     root.config(menu=root.menu)
     root.__root = ttk.Frame(root)
     root.__root.pack(fill="both",expand=True)
@@ -737,6 +758,10 @@ try:
     print(setup_info)
     if setup_info["gui_dnd"]:
         print("[info] tkdnd enable")
+        #oot.__root.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
+        #root.__root.dnd_frame.pack(anchor="c",fill="both",expand=True)
+        root.__root.drop_target_register(DND_FILES)
+        root.__root.dnd_bind('<<Drop>>', lambda event: mfile.open_file(ofps=3, open_path=event.data))
     if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:
         print("[info] open from argv("+sys.argv[-1]+")")
         mfile.open_file(ofps=3,open_path=sys.argv[-1])

@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['../maruediter.py'],
-             pathex=['/home/maruo/ドキュメント/program/maruediter/linux32'],
+a = Analysis(['../marueditor.py'],
+             pathex=['/home/maruo/ドキュメント/program/marueditor/linux32'],
              binaries=[],
              datas=[],
              hiddenimports=["psutil"],
@@ -21,12 +21,12 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='maruediter',
+          name='Maruediter',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -34,4 +34,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='maruediter')
+               name='Maruediter')

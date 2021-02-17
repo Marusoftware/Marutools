@@ -729,6 +729,12 @@ try:
     ws = root.tk.call('tk', 'windowingsystem')
     print(ws)
     if platform.system() == "Darwin" and ws == "aqua":
+        from Foundation import NSBundle
+        bundle = NSBundle.mainBundle()
+        if bundle:
+            info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
+            if info and info['CFBundleName'] in ['Python',"pypy"]:
+                info['CFBundleName'] = "Marueditor"
         root.menu.apple = tkinter.Menu(root.menu, name='apple')
         root.menu.apple.add_command(label='About Marueditor', command=hlp.var)
         root.menu.apple.add_separator()

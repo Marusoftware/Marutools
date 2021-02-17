@@ -30,7 +30,7 @@ class Video():
     def play(self, frame, place=0):
         self.stopd = 0
         self.frame = frame
-        self.frame.vidframe = ttk.Canvas(self.frame)
+        self.frame.vidframe = tkinter.Canvas(self.frame)
         self.frame.vidframe.pack(fill="both",expand=True)
         self.vid_frame_rate=self.video.get_meta_data()
         self.video_thread = threading.Thread(target=self._stream,args=(place,))

@@ -3,12 +3,9 @@ import pickle
 import tkinter
 from tkinter import ttk
 import shutil
-try:
-    import filedialog
-    import media
-    import ttkwidgets
-except:
-    pass
+import filedialog
+import media
+import ttkwidgets
 import tkinter.messagebox
 import threading
 import PIL

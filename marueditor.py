@@ -119,7 +119,7 @@ try:
     file_addon_type_ex = []
     tmp = ""
     history = []
-    info = ["ver=b0.1","rever=0"]
+    info = ["b0.0.1","1"]
     openning = []
     tema = 0
     saved = 0
@@ -136,7 +136,7 @@ try:
                 file_addon.remove(file_addon.get_file()[len(file_addons)])
                 time.sleep(1)
                 os.chdir(cd)
-                subprocess.Popen([sys.argv[0]], shell=True)
+                #subprocess.Popen([sys.argv[0]], shell=True)
                 exit(-1)
             else:
                 try:
@@ -634,7 +634,7 @@ try:
             h.img = tkinter.PhotoImage(file='./image/init.png', master=h._h)
             h_l1 = ttk.Label(h._h, image=h.img)
             h_l1.pack(side="top")
-            h_l2 = ttk.Label(h._h, text="version:" + info[0].lstrip("ver=") + "  reversion:" + info[1].lstrip("rever=") + "  2019-2021 Marusoftware")
+            h_l2 = ttk.Label(h._h, text="Version:" + info[0] + "  subVersion:" + info[1].lstrip("rever=") + "  2019-2021 Marusoftware")
             h_l2.pack(side="bottom")
             h._h2 = ttk.Frame(h)
             h.note.add(h._h2,text=txt["licence"])
@@ -725,7 +725,7 @@ try:
     root.menu.m_d.add_command(label=txt["open_new"]+" (N)", command=window.newwin,under=len(txt["open_new"])+2)
     root.menu.m_d.add_checkbutton(label=txt["full_screen"]+" (F)", variable=fl, command=window.fullscreen,under=len(txt["full_screen"])+2)
     root.menu.m_h = tkinter.Menu(root.menu, tearoff=0)
-    
+    root.menu.m_e = tkinter.Menu(root.menu, tearoff=0, name="edit")
     ws = root.tk.call('tk', 'windowingsystem')
     print(ws)
     if platform.system() == "Darwin" and ws == "aqua":
@@ -741,14 +741,16 @@ try:
         root.menu.add_cascade(menu=root.menu.apple)
         root.menu.add_cascade(label=txt["file"], menu=root.menu.m_f)
         root.menu.add_cascade(label=txt["window"], menu=root.menu.m_d)
+        root.menu.add_cascade(label="Edit", menu=root.menu.m_e)#todo(newtext)
         root.createcommand('tk::mac::ShowPreferences', mfile.setting)
         root.menu.m_h = tkinter.Menu(root.menu, name='help')
         root.createcommand('tk::mac::ShowHelp', hlp.help)
         root.menu.add_cascade(label=txt["help"], menu=root.menu.m_h)
         root.createcommand('tk::mac::Quit', mfile.exit)
     else:
-        root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f,under=len(txt["file"])+2)
-        root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d,under=len(txt["window"])+2)
+        root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f, under=len(txt["file"])+2)
+        root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d, under=len(txt["window"])+2)
+        root.menu.add_cascade(label="Edit"+" (E)", menu=root.menu.m_e, under=len("Edit")+2)#todo(newtext)
         root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
         root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
         root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)

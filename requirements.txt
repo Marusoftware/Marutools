@@ -1,0 +1,7 @@
+psutil
+babel
+numpy==1.18
+Pillow
+imageio
+pydub
+imageio-ffmpeg

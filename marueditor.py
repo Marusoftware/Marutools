@@ -1,9 +1,25 @@
 #! /usr/bin/python3
-import libtools, logging, os, argparse, sys
+import libtools, logging, os, argparse, sys, platform
+#
+#    from venvdotapp import require_bundle
+#    require_bundle()
 #setCurrentDirectory
-if ".exe" == os.path.splitext(os.path.dirname(sys.argv[0])) or "Marueditor.app" in os.path.dirname(sys.executable):
-    cd = os.path.abspath(os.path.dirname(sys.executable))
+if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+    if platform.system() == "Darwin":
+        cd = sys._MEIPASS
+    elif platform.system() == "Windows":
+        cd = os.path.abspath(os.path.dirname(sys.executable))
 else:
+    if platform.system() == "Darwin":
+        try:
+            from Foundation import NSBundle
+            bundle = NSBundle.mainBundle()
+            if bundle:
+                info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
+                if info and info['CFBundleName'] in ['Python',"pypy"]:
+                    info['CFBundleName'] = "Marueditor"
+        except:
+            pass
     cd = os.path.abspath(os.path.dirname(sys.argv[0]))
 os.chdir(cd)
 #argv parse
@@ -32,7 +48,7 @@ try:
     print("[info] import core library.....", end="")
     sys.dont_write_bytecode = True
     sys.path.append(os.path.join(cd,"share"))
-    import random, string, locale, time, platform, threading, datetime, getpass, shutil, pickle, traceback, subprocess
+    import random, string, locale, time, threading, datetime, getpass, shutil, pickle, traceback, subprocess
     from importlib import import_module
     setup_info = {}
 except:
@@ -729,12 +745,6 @@ try:
     ws = root.tk.call('tk', 'windowingsystem')
     print(ws)
     if platform.system() == "Darwin" and ws == "aqua":
-        from Foundation import NSBundle
-        bundle = NSBundle.mainBundle()
-        if bundle:
-            info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
-            if info and info['CFBundleName'] in ['Python',"pypy"]:
-                info['CFBundleName'] = "Marueditor"
         root.menu.apple = tkinter.Menu(root.menu, name='apple')
         root.menu.apple.add_command(label='About Marueditor', command=hlp.var)
         root.menu.apple.add_separator()

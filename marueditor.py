@@ -1,9 +1,6 @@
 #! /usr/bin/python3
 import libtools, logging, os, argparse, sys, platform
-#
-#    from venvdotapp import require_bundle
-#    require_bundle()
-#setCurrentDirectory
+#setCurrentDirectoryAnd_macOS_BUNDLE_NAME
 if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
     if platform.system() == "Darwin":
         cd = sys._MEIPASS
@@ -16,13 +13,13 @@ else:
             bundle = NSBundle.mainBundle()
             if bundle:
                 info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
-                if info and info['CFBundleName'] in ['Python',"pypy"]:
+                if info and info['CFBundleName'] == 'Python':
                     info['CFBundleName'] = "Marueditor"
         except:
             pass
     cd = os.path.abspath(os.path.dirname(sys.argv[0]))
 os.chdir(cd)
-#argv parse
+#argvParse
 argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The best editor.")
 argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
 argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
@@ -77,7 +74,7 @@ elif platform.system() == "Linux":
 elif platform.system() == "Darwin":
     share_os_path=os.path.join(cd,"share_os","macos")
 else:
-    print("Unknown System. Please report to Marusoftware.")
+    print("Unknown System. ("+platform.system()+")Please report to Marusoftware(marusoftware@outlook.jp).")
     exit(-1)
 os.environ["PATH"] += ":"+share_os_path
 sys.path.append(share_os_path)

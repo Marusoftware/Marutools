@@ -3,16 +3,17 @@ __all__ = ["Config"]
 
 class Config():
     def __init__(self):
-        if os.name == "posix":
-            self.conf_path = os.path.join(os.path.expanduser("~"),".config","marueditor",getpass.getuser()+ "marueditor.conf")
-            os.makedirs(os.path.dirname(self.conf_path),exist_ok=True)
-        elif os.name == "nt":
-            self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","marueditor",getpass.getuser()+ "marueditor.conf")
-            os.makedirs(os.path.dirname(self.conf_path),exist_ok=True)
-        else:
-            self.conf_path = "./"+ getpass.getuser() + "marueditor.conf"
-            os.makedirs(os.path.dirname(self.conf_path),exist_ok=True)
+        if platform.system() == "Linux":
+            self.conf_path = os.path.join(os.path.expanduser("~"),".config","marueditor","marueditor.conf")
+        elif platform.system() == "Windows":
+            try:
+                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming","marueditor","marueditor.conf")
+            except:
+                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming","marueditor","marueditor.conf")
+        elif platform.system() == "Darwin":
+                self.conf_path = "./"+ getpass.getuser() + "marueditor.conf"
         self.conf_dir = os.path.dirname(self.conf_path)
+        os.makedirs(self.conf_dir,exist_ok=True)
     def readConf(self):
         if os.path.exists(self.conf_path):
             try:
@@ -24,7 +25,7 @@ class Config():
             self.conf = {}
             self.conf.update(welcome=1)
             if platform.system() == "Windows":
-                self.conf.update(theme="winnative")
+                self.conf.update(theme="xpnative")
             elif platform.system() == "Darwin":
                 self.conf.update(theme="aqua")
             else:

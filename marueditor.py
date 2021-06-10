@@ -74,7 +74,7 @@ elif platform.system() == "Linux":
 elif platform.system() == "Darwin":
     share_os_path=os.path.join(cd,"share_os","macos")
 else:
-    print("Unknown System. ("+platform.system()+")Please report to Marusoftware(marusoftware@outlook.jp).")
+    print("Unknown System. ("+platform.system()+")Please report this to Marusoftware(marusoftware@outlook.jp).")
     exit(-1)
 os.environ["PATH"] += ":"+share_os_path
 sys.path.append(share_os_path)

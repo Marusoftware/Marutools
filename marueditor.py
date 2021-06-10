@@ -713,7 +713,7 @@ try:
         root.style.theme_use(conf["theme"])
     root.title(txt["marueditor"])
     if os.path.exists("./image/marueditor.png"):
-        root.iconphoto(True, tkinter.PhotoImage(file='./image/marueditor.png'))
+        root.iconphoto(False, tkinter.PhotoImage(file='./image/marueditor.png'))
     else:
         print("[info] Icon file not found.")
     if not "--debug" in sys.argv:

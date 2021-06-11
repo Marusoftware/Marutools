@@ -24,12 +24,15 @@ argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The
 argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
 argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
 argv = argv_parser.parse_args()
+
 config = libtools.Config()
 lang = libtools.Lang()
+#LoadConfig
 conf = config.readConf()
+#getText
 txt = lang.getText(conf["lang"])
-first = config.first
 libtools.Config = config
+
 if "log_dir" in conf:
     log_dir = conf["log_dir"]
 else:
@@ -190,7 +193,7 @@ try:
     #current directory
     os.chdir(cd)
     
-    if first:
+    if config.first:
         first = tkinter.Tk(className="Marueditor")
         first.title(txt["welcome"])
         first.l1 = ttk.Label(first, text="==="+txt["welcome"]+"===")

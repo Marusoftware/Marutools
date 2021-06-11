@@ -126,3 +126,8 @@ dmypy.json
 
 .vscode/
 marueditor.app/
+
+*.deb
+*.rpm
+*.tgz
+*.exe

@@ -48,7 +48,7 @@ try:
     print("[info] import core library.....", end="")
     sys.dont_write_bytecode = True
     sys.path.append(os.path.join(cd,"share"))
-    import random, string, locale, time, threading, datetime, getpass, shutil, pickle, traceback, subprocess
+    import random, string, locale, time, threading, datetime, getpass, shutil, pickle, traceback, subprocess, ctypes
     from importlib import import_module
     setup_info = {}
 except:
@@ -66,6 +66,7 @@ if platform.system() == "Windows":
         share_os_path=os.path.join(cd,"share_os","win64")
     else:
         share_os_path=os.path.join(cd,"share_os","win32")
+    ctypes.windll.shcore.SetProcessDpiAwareness(True)
 elif platform.system() == "Linux":
     if platform.machine() == "armv7":
         share_os_path=os.path.join(cd,"share_os","raspi")
@@ -716,7 +717,7 @@ try:
         root.style.theme_use(conf["theme"])
     root.title(txt["marueditor"])
     if os.path.exists("./image/marueditor.png"):
-        root.iconphoto(False, tkinter.PhotoImage(file='./image/marueditor.png'))
+        root.iconphoto(True, tkinter.PhotoImage(file='./image/marueditor.png'))
     else:
         print("[info] Icon file not found.")
     if not "--debug" in sys.argv:

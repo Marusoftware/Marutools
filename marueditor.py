@@ -52,14 +52,14 @@ logger.addHandler(logger.fileOut)
 logger.info("start")
 
 def print(data, end="\n"):#temp
+    data = str(data)
     if "[info]" in data:
-        logger.info(data)
+        logger.info(data.replace("[info]",""))
     elif "[error]" in data:
-        logger.error(data)
+        logger.error(data.replace("[error]",""))
     else:
-        logger.info(data)
-        #import builtins
-        #builtins.print(data,end=end)
+        for t in data.split("\n"):
+            logger.info(t)
 
 #CoreLib
 try:

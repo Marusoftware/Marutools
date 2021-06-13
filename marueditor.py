@@ -23,6 +23,7 @@ os.chdir(cd)
 argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The best editor.")
 argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
 argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
+argv_parser.add_argument("-log_level", action="store", type=int, dest="log_level", default=0 ,help="set Log level.(0-50)")
 argv = argv_parser.parse_args()
 
 config = libtools.Config()
@@ -39,9 +40,26 @@ else:
     log_dir = os.path.join(config.conf_dir,"log/")
 os.makedirs(log_dir ,exist_ok=True)
 print("Start Logging on ",os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
-logging.basicConfig(filename=os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"), format='%(levelname)s:%(asctime)s:%(name)s| ')
+logging.basicConfig(format='%(levelname)s:%(asctime)s:%(name)s| %(message)s',level=argv.log_level)
 logger = logging.getLogger(__name__)
+logger.stdErrOut= logging.StreamHandler()
+logger.stdErrOut.setLevel(argv.log_level)
+logger.stdErrOut.setFormatter(logging.Formatter('%(levelname)s:%(asctime)s:%(name)s| %(message)s'))
+logger.fileOut= logging.FileHandler(os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
+logger.fileOut.setLevel(argv.log_level)
+#logger.addHandler(logger.stdErrOut)
+logger.addHandler(logger.fileOut)
 logger.info("start")
+
+def print(data, end="\n"):#temp
+    if "[info]" in data:
+        logger.info(data)
+    elif "[error]" in data:
+        logger.error(data)
+    else:
+        logger.info(data)
+        #import builtins
+        #builtins.print(data,end=end)
 
 #CoreLib
 try:

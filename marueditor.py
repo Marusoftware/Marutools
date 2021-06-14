@@ -137,6 +137,7 @@ else:
     import tkinter.messagebox as tkmsg
     import filedialog as filedialog
     from scrolledtext import ScrolledText
+    from PIL import Image, ImageTk
     #import tkintertable
     #import media
 
@@ -735,7 +736,14 @@ try:
         root.style.theme_use(conf["theme"])
     root.title(txt["marueditor"])
     if os.path.exists("./image/marueditor.png"):
-        root.iconphoto(True, tkinter.PhotoImage(file='./image/marueditor.png'))
+        try:
+            root.iconphoto(True, tkinter.PhotoImage(file='./image/marueditor.png'))
+        except:
+            try:
+                icon=ImageTk.PhotoImage(Image.open('./image/marueditor.png'))
+                root.iconphoto(True, icon)
+            except:
+                logger.error("Can't read icon. But continue......")
     else:
         print("[info] Icon file not found.")
     if not "--debug" in sys.argv:

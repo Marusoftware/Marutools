@@ -1,5 +1,6 @@
 #! /bin/bash
 
+cd build
 cd ./linux
 sudo rm -r ./marueditor/usr/share/marueditor/
 mkdir ./marueditor/usr/share/marueditor/
@@ -47,7 +48,7 @@ cd ../../
 sudo rm -r win32
 mkdir win32
 cd ./win32
-wine py -3.8-32 -m PyInstaller --noconsole ../specs/maruediterw3.spec
+wine py -3.8-32 -m PyInstaller --noconsole ../specs/marueditorw3.spec
 mkdir ./dist/marueditor/share_os
 cp -r ../file_addon/ ./dist/marueditor/file_addon
 cp -r ../gui_addon/ ./dist/marueditor/gui_addon
@@ -61,7 +62,7 @@ cd ../../
 sudo rm -r win64
 mkdir win64
 cd ./win64
-wine py -3.8-64 -m PyInstaller --noconsole ../specs/maruediterw6.spec
+wine py -3.8-64 -m PyInstaller --noconsole ../specs/marueditorw6.spec
 mkdir ./dist/marueditor/share_os
 cp -r ../file_addon/ ./dist/marueditor/file_addon
 cp -r ../gui_addon/ ./dist/marueditor/gui_addon

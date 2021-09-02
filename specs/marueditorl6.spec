@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['../maruediter.py'],
+a = Analysis(['../marueditor.py'],
              pathex=['/home/maruo/ドキュメント/program/maruediter/linux64'],
              binaries=[],
              datas=[],
@@ -21,7 +21,7 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='maruediter',
+          name='Marueditor',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,

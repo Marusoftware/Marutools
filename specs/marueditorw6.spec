@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['..\\maruediter.py'],
+a = Analysis(['..\\marueditor.py'],
              pathex=['Z:\\home\\maruo\\ドキュメント\\program\\maruediter\\win64''Z:\\home\\maruo\\ドキュメント\\program\\maruediter\\share_os\\win64'],
              binaries=[],
              datas=[],

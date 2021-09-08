@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 Encoding=UTF-8
-Name=Maru editer
-Comment=Editer
-Exec=/usr/bin/maruediter
-Icon=/usr/share/maruediter/image/maruediter.png
+Name=Marueditor
+Comment=The best Editor
+Exec=/usr/bin/marueditor
+Icon=/usr/share/marueditor/image/marueditor.png
 Categories=Application;Office;
 Terminal=false
 Name[ja_JP]=Maruediter

@@ -1,0 +1,7 @@
+psutil
+babel
+numpy
+PIL
+imageio
+pydub
+cffi

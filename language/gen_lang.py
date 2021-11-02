@@ -1,7 +1,9 @@
 langs = {"en_US" : "en", "af" : "af", "zh" : "zh-CN", "zh_Hans" : "zh-CN", "zh_Hant" : "zh-TW",
  "zh_Hant_TW": "zh-TW", "zh_Hant_HK" : "zh-TW", "zh_Hant_MO" : "zh-TW"}
 src_lang = ["ja_JP","ja"]
-cd = "/home/maruo/ドキュメント/program/Marutools/language"
+import os
+cd=os.path.join(os.getcwd(),"language")
+#cd = "/home/maruo/ドキュメント/program/Marutools/language"
 
 import babel, googletrans, traceback, pickle, os, sys
 os.chdir(cd)

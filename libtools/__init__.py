@@ -1,4 +1,4 @@
-from .config import Config 
-from .lang import Lang
+from .data import Config, Lang
+import core
 
-__all__ = ["Config", "Lang"]
+__all__ = ["Config", "Lang", "core"]

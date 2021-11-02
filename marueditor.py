@@ -1,72 +1,12 @@
 #! /usr/bin/python3
-import libtools, logging, os, argparse, sys, platform
-#setCurrentDirectoryAnd_macOS_BUNDLE_NAME
-if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-    if platform.system() == "Darwin":
-        cd = sys._MEIPASS
-    elif platform.system() == "Windows":
-        cd = os.path.abspath(os.path.dirname(sys.executable))
-else:
-    if platform.system() == "Darwin":
-        try:
-            from Foundation import NSBundle
-            bundle = NSBundle.mainBundle()
-            if bundle:
-                info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
-                if info and info['CFBundleName'] == 'Python':
-                    info['CFBundleName'] = "Marueditor"
-        except:
-            pass
-    cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-os.chdir(cd)
-#argvParse
-argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The best editor.")
-argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
-argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
-argv_parser.add_argument("-log_level", action="store", type=int, dest="log_level", default=0 ,help="set Log level.(0-50)")
-argv = argv_parser.parse_args()
-
-config = libtools.Config()
-lang = libtools.Lang()
-#LoadConfig
-conf = config.readConf()
-#getText
-txt = lang.getText(conf["lang"])
-libtools.Config = config
-
-if "log_dir" in conf:
-    log_dir = conf["log_dir"]
-else:
-    log_dir = os.path.join(config.conf_dir,"log/")
-os.makedirs(log_dir ,exist_ok=True)
-print("Start Logging on ",os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
-logging.basicConfig(format='%(levelname)s:%(asctime)s:%(name)s| %(message)s',level=argv.log_level)
-logger = logging.getLogger(__name__)
-logger.stdErrOut= logging.StreamHandler()
-logger.stdErrOut.setLevel(argv.log_level)
-logger.stdErrOut.setFormatter(logging.Formatter('%(levelname)s:%(asctime)s:%(name)s| %(message)s'))
-logger.fileOut= logging.FileHandler(os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
-logger.fileOut.setLevel(argv.log_level)
-#logger.addHandler(logger.stdErrOut)
-logger.addHandler(logger.fileOut)
-logger.info("start")
-
-def print(data, end="\n"):#temp
-    data = str(data)
-    if "[info]" in data:
-        logger.info(data.replace("[info]",""))
-    elif "[error]" in data:
-        logger.error(data.replace("[error]",""))
-    else:
-        for t in data.split("\n"):
-            logger.info(t)
+import os, sys, platform
 
 #CoreLib
 try:
-    print("[info] import core library.....", end="")
-    sys.dont_write_bytecode = True
+    logger.info("import core library.....")
+    sys.dont_write_bytecode = True # __pycache__ deletion
     sys.path.append(os.path.join(cd,"share"))
-    import random, string, locale, time, threading, datetime, getpass, shutil, pickle, traceback, subprocess, ctypes
+    import random, string, time, threading, shutil, traceback, subprocess, ctypes
     from importlib import import_module
     setup_info = {}
 except:

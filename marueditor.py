@@ -1,85 +1,17 @@
 #! /usr/bin/python3
-import os, sys, platform, random, string, time, threading, shutil, traceback, subprocess, ctypes
-
-#GuiLib
-if argv.shell:        
-    setup_info.update(gui=False)
-    print("[info] open in shell mode.")
-else:
-    setup_info.update(gui=True)
-    print("[info] import GUI library.....",end="")
-    
-    #import tkintertable
-    #import media
+import os, sys, platform, random, string, time, threading, shutil, traceback, subprocess
 
 print("[info] import addon")
 import addons
-import gui_addon
 
 try:
     print("[info] start")
-    
-    #import file addon
-    file_addon_list = addons.get()
-    file_addons = []
-    file_addon_type = []
-    file_addon_type_ex = []
     tmp = ""
     history = []
     info = ["b0.0.1","1"]
     openning = []
     tema = 0
     saved = 0
-    
-    while 1:
-        if len(file_addons) < len(file_addon_list):
-            try:
-                file_addons.append(import_module("." + file_addon_list[len(file_addons)], "file_addon").edit)
-            except:
-                print("Error is happen in progress on import addon.\nNow in restarting.")
-                if "--debug" in sys.argv:
-                    import traceback
-                    print("error report=====\n"+traceback.format_exc())
-                addons.remove(addons.get_file()[len(file_addons)])
-                time.sleep(1)
-                os.chdir(cd)
-                #subprocess.Popen([sys.argv[0]], shell=True)
-                exit(-1)
-            else:
-                try:
-                    if file_addons[-1].get_info("enable") == 0:
-                        raise Exception
-                    if type(file_addons[-1].get_info("type")) == str:
-                        file_addon_type.append(file_addons[-1].get_info("type"))
-                        file_addon_type_ex.append(file_addons[-1].get_info("type_ex"))
-                    elif type(file_addons[-1].get_info("type")) == list:
-                        if type(file_addons[-1].get_info("type_ex")) == list:
-                            if len(file_addons[-1].get_info("type")) == len(file_addons[-1].get_info("type_ex")):
-                                for i in range(len(file_addons[-1].get_info("type"))):
-                                    file_addon_list.append(file_addon_list[-1])
-                                    file_addon_type.append(file_addons[-1].get_info("type")[i])
-                                    file_addons.append(file_addons[-1])
-                                    file_addon_type_ex.append(file_addons[-1].get_info("type_ex")[i])
-                            else:
-                                file_addon_type.append(file_addons[-1].get_info("type"))[0]
-                                file_addon_type_ex.append(file_addons[-1].get_info("type_ex"))[0]
-                        else:
-                            file_addon_type.append(file_addons[-1].get_info("type")[0])
-                            file_addon_type_ex.append(file_addons[-1].get_info("type_ex"))
-                    else:
-                        file_addon_list.pop(len(file_addons)-1)
-                        file_addons.pop(len(file_addons)-1)
-                    if file_addons[len(file_addons)-1].get_info("__built_in__"):
-                        pass
-                except Exception:
-                    file_addon_list.pop(len(file_addons)-1)
-                    file_addons.pop(len(file_addons)-1)
-        else:
-            break
-
-    print("[info] loaded addon:" + str(file_addon_list))
-    print("[info] loaded addon type:" + str(file_addon_type))
-    print("[info] loaded addon module:" + str(file_addons))
 
     #current directory
     os.chdir(cd)

@@ -1,16 +1,49 @@
-import importlib, libtools, os, sys
+import libtools, os, sys
 from importlib import import_module
 
 class Addon():
-    def __init__(self, conf):
+    def __init__(self, conf, logger):
         self.loaded_addon={}
+        self.loaded_addon_info={}
+        self.extdict={}
         self.conf=conf
-    def loadAll(self, load_dirs:list):
+        self.logger=logger
+    def install(self):
+        pass
+    def uninstall(self):
+        pass
+    def load(self, addon_file, addon_type):
+        try:
+            module=import_module(os.path.splitext(os.path.basename(addon_file))[0], os.path.dirname(addon_file).replace(os.path.sep, "."))
+        except:
+            self.logger.warn(f"Can't import addon({addon_file}). (Not a collect python file.)")
+            return
+        if addon_type == "editor" and hasattr(module, "Edit"):
+            if not callable(module.Edit):
+                self.logger.warn(f"Can't import addon({addon_file}). (Edit class is not callable.)")
+                return
+            attrs=["name","file_types"]
+            addon=module.Edit()#add args
+            for attr in attrs:
+                if not hasattr(addon.Edit, attr):
+                    self.logger.warn(f"Can't import addon({addon_file}). (Missing {attr} attr.)")
+                    break
+            else:
+                if addon.name in self.loaded_addon:
+                    self.logger.warn(f"Can't import addon({addon_file}). (Used addon name.)")
+                    return
+                self.loaded_addon[addon.name]=addon
+                self.loaded_addon_info[addon.name]={"name":addon.name,"file_types":addon.file_types}
+                if not addon.file_types in self.extdict:
+                    self.extdict[addon.file_types]=[]
+                self.extdict[addon.file_types].append(addon.name)
+    def unload(self):
+        pass
+    def loadAll(self, load_dirs:list, addon_type):
         sys.path.extend(load_dirs)
         for load_dir in load_dirs:
             for addon_file in os.listdir(load_dir):
-                
-                addon=importlib.import_module(os.path.splitext(addon_file)[0])
+                self.load(addon_file=os.path.join(load_dir, addon_file), addon_type=addon_type)
                 
 
 class AddonAPI():

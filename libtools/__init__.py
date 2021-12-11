@@ -1,4 +1,4 @@
 from .data import Config, Lang
-from . import core, ui, exception
+from . import core, exception, ui as UI
 
-__all__ = ["Config", "Lang", "core", "ui", "exception"]
+__all__ = ["Config", "Lang", "core", "exception", "UI"]

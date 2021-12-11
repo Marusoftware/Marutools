@@ -2,7 +2,7 @@ import argparse, libtools, os, sys
 
 class Main():
     def __init__(self, setup_info):
-        self.ui=libtools.ui.TKINTER(setup_info=setup_info, endnd=conf["endnd"])
+        self.ui=libtools.UI(setup_info=setup_info, endnd=conf["endnd"])
 
 if __name__ == "__main__":
     """INIT"""

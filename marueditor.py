@@ -1,46 +1,6 @@
 #! /usr/bin/python3
-import os, sys, platform
+import os, sys, platform, random, string, time, threading, shutil, traceback, subprocess, ctypes
 
-#CoreLib
-try:
-    logger.info("import core library.....")
-    sys.dont_write_bytecode = True # __pycache__ deletion
-    sys.path.append(os.path.join(cd,"share"))
-    import random, string, time, threading, shutil, traceback, subprocess, ctypes
-    from importlib import import_module
-    setup_info = {}
-except:
-    print("[error]=====Unknown big problem happen. Please reinstall Marueditor.=====(critical)")
-    exit(-1)
-else:
-    print("done.")
-
-#import path setting
-setup_info.update(is64bit=(sys.maxsize > 2 ** 32))
-sys.path.append(os.path.join(cd,"share"))
-share_os_path=""
-if platform.system() == "Windows":
-    if setup_info["is64bit"]:
-        share_os_path=os.path.join(cd,"share_os","win64")
-    else:
-        share_os_path=os.path.join(cd,"share_os","win32")
-    ctypes.windll.shcore.SetProcessDpiAwareness(True)
-elif platform.system() == "Linux":
-    if platform.machine() == "armv7":
-        share_os_path=os.path.join(cd,"share_os","raspi")
-    else: 
-        if setup_info["is64bit"]:
-            share_os_path=os.path.join(cd,"share_os","linux64")
-        else:
-            share_os_path=os.path.join(cd,"share_os","linux32")    
-elif platform.system() == "Darwin":
-    share_os_path=os.path.join(cd,"share_os","macos")
-else:
-    print("Unknown System. ("+platform.system()+")Please report this to Marusoftware(marusoftware@outlook.jp).")
-    exit(-1)
-os.environ["PATH"] += ":"+share_os_path
-sys.path.append(share_os_path)
-os.environ['TKDND_LIBRARY'] = os.path.join(share_os_path,"tkdnd")
 #GuiLib
 if argv.shell:        
     setup_info.update(gui=False)
@@ -48,48 +8,19 @@ if argv.shell:
 else:
     setup_info.update(gui=True)
     print("[info] import GUI library.....",end="")
-    try:
-        import tkinter
-    except:
-        setup_info.update(gui=False)
-        print("[error] can't import gui library.")
-        print(traceback.format_exc())
-    else:
-        print("done.")
-    import tkinter.filedialog
-    #tkdnd(dnd suppport)
-    try:
-        from tkdnd import *
-    except:
-        from tkinter import Tk
-        setup_info.update(gui_dnd = False)
-        traceback.print_exc()
-    else:
-        setup_info.update(gui_dnd = True)
-    #ttkthemes
-    try:
-        from ttkthemes import ThemedStyle as Style
-    except:
-        from tkinter.ttk import Style
-    from custom_note import CustomNotebook
-    import tkinter.simpledialog
-    import tkinter.ttk as ttk
-    import tkinter.messagebox as tkmsg
-    import filedialog as filedialog
-    from scrolledtext import ScrolledText
-    from PIL import Image, ImageTk
+    
     #import tkintertable
     #import media
 
 print("[info] import addon")
-import file_addon
+import addons
 import gui_addon
 
 try:
     print("[info] start")
     
     #import file addon
-    file_addon_list = file_addon.get()
+    file_addon_list = addons.get()
     file_addons = []
     file_addon_type = []
     file_addon_type_ex = []
@@ -109,7 +40,7 @@ try:
                 if "--debug" in sys.argv:
                     import traceback
                     print("error report=====\n"+traceback.format_exc())
-                file_addon.remove(file_addon.get_file()[len(file_addons)])
+                addons.remove(addons.get_file()[len(file_addons)])
                 time.sleep(1)
                 os.chdir(cd)
                 #subprocess.Popen([sys.argv[0]], shell=True)
@@ -574,7 +505,7 @@ try:
             s_b2.pack(side="left",fill="both",expand=True)
             def remove():
                 try:
-                    file_addon.remove(file_addon.get_file()[s.a_fl.curselection()[0]-1])
+                    addons.remove(addons.get_file()[s.a_fl.curselection()[0]-1])
                     s.a_fl.delete(s.a_fl.curselection()[0]-1)
                 except:
                     pass

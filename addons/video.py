@@ -26,6 +26,8 @@ class edit():
             return ".mvid"
         elif argv == "type_ex":
             return "Maru video file"
+        elif argv == "require":
+            return []
         else:
             return 0
     

@@ -1,8 +1,0 @@
-psutil
-babel
-numpy
-Pillow
-imageio
-pydub
-imageio-ffmpeg
-cffi

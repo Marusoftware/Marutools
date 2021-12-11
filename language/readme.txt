@@ -1,5 +1,5 @@
 ##########################################
-# Marusoftware Marueditor Language Files #
+# Marusoftware Marutools Language Files  #
 #                                        # 
 #        2020 - Marusoftware             #
 ##########################################
@@ -15,7 +15,8 @@ Now we serve these languages:
  af : Afrikaans
  zh* : Chinese(Hant and Hans)
 
-If you want another one, please contact
-here.
+And these languages were transrated by human:
+ ja-JP : Japanese
 
+If you want another one, please contact here.
 Mail: marusoftware@outlook.jp

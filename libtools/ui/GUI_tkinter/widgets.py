@@ -6,7 +6,8 @@ except ImportError:  # Python 3
     from tkinter import ttk
 
 class CustomNotebook(ttk.Notebook):
-    """A ttk Notebook with close buttons on each tab"""
+    """A ttk Notebook with close buttons on each tab
+    This code was copied from https://stackoverflow.com/questions/39458337/is-there-a-way-to-add-close-buttons-to-tabs-in-tkinter-ttk-notebook"""
 
     __initialized = False
 
@@ -92,15 +93,3 @@ class CustomNotebook(ttk.Notebook):
             ]
         })
     ])
-
-if __name__ == "__main__":
-    root = tk.Tk()
-
-    notebook = CustomNotebook(width=200, height=200)
-    notebook.pack(side="top", fill="both", expand=True)
-
-    for color in ("red", "orange", "green", "blue", "violet"):
-        frame = tk.Frame(notebook, background=color)
-        notebook.add(frame, text=color)
-
-    root.mainloop()

@@ -1,7 +1,6 @@
 #! /usr/bin/python3
 import os, sys, platform, random, string, time, threading, shutil, traceback, subprocess
 
-print("[info] import addon")
 import addons
 
 try:

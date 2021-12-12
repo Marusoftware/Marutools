@@ -15,7 +15,6 @@ __all__ = ['ScrolledText']
 from tkinter import Frame, Text, Scrollbar, Pack, Grid, Place
 from tkinter.constants import RIGHT, LEFT, Y, BOTH
 
-
 class ScrolledText(Text):
     def __init__(self, master=None, **kw):
         self.frame = Frame(master)
@@ -39,17 +38,3 @@ class ScrolledText(Text):
 
     def __str__(self):
         return str(self.frame)
-
-
-def example():
-    from tkinter.constants import END
-
-    stext = ScrolledText(bg='white', height=10)
-    stext.insert(END, __doc__)
-    stext.pack(fill=BOTH, side=LEFT, expand=True)
-    stext.focus_set()
-    stext.mainloop()
-
-
-if __name__ == "__main__":
-    example()

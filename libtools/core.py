@@ -1,8 +1,9 @@
 import sys, os, platform, logging
 
-def adjustEnv():
+def adjustEnv(logger):
     #setCurrentDirectoryAnd_macOS_BUNDLE_NAME
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        logger.debug("detect frozen")
         if platform.system() == "Darwin":
             cd = sys._MEIPASS
         elif platform.system() == "Windows":
@@ -17,36 +18,43 @@ def adjustEnv():
                     if info and info['CFBundleName'] == 'Python':
                         info['CFBundleName'] = "Marueditor"
             except:
-                pass
+                logger.debug("Error was happen on changeing MacOS ProcessName")
+            else:
+                logger.debug("MacOS ProcessName was succesfully changed.")
         cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-    os.chdir(cd)
     # __pycache__ deletion
     sys.dont_write_bytecode = True
+    #init setup_info
+    setup_info={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine(), "cd":cd, "share":os.path.join(cd,"share")}
     #path setting
-    sys.path.append(os.path.join(cd,"share"))#share library path
-    setup_info={"arch":(sys.maxsize > 2 ** 32), "cd":cd, "share":os.path.join(cd,"share")}
-    if platform.system() == "Windows":
-        import ctypes
+    if not setup_info["share"] in sys.path:
+        sys.path.append(setup_info["share"])#share library path
+    #platform specific
+    if setup_info["os"] == "Windows":
         if setup_info["arch"]:
             setup_info["share_os"]=os.path.join(cd,"share_os","win64")
         else:
             setup_info["share_os"]=os.path.join(cd,"share_os","win32")
+        #Hi DPI Support
+        import ctypes
         ctypes.windll.shcore.SetProcessDpiAwareness(True)
-    elif platform.system() == "Linux":
-        if platform.machine() == "armv7":
+    elif setup_info["os"] == "Linux":
+        if setup_info["machine"] == "armv7":
             setup_info["share_os"]=os.path.join(cd,"share_os","raspi")
-        else: 
+        else:
             if setup_info["is64bit"]:
                 setup_info["share_os"]=os.path.join(cd,"share_os","linux64")
             else:
                 setup_info["share_os"]=os.path.join(cd,"share_os","linux32")    
-    elif platform.system() == "Darwin":
+    elif setup_info["os"] == "Darwin":
         setup_info["share_os"]=os.path.join(cd,"share_os","macos")
     else:
-        print("Unknown System. ("+platform.system()+")Please report this to Marusoftware(marusoftware@outlook.jp).")
+        logger.critical(f'Unknown System. ({setup_info["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
         exit(-1)
-    os.environ["PATH"] += ":"+setup_info["share_os"]
-    sys.path.append(setup_info["share_os"])
+    if not setup_info["share_os"] in os.environ["PATH"]:
+        os.environ["PATH"] += ":"+setup_info["share_os"]
+    if not setup_info["share_os"] in sys.path:
+        sys.path.append(setup_info["share_os"])
     return setup_info
 
 class Logger():
@@ -60,11 +68,17 @@ class Logger():
         logger.stdErrOut.setFormatter(logging.Formatter('%(levelname)s:%(asctime)s:%(name)s| %(message)s'))
         logger.fileOut= logging.FileHandler(os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
         logger.fileOut.setLevel(log_level)
-        #logger.addHandler(logger.stdErrOut)#multiple stderr deletion
         logger.addHandler(logger.fileOut)
         self.logger=logger
-    def getChild(self):
-        pass
+        self.childs=[]
+    def getChild(self, name):
+        child=self.logger.getChild(name)
+        self.childs.append(child)
+        return child
+    def getLogger(self, name):
+        logger=logging.getLogger(name)
+        self.childs.append(logger)
+        return 
     def info(self, text):
         self.logger.info(text)
     def error(self, text):

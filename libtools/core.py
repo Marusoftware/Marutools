@@ -25,7 +25,7 @@ def adjustEnv(logger):
     # __pycache__ deletion
     sys.dont_write_bytecode = True
     #init setup_info
-    setup_info={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine(), "cd":cd, "share":os.path.join(cd,"share")}
+    setup_info={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine(), "cd":cd, "share":os.path.join(cd,"share"), "addons":list(os.path.join(cd,"addons"))}
     #path setting
     if not setup_info["share"] in sys.path:
         sys.path.append(setup_info["share"])#share library path

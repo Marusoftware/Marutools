@@ -1,6 +1,9 @@
-__all__=["GUI","TUI","WEB"]
+__all__=["GUI", "TUI", "WEB", "UI"]
 
-def GUI(library="auto"):
+def UI(conf, logger):
+    return GUI(conf, logger)
+
+def GUI(conf, logger, library="auto"):
     from .GUI_tkinter import TKINTER
     return TKINTER()
 

@@ -2,7 +2,7 @@ import os, getpass, pickle, locale, platform
 __all__ = ["Config"]
 
 class Config():
-    def __init__(self):
+    def __init__(self, conf_dir, global_conf):
         if platform.system() == "Linux":
             self.conf_path = os.path.join(os.path.expanduser("~"),".config","marueditor","marueditor.conf")
         elif platform.system() == "Windows":

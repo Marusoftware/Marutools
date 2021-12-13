@@ -1,20 +1,4 @@
-#! /usr/bin/python3
-import os, sys, platform, random, string, time, threading, shutil, traceback, subprocess
-
-import addons
-
 try:
-    print("[info] start")
-    tmp = ""
-    history = []
-    info = ["b0.0.1","1"]
-    openning = []
-    tema = 0
-    saved = 0
-
-    #current directory
-    os.chdir(cd)
-    
     if config.first:
         first = tkinter.Tk(className="Marueditor")
         first.title(txt["welcome"])

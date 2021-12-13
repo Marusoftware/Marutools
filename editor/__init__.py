@@ -1,5 +1,8 @@
 import argparse, libtools, os, sys
 
+__version__="Marueditor b1.0.0"
+__revision__="0"
+
 class Main():
     def __init__(self, setup_info=None):
         #LoadConfig
@@ -18,8 +21,16 @@ class Main():
             self.setup_info=libtools.core.adjustEnv(logger=self.logger.getChild("AdjustEnv"))
         self.addon=libtools.Addon(conf, self.logger.getLogger("Addon"))
         self.addon.loadAll(self.setup_info["addons"],"editor")
-        self.ui=libtools.UI(conf, self.logger.getLogger("UI"))
-
+        self.logger.info("start")
+        self.ui=libtools.UI.UI(config, self.logger.getLogger("UI"))
+    def open(self, as_diff_type=False, self_select=False):
+        self.ui.root
+    def save(self):
+        pass
+    def new(self):
+        pass
+    def close(self):
+        pass
 if __name__ == "__main__":
     """INIT"""
     #argvParse

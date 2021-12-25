@@ -1,8 +1,26 @@
-import os, getpass, pickle, locale, platform
+import os, getpass, pickle, locale, platform, sys
 __all__ = ["Config"]
 
 class Config():
-    def __init__(self, conf_dir, global_conf):
+    def __init__(self):
+        self.default_data = {}
+        self.appinfo={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine()}
+        if os.path.exists(self.data_path):
+            self.data = pickle.load(open(self.data_path, "rb"))
+        else:
+            self.data=self.default_data
+            self._syncData()
+        for index in self.default_data:
+            if not index in self.data:
+                self.data[index]=self.default_data[index]
+        if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+            if platform.system() == "Darwin":
+                cd = sys._MEIPASS
+            elif platform.system() == "Windows":
+                cd = os.path.abspath(os.path.dirname(sys.executable))
+        else:
+            cd = os.path.abspath(os.path.dirname(sys.argv[0]))
+        self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=list(os.path.join(cd,"addons")))
         if platform.system() == "Linux":
             self.conf_path = os.path.join(os.path.expanduser("~"),".config","marueditor","marueditor.conf")
         elif platform.system() == "Windows":
@@ -12,8 +30,40 @@ class Config():
                 self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming","marueditor","marueditor.conf")
         elif platform.system() == "Darwin":
                 self.conf_path = "./"+ getpass.getuser() + "marueditor.conf"
+        #platform specific
+        if appinfo["os"] == "Windows":
+            if appinfo["arch"]:
+                appinfo["share_os"]=os.path.join(cd,"share_os","win64")
+            else:
+                appinfo["share_os"]=os.path.join(cd,"share_os","win32")
+            #Hi DPI Support
+            import ctypes
+            ctypes.windll.shcore.SetProcessDpiAwareness(True)
+        elif appinfo["os"] == "Linux":
+            if appinfo["machine"] == "armv7":
+                appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
+            else:
+                if appinfo["is64bit"]:
+                    appinfo["share_os"]=os.path.join(cd,"share_os","linux64")
+                else:
+                    appinfo["share_os"]=os.path.join(cd,"share_os","linux32")    
+        elif appinfo["os"] == "Darwin":
+            appinfo["share_os"]=os.path.join(cd,"share_os","macos")
+        else:
+            logger.critical(f'Unknown System. ({appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
+            exit(-1)
         self.conf_dir = os.path.dirname(self.conf_path)
         os.makedirs(self.conf_dir,exist_ok=True)
+    def _syncData(self):
+        pickle.dump(self.data, open(self.data_path, "wb"))
+    def getProperty(self, property_name):
+        if not property_name in self.data:
+            return False
+        else:
+            return self.data[property_name]
+    def setProperty(self, property_name, value):
+        self.data[property_name]=value
+        self._syncData()
     def readConf(self):
         if os.path.exists(self.conf_path):
             try:
@@ -42,8 +92,8 @@ class Config():
     def addConf(self, key, value):
         self.conf.update([(key,value)])
         pickle.dump(self.conf ,open(self.conf_path,"wb"))
-    def setConfig(self, dictionary):
-        self.conf = dictionary
+    def delConf(self, key):
+        self.conf.pop(key)
         pickle.dump(self.conf ,open(self.conf_path,"wb"))
 
 class Lang():

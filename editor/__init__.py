@@ -5,24 +5,30 @@ __revision__="0"
 
 class Main():
     def __init__(self, setup_info=None):
-        #LoadConfig
-        config = libtools.Config()
-        conf = config.readConf()
-        #getl10n
-        lang = libtools.Lang()
-        txt = lang.getText(conf["lang"])
-        #logging
-        if "log_dir" in conf:
-            log_dir = conf["log_dir"]
-        else:
-            log_dir = os.path.join(config.conf_dir,"log/")
-        self.logger=libtools.core.Logger(log_dir=log_dir, log_level=argv.log_level)
+        self.LoadConfig()
+        self.Loadl10n()
+        self.LoadLogger()
         if not setup_info is None:
             self.setup_info=libtools.core.adjustEnv(logger=self.logger.getChild("AdjustEnv"))
         self.addon=libtools.Addon(conf, self.logger.getLogger("Addon"))
         self.addon.loadAll(self.setup_info["addons"],"editor")
         self.logger.info("start")
-        self.ui=libtools.UI.UI(config, self.logger.getLogger("UI"))
+        self.ui=libtools.UI.UI(config, self.logger.getLogger("UI"), style="")
+    def LoadConfig(self):
+        self.config = libtools.Config()
+        self.conf = self.config.readConf()
+    def Loadl10n(self, language=None):
+        if language is None:
+            language=self.conf["lang"]
+        self.lang = libtools.Lang()
+        self.txt = self.lang.getText(language)
+    def LoadLogger(self):
+        #logging
+        if "log_dir" in self.conf:
+            log_dir = self.conf["log_dir"]
+        else:
+            log_dir = os.path.join(self.config.conf_dir,"log/")
+        self.logger=libtools.core.Logger(log_dir=log_dir, log_level=argv.log_level)
     def tkerror(self, exception, value, t):
         import tkinter
         sorry = tkinter.Toplevel()
@@ -36,15 +42,10 @@ class Main():
         t.insert("end",str(t)+"\n")
         tkinter.Button(sorry, text="EXIT", command=sorry.destroy).pack()
         sorry.protocol("WM_DELETE_WINDOW",sorry.destroy)
-    #tkclassname
-    try:
-        root.style = Style()
-    except:
-        from tkinter.ttk import Style as oStyle
-        root.style = oStyle()
-    print("[info] Theme:"+conf["theme"])
+    def main(self):
+        self.logger.info("[info] Theme:"+self.conf["theme"])
     if "theme" in conf:
-        root.style.theme_use(conf["theme"])
+        pass
     root.title(txt["marueditor"])
     if os.path.exists("./image/marueditor.png"):
         try:

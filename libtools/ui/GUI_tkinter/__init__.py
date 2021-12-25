@@ -20,13 +20,20 @@ class TKINTER():
             self.setup_info["GUI_tkdnd"] = False
         else:
             self.setup_info["GUI_tkdnd"] = True
-        self.root=Tk()
-    def main(self):
-        """#ttkthemes(Now disabled)
+        self.root=Tk(className=setup_info["appname"])
+        #ttkthemes
         try:
             from ttkthemes import ThemedStyle as Style
         except:
-            from tkinter.ttk import Style"""
+            from tkinter.ttk import Style
+        try:
+            self.root.style = Style()
+        except:
+            from tkinter.ttk import Style as oStyle
+            self.root.style = oStyle()
+    def setStyle(self, name):
+        self.root.style.theme_use(name)
+    def main(self):
         try:
             from tkinter.scrolledtext import ScrolledText
         except:

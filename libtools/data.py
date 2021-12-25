@@ -31,26 +31,26 @@ class Config():
         elif platform.system() == "Darwin":
                 self.conf_path = "./"+ getpass.getuser() + "marueditor.conf"
         #platform specific
-        if appinfo["os"] == "Windows":
-            if appinfo["arch"]:
-                appinfo["share_os"]=os.path.join(cd,"share_os","win64")
+        if self.appinfo["os"] == "Windows":
+            if self.appinfo["arch"]:
+                self.appinfo["share_os"]=os.path.join(cd,"share_os","win64")
             else:
-                appinfo["share_os"]=os.path.join(cd,"share_os","win32")
+                self.appinfo["share_os"]=os.path.join(cd,"share_os","win32")
             #Hi DPI Support
             import ctypes
             ctypes.windll.shcore.SetProcessDpiAwareness(True)
-        elif appinfo["os"] == "Linux":
-            if appinfo["machine"] == "armv7":
-                appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
+        elif self.appinfo["os"] == "Linux":
+            if self.appinfo["machine"] == "armv7":
+                self.appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
             else:
-                if appinfo["is64bit"]:
-                    appinfo["share_os"]=os.path.join(cd,"share_os","linux64")
+                if self.appinfo["is64bit"]:
+                    self.appinfo["share_os"]=os.path.join(cd,"share_os","linux64")
                 else:
-                    appinfo["share_os"]=os.path.join(cd,"share_os","linux32")    
-        elif appinfo["os"] == "Darwin":
-            appinfo["share_os"]=os.path.join(cd,"share_os","macos")
+                    self.appinfo["share_os"]=os.path.join(cd,"share_os","linux32")    
+        elif self.appinfo["os"] == "Darwin":
+            self.appinfo["share_os"]=os.path.join(cd,"share_os","macos")
         else:
-            logger.critical(f'Unknown System. ({appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
+            print(f'Unknown System. ({self.appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
             exit(-1)
         self.conf_dir = os.path.dirname(self.conf_path)
         os.makedirs(self.conf_dir,exist_ok=True)

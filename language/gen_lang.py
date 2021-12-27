@@ -5,7 +5,7 @@ import os
 cd=os.path.join(os.getcwd(),"language")
 #cd = "/home/maruo/ドキュメント/program/Marutools/language"
 
-import babel, googletrans, traceback, pickle, os, sys
+import babel, googletrans, json, os, sys
 os.chdir(cd)
 translator=googletrans.Translator()
 b={}
@@ -18,11 +18,11 @@ if len(sys.argv) > 1:
             print(sys.argv[i+1])
     langs = l1
 print(langs)
-src = pickle.load(open(src_lang[0]+".lang","rb"))
+src = json.load(open(src_lang[0]+".lang","r"))
 for l in babel.localedata.locale_identifiers():
     if l in langs:
         if os.path.exists(l+".lang"):
-            b = pickle.load(open(l+".lang","rb"))
+            b = json.load(open(l+".lang","r"))
         for t in src.keys():
             if not t in b:
                 try:
@@ -30,5 +30,5 @@ for l in babel.localedata.locale_identifiers():
                 except ValueError:
                     print([langs[l],t])
                     break
-        pickle.dump(b, open(l+".lang","wb"))
+        json.dump(b, open(l+".lang","w"))
         b = {}

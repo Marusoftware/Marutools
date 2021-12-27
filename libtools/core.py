@@ -22,7 +22,11 @@ def adjustEnv(logger, appinfo):
         os.environ["PATH"] += ":"+appinfo["share_os"]
     if not appinfo["share_os"] in sys.path:
         sys.path.append(appinfo["share_os"])
-
+    if platform.system() == "Windows":
+        #Hi DPI Support
+        import ctypes
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+        logger.debug("HiDPI Support is enabled.")
 class Logger():
     def __init__(self, log_dir=None, name="main", log_level=0):
         os.makedirs(log_dir ,exist_ok=True)
@@ -44,7 +48,7 @@ class Logger():
     def getLogger(self, name):
         logger=logging.getLogger(name)
         self.childs.append(logger)
-        return 
+        return logger
     def info(self, text):
         self.logger.info(text)
     def error(self, text):

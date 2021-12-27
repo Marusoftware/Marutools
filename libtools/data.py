@@ -15,7 +15,7 @@ class Config():
                     cd = os.path.abspath(os.path.dirname(sys.executable))
             else:
                 cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-        self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=list(os.path.join(cd,"addons")), lang=os.path.join(cd, "language"))
+        self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=list(os.path.join(cd,"addons")), lang=os.path.join(cd, "language"), image=os.path.join(cd,"image"))
         if platform.system() == "Linux":
             self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname, module+".conf")
             if self.appinfo["machine"] == "armv7":

@@ -4,15 +4,17 @@ __version__="Marueditor b1.0.0"
 __revision__="0"
 
 class Main():
-    def __init__(self, app_info=None):
+    def __init__(self, appinfo=None):
         self.LoadConfig()
         self.Loadl10n()
         self.LoadLogger()
+        if not appinfo is None:
+            self.appinfo.update(**appinfo)
         libtools.core.adjustEnv(logger=self.logger.getChild("AdjustEnv"))
-        self.addon=libtools.Addon(conf, self.logger.getLogger("Addon"))
-        self.addon.loadAll(self.setup_info["addons"],"editor")
+        self.addon=libtools.Addon(self.logger.getLogger("Addon"))
+        self.addon.loadAll(self.appinfo["addons"],"editor")
         self.logger.info("start")
-        self.ui=libtools.UI.UI(config, self.logger.getLogger("UI"), style="")
+        self.ui=libtools.UI.UI(self.conf, self.logger.getLogger("UI"), style="")
     def LoadConfig(self):
         import platform, locale
         default_conf={"welcome":1, "lang":"ja_JP"}
@@ -44,7 +46,7 @@ class Main():
         if "log_dir" in self.conf:
             log_dir = self.conf["log_dir"]
         else:
-            log_dir = os.path.join(self.config.conf_dir,"log/")
+            log_dir = self.appinfo["log"]
         self.logger=libtools.core.Logger(log_dir=log_dir, log_level=argv.log_level)
     def tkerror(self, exception, value, t):
         import tkinter

@@ -2,11 +2,10 @@ import libtools, os, sys
 from importlib import import_module
 
 class Addon():
-    def __init__(self, conf, logger):
+    def __init__(self, logger):
         self.loaded_addon={}
         self.loaded_addon_info={}
         self.extdict={}
-        self.conf=conf
         self.logger=logger
     def install(self):
         pass

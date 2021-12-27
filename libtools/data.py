@@ -44,7 +44,7 @@ class Config():
             self.conf_path=os.path.join(conf_dir, appname, module+".conf")
         self.conf_dir = os.path.dirname(self.conf_path)
         os.makedirs(self.conf_dir,exist_ok=True)
-        self.appinfo.update(conf=self.conf_dir)
+        self.appinfo.update(conf=self.conf_dir, log=os.path.join(self.conf_dir, "log"))
         self.readConf()
     def _syncData(self):
         json.dump(self.conf, open(self.conf_path, "w"))

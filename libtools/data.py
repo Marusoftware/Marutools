@@ -1,18 +1,23 @@
-import os, getpass, pickle, locale, platform, sys
+import os, getpass, json, locale, platform, sys
 __all__ = ["Config"]
 
 class Config():
-    def __init__(self):
-        self.default_data = {}
-        self.appinfo={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine()}
-        if os.path.exists(self.data_path):
-            self.data = pickle.load(open(self.data_path, "rb"))
+    def __init__(self, appname, module):
+        self.default_conf = {}
+        self.default_conf.update(welcome=1)
+        if platform.system() == "Windows":
+            self.default_conf.update(theme="xpnative")
+        elif platform.system() == "Darwin":
+            self.default_conf.update(theme="aqua")
         else:
-            self.data=self.default_data
-            self._syncData()
-        for index in self.default_data:
-            if not index in self.data:
-                self.data[index]=self.default_data[index]
+            self.default_conf.update(theme="default")
+        if None in locale.getlocale():
+            self.default_conf.update([("lang",locale.getlocale()[0]),("encode",locale.getlocale()[1])])
+        else:
+            self.default_conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
+        if self.conf["lang"] == None:
+            self.conf.update(lang="ja_JP")
+        self.appinfo={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine(), "appname":appname}
         if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
             if platform.system() == "Darwin":
                 cd = sys._MEIPASS
@@ -22,79 +27,51 @@ class Config():
             cd = os.path.abspath(os.path.dirname(sys.argv[0]))
         self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=list(os.path.join(cd,"addons")))
         if platform.system() == "Linux":
-            self.conf_path = os.path.join(os.path.expanduser("~"),".config","marueditor","marueditor.conf")
-        elif platform.system() == "Windows":
-            try:
-                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming","marueditor","marueditor.conf")
-            except:
-                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming","marueditor","marueditor.conf")
-        elif platform.system() == "Darwin":
-                self.conf_path = "./"+ getpass.getuser() + "marueditor.conf"
-        #platform specific
-        if self.appinfo["os"] == "Windows":
-            if self.appinfo["arch"]:
-                self.appinfo["share_os"]=os.path.join(cd,"share_os","win64")
-            else:
-                self.appinfo["share_os"]=os.path.join(cd,"share_os","win32")
-            #Hi DPI Support
-            import ctypes
-            ctypes.windll.shcore.SetProcessDpiAwareness(True)
-        elif self.appinfo["os"] == "Linux":
+            self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname, module+".conf")
             if self.appinfo["machine"] == "armv7":
                 self.appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
             else:
                 if self.appinfo["is64bit"]:
                     self.appinfo["share_os"]=os.path.join(cd,"share_os","linux64")
                 else:
-                    self.appinfo["share_os"]=os.path.join(cd,"share_os","linux32")    
-        elif self.appinfo["os"] == "Darwin":
+                    self.appinfo["share_os"]=os.path.join(cd,"share_os","linux32")
+        elif platform.system() == "Windows":
+            try:
+                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname, module+".conf")
+            except:
+                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname, module+".conf")
+            if self.appinfo["arch"]:
+                self.appinfo["share_os"]=os.path.join(cd,"share_os","win64")
+            else:
+                self.appinfo["share_os"]=os.path.join(cd,"share_os","win32")
+        elif platform.system() == "Darwin":
+            self.conf_path = os.path.join(os.path.expanduser("~"), ".config", appname, module+".conf")
             self.appinfo["share_os"]=os.path.join(cd,"share_os","macos")
         else:
             print(f'Unknown System. ({self.appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
             exit(-1)
+        self.readConf()
+    def _syncData(self):
+        json.dump(self.conf, open(self.conf_path, "w"))
+    def readConf(self):
         self.conf_dir = os.path.dirname(self.conf_path)
         os.makedirs(self.conf_dir,exist_ok=True)
-    def _syncData(self):
-        pickle.dump(self.data, open(self.data_path, "wb"))
-    def getProperty(self, property_name):
-        if not property_name in self.data:
-            return False
-        else:
-            return self.data[property_name]
-    def setProperty(self, property_name, value):
-        self.data[property_name]=value
-        self._syncData()
-    def readConf(self):
+        self.appinfo.update(conf=self.conf_dir)
         if os.path.exists(self.conf_path):
-            try:
-                self.conf = pickle.load(open(self.conf_path,"rb"))
-            except:
-                os.remove(self.conf_path)
-            self.first = 0
+            self.conf = json.load(open(self.conf_path, "r"))
         else:
-            self.conf = {}
-            self.conf.update(welcome=1)
-            if platform.system() == "Windows":
-                self.conf.update(theme="xpnative")
-            elif platform.system() == "Darwin":
-                self.conf.update(theme="aqua")
-            else:
-                self.conf.update(theme="default")
-            if None in locale.getlocale():
-                self.conf.update([("lang",locale.getlocale()[0]),("encode",locale.getlocale()[1])])
-            else:
-                self.conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
-            if self.conf["lang"] == None:
-                self.conf.update(lang="ja_JP")
-            pickle.dump(self.conf,open(self.conf_path,"wb"))
-            self.first = 1
-        return self.conf
+            self.appinfo.update(first=True)
+            self.conf=self.default_data
+            self._syncData()
+        for index in self.default_data:
+            if not index in self.data:
+                self.data[index]=self.default_data[index]
     def addConf(self, key, value):
         self.conf.update([(key,value)])
-        pickle.dump(self.conf ,open(self.conf_path,"wb"))
+        self._syncData()
     def delConf(self, key):
         self.conf.pop(key)
-        pickle.dump(self.conf ,open(self.conf_path,"wb"))
+        self._syncData()
 
 class Lang():
     def __init__(self):

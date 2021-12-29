@@ -68,6 +68,8 @@ class TKINTER():
         t.insert("end",str(t)+"\n")
         tkinter.Button(sorry, text="EXIT", command=sorry.destroy).pack()
         #sorry.protocol("WM_DELETE_WINDOW",sorry.destroy)
+    def changeSize(self, size):
+        self._root.geometry(size)
     def main(self):
         try:
             from tkinter.scrolledtext import ScrolledText
@@ -88,3 +90,17 @@ class TKINTER():
             self._root.createcommand('tk::mac::ShowPreferences')
     def Menu(self, **options):
         return _Menu(self._root, **options)
+    def Notebook(self, close=None, command=None, **options):
+        if close is None:
+            from tkinter.ttk import Notebook
+            note=Notebook(self.root)
+        else:
+            from .widgets import CustomNotebook
+            note=CustomNotebook(self.root)
+        note.enable_traversal()
+        if not command is None:
+            note.bind("<<NotebookTabClosed>>",lambda null: command)
+        note.pack(fill="both", expand=True)
+        return note
+    def mainloop(self):
+        self._root.mainloop()

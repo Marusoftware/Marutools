@@ -22,6 +22,10 @@ class Editor():
         self.ui=libtools.UI.UI(self.config, self.logger.getLogger("UI"))
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
+        self.ui.changeSize('500x500')
+        self.ui.notebook=self.ui.Notebook()
+    def mainloop(self):
+        self.ui.mainloop()
     def exit(self):
         sys.exit()
     def LoadConfig(self):
@@ -80,11 +84,15 @@ class Editor():
         self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings")#Settings
         self.ui.menu.edit=self.ui.menu.add_category("Help", name="help")#Help
+    def open(self, as_diff_type=False, self_select=False):
+        pass
+    def save(self):
+        pass
+    def new(self):
+        pass
+    def close(self):
+        pass
 """
-        root.note = CustomNotebook(root.__root, style=root.style)
-        root.note.pack(fill="both",expand=True)
-        root.note.enable_traversal()
-        root.bind("<<NotebookTabClosed>>",lambda null: mfile.close_tab())
         print(setup_info)
         if setup_info["gui_dnd"]:
             print("[info] tkdnd enable")
@@ -96,20 +104,7 @@ class Editor():
             print("[info] open from argv("+sys.argv[-1]+")")
             mfile.open_file(ofps=3,open_path=sys.argv[-1])
         window.welcome()
-        root.geometry('500x500')
-        root.update_idletasks()
-        root.deiconify()
-        root.mainloop()
-
-        def open(self, as_diff_type=False, self_select=False):
-            self.ui.root
-        def save(self):
-            pass
-        def new(self):
-            pass
-        def close(self):
-            pass
-            # window class
+        # window class
         class window():
             #fullscreen
             def fullscreen():
@@ -544,6 +539,7 @@ def run(argv=DefaultArgv):
     app=Editor(argv)
     app.Setup()
     app.CreateMenu()
+    app.mainloop()
 
 if __name__ == "__main__":
     """INIT"""

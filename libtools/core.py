@@ -1,4 +1,7 @@
-import sys, os, platform, logging
+import sys, os, platform, logging, random, string
+
+def randomstr(n):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=n))
 
 def adjustEnv(logger, appinfo):
     #change macOS Bundle name

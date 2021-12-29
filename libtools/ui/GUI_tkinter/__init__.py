@@ -1,5 +1,6 @@
-import os, traceback
+import os
 from libtools.exception import UIError
+from libtools.ui.GUI_tkinter.menu import Menu as _Menu
 
 class TKINTER():
     def __init__(self, config, logger):
@@ -7,21 +8,21 @@ class TKINTER():
         self.config=config
         self.conf=config.conf
         self.appinfo=config.appinfo
+        self.backend="tkinter"
         try:
             import tkinter
         except:
             self.appinfo["GUI"]=False
             raise UIError("GUI is not supported")
-        if self.appinfo["GUI_tkdnd"]:
-            os.environ['TKDND_LIBRARY'] = os.path.join(self.appinfo["share_os"],"tkdnd")
+        os.environ['TKDND_LIBRARY'] = os.path.join(self.appinfo["share_os"],"tkdnd")
         try:
             from .tkdnd import Tk
         except Exception as e:
             self.logger.exception(e)
             from tkinter import Tk
-            self.appinfo["GUI_tkdnd"] = False
+            self.dnd = False
         else:
-            self.appinfo["GUI_tkdnd"] = True
+            self.dnd = True
         self.root=Tk(className=self.appinfo["appname"])
         #ttkthemes
         try:
@@ -37,6 +38,7 @@ class TKINTER():
         self.changeTitle(self.appinfo["appname"])
         if "theme" in self.conf:
             self.changeStyle(self.conf["theme"])
+        self.aqua=(self.appinfo["os"] == "Darwin" and self.root.tk.call('tk', 'windowingsystem') == "aqua")
     def changeTitle(self, title):
         self.root.title(title)
     def changeStyle(self, name):
@@ -58,7 +60,7 @@ class TKINTER():
         t.insert("end",str(value)+"\n")
         t.insert("end",str(t)+"\n")
         tkinter.Button(sorry, text="EXIT", command=sorry.destroy).pack()
-        sorry.protocol("WM_DELETE_WINDOW",sorry.destroy)
+        #sorry.protocol("WM_DELETE_WINDOW",sorry.destroy)
     def main(self):
         try:
             from tkinter.scrolledtext import ScrolledText
@@ -69,3 +71,14 @@ class TKINTER():
         import tkinter.ttk as ttk
         import tkinter.messagebox as tkmsg
         from . import filedialog
+    def setcallback(self, name, callback):
+        if name=="close":
+            self.root.protocol("WM_DELETE_WINDOW", callback)
+            if self.aqua:
+                self.root.createcommand('tk::mac::Quit', callback)
+        elif name=="macos_help" and self.aqua:
+            self.root.createcommand('tk::mac::ShowHelp', callback)
+        elif name=="macos_settings" and self.aqua:
+            self.root.createcommand('tk::mac::ShowPreferences')
+    def Menu(self, **options):
+        return _Menu(self.root, **options)

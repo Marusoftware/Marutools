@@ -3,19 +3,24 @@ import argparse, libtools, os, sys
 __version__="Marueditor b1.0.0"
 __revision__="0"
 
+class DefaultArgv:
+    log_level=0
+
 class Main():
-    def __init__(self, argv, appinfo=None):
+    def __init__(self, argv=DefaultArgv, appinfo=None):
         self.argv=argv
         self.LoadConfig()
         self.Loadl10n()
         self.LoadLogger()
         if not appinfo is None:
             self.appinfo.update(**appinfo)
-        libtools.core.adjustEnv(logger=self.logger.getChild("AdjustEnv"))
+        libtools.core.adjustEnv(self.logger.getChild("AdjustEnv"), self.appinfo)
         self.addon=libtools.Addon(self.logger.getLogger("Addon"))
         self.addon.loadAll(self.appinfo["addons"],"editor")
         self.logger.info("start")
-        self.ui=libtools.UI.UI(self.config, self.logger.getLogger("UI"), style="")
+        self.ui=libtools.UI.UI(self.config, self.logger.getLogger("UI"))
+        self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
+        self.ui.setcallback("close", self.exit)
     def LoadConfig(self):
         import platform, locale
         default_conf={"welcome":1, "lang":"ja_JP"}
@@ -42,82 +47,88 @@ class Main():
         'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'st_open_from', 'st_dnd', 'new_check2', 'about']
         self.lang = libtools.Lang(self.appinfo, req)
         self.txt = self.lang.getText(language)
-    def LoadLogger(self, debug):
+    def LoadLogger(self):
         #logging
         if "log_dir" in self.conf:
             log_dir = self.conf["log_dir"]
         else:
             log_dir = self.appinfo["log"]
         self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level)
-    def main(self):
-        self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
-            root.protocol("WM_DELETE_WINDOW", mfile.exit)
-            #create Menu(master)
-            root.menu = tkinter.Menu(root)
-            #File Menu
-            root.menu.m_f = tkinter.Menu(root.menu, tearoff=0)
-            root.menu.m_f.add_command(label=txt["new"]+" (N)", command=mfile.new ,under=len(txt["new"])+2)
-            root.menu.m_f.add_command(label=txt["open"]+" (O)", command=lambda: threading.Thread(target=mfile.open_file,args=[1]).start(),under=len(txt["open"])+2)
-            if "open_other" in conf:
-                if conf["open_other"] == 1:
-                    root.menu.m_f.add_command(label=txt["open_from"]+" (P)", command=lambda: threading.Thread(target=mfile.open_file,args=[2]).start(),under=len(txt["open_from"])+2)
-            root.menu.m_f.add_command(label=txt["save_as"]+" (A)", command=lambda:mfile.save(other_name=1),under=len(txt["save_as"])+2)
-            root.menu.m_f.add_command(label=txt["save"]+" (S)", command=mfile.save,under=len(txt["save"])+2)
-            root.menu.m_f.add_command(label=txt["close_tab"]+" (C)",command=mfile.close_tab,under=len(txt["close_tab"])+2)
-            root.menu.m_f.add_command(label=txt["close_all"]+" (X)", command=mfile.exit,under=len(txt["close_all"])+2)
-            #Window Menu
-            root.menu.m_d = tkinter.Menu(root.menu, tearoff=0, name="window")
-            fl = tkinter.BooleanVar()
-            root.menu.m_d.add_command(label=txt["open_new"]+" (N)", command=window.newwin,under=len(txt["open_new"])+2)
-            root.menu.m_d.add_checkbutton(label=txt["full_screen"]+" (F)", variable=fl, command=window.fullscreen,under=len(txt["full_screen"])+2)
-            root.menu.m_h = tkinter.Menu(root.menu, tearoff=0)
-            root.menu.m_e = tkinter.Menu(root.menu, tearoff=0, name="edit")
-            ws = root.tk.call('tk', 'windowingsystem')
-            print(ws)
-            if platform.system() == "Darwin" and ws == "aqua":
-                root.menu.apple = tkinter.Menu(root.menu, name='apple')
-                root.menu.apple.add_command(label='About Marueditor', command=hlp.var)
-                root.menu.apple.add_separator()
-                root.menu.add_cascade(menu=root.menu.apple)
-                root.menu.add_cascade(label=txt["file"], menu=root.menu.m_f)
-                root.menu.add_cascade(label=txt["window"], menu=root.menu.m_d)
-                root.menu.add_cascade(label="Edit", menu=root.menu.m_e)#todo(newtext)
-                root.createcommand('tk::mac::ShowPreferences', mfile.setting)
-                root.menu.m_h = tkinter.Menu(root.menu, name='help')
-                root.createcommand('tk::mac::ShowHelp', hlp.help)
-                root.menu.add_cascade(label=txt["help"], menu=root.menu.m_h)
-                root.createcommand('tk::mac::Quit', mfile.exit)
-            else:
-                root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f, under=len(txt["file"])+2)
-                root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d, under=len(txt["window"])+2)
-                root.menu.add_cascade(label="Edit"+" (E)", menu=root.menu.m_e, under=len("Edit")+2)#todo(newtext)
-                root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
-                root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
-                root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)
-            root.menu.m_h.add_command(label=txt["help"]+" (H)", command=hlp.help,under=len(txt["help"])+2)
-            root.menu.m_h.add_command(label=txt["chk_upd"]+" (C)", command=hlp.help,under=len(txt["chk_upd"])+2)
-            root.config(menu=root.menu)
-            root.__root = ttk.Frame(root)
-            root.__root.pack(fill="both",expand=True)
-            root.note = CustomNotebook(root.__root, style=root.style)
-            root.note.pack(fill="both",expand=True)
-            root.note.enable_traversal()
-            root.bind("<<NotebookTabClosed>>",lambda null: mfile.close_tab())
-            print(setup_info)
-            if setup_info["gui_dnd"]:
-                print("[info] tkdnd enable")
-                #oot.__root.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
-                #root.__root.dnd_frame.pack(anchor="c",fill="both",expand=True)
-                root.__root.drop_target_register(DND_FILES)
-                root.__root.dnd_bind('<<Drop>>', lambda event: mfile.open_file(ofps=3, open_path=event.data))
-            if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:
-                print("[info] open from argv("+sys.argv[-1]+")")
-                mfile.open_file(ofps=3,open_path=sys.argv[-1])
-            window.welcome()
-            root.geometry('500x500')
-            root.update_idletasks()
-            root.deiconify()
-            root.mainloop()
+    def CreateMenu(self):
+        self.ui.menu=self.ui.Menu("bar")
+        self.ui.menu.apple=self.ui.menu.add_category("apple")
+"""     def main(self):
+        import tkinter, threading, platform
+        from tkinter import ttk
+        root=self.ui.root
+        conf=self.conf
+        txt=self.txt
+        #create Menu(master)
+        root.menu = tkinter.Menu(root)
+        #File Menu
+        root.menu.m_f = tkinter.Menu(root.menu, tearoff=0)
+        root.menu.m_f.add_command(label=txt["new"]+" (N)", command=mfile.new ,under=len(txt["new"])+2)
+        root.menu.m_f.add_command(label=txt["open"]+" (O)", command=lambda: threading.Thread(target=mfile.open_file,args=[1]).start(),under=len(txt["open"])+2)
+        if "open_other" in conf:
+            if conf["open_other"] == 1:
+                root.menu.m_f.add_command(label=txt["open_from"]+" (P)", command=lambda: threading.Thread(target=mfile.open_file,args=[2]).start(),under=len(txt["open_from"])+2)
+        root.menu.m_f.add_command(label=txt["save_as"]+" (A)", command=lambda:mfile.save(other_name=1),under=len(txt["save_as"])+2)
+        root.menu.m_f.add_command(label=txt["save"]+" (S)", command=mfile.save,under=len(txt["save"])+2)
+        root.menu.m_f.add_command(label=txt["close_tab"]+" (C)",command=mfile.close_tab,under=len(txt["close_tab"])+2)
+        root.menu.m_f.add_command(label=txt["close_all"]+" (X)", command=mfile.exit,under=len(txt["close_all"])+2)
+        #Window Menu
+        root.menu.m_d = tkinter.Menu(root.menu, tearoff=0, name="window")
+        fl = tkinter.BooleanVar()
+        root.menu.m_d.add_command(label=txt["open_new"]+" (N)", command=window.newwin,under=len(txt["open_new"])+2)
+        root.menu.m_d.add_checkbutton(label=txt["full_screen"]+" (F)", variable=fl, command=window.fullscreen,under=len(txt["full_screen"])+2)
+        root.menu.m_h = tkinter.Menu(root.menu, tearoff=0)
+        root.menu.m_e = tkinter.Menu(root.menu, tearoff=0, name="edit")
+        ws = root.tk.call('tk', 'windowingsystem')
+        print(ws)
+        if platform.system() == "Darwin" and ws == "aqua":
+            root.menu.apple = tkinter.Menu(root.menu, name='apple')
+            root.menu.apple.add_command(label='About Marueditor', command=hlp.var)
+            root.menu.apple.add_separator()
+            root.menu.add_cascade(menu=root.menu.apple)
+            root.menu.add_cascade(label=txt["file"], menu=root.menu.m_f)
+            root.menu.add_cascade(label=txt["window"], menu=root.menu.m_d)
+            root.menu.add_cascade(label="Edit", menu=root.menu.m_e)#todo(newtext)
+            root.createcommand('tk::mac::ShowPreferences', mfile.setting)
+            root.menu.m_h = tkinter.Menu(root.menu, name='help')
+            root.createcommand('tk::mac::ShowHelp', hlp.help)
+            root.menu.add_cascade(label=txt["help"], menu=root.menu.m_h)
+            root.createcommand('tk::mac::Quit', mfile.exit)
+        else:
+            root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f, under=len(txt["file"])+2)
+            root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d, under=len(txt["window"])+2)
+            root.menu.add_cascade(label="Edit"+" (E)", menu=root.menu.m_e, under=len("Edit")+2)#todo(newtext)
+            root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
+            root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
+            root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)
+        root.menu.m_h.add_command(label=txt["help"]+" (H)", command=hlp.help,under=len(txt["help"])+2)
+        root.menu.m_h.add_command(label=txt["chk_upd"]+" (C)", command=hlp.help,under=len(txt["chk_upd"])+2)
+        root.config(menu=root.menu)
+        root.__root = ttk.Frame(root)
+        root.__root.pack(fill="both",expand=True)
+        root.note = CustomNotebook(root.__root, style=root.style)
+        root.note.pack(fill="both",expand=True)
+        root.note.enable_traversal()
+        root.bind("<<NotebookTabClosed>>",lambda null: mfile.close_tab())
+        print(setup_info)
+        if setup_info["gui_dnd"]:
+            print("[info] tkdnd enable")
+            #oot.__root.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
+            #root.__root.dnd_frame.pack(anchor="c",fill="both",expand=True)
+            root.__root.drop_target_register(DND_FILES)
+            root.__root.dnd_bind('<<Drop>>', lambda event: mfile.open_file(ofps=3, open_path=event.data))
+        if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:
+            print("[info] open from argv("+sys.argv[-1]+")")
+            mfile.open_file(ofps=3,open_path=sys.argv[-1])
+        window.welcome()
+        root.geometry('500x500')
+        root.update_idletasks()
+        root.deiconify()
+        root.mainloop()
 
         def open(self, as_diff_type=False, self_select=False):
             self.ui.root
@@ -172,9 +183,6 @@ class Main():
             class mfile():
                 def __init__(self):
                     pass
-                #randomstr
-                def _randomstr(n):
-                return ''.join(random.choices(string.ascii_letters + string.digits, k=n))
                 #save file
                 def save(other_name=0, save_all=1):
                     print("[save]")
@@ -559,7 +567,7 @@ class Main():
                 def help():
                     pass
                 def update():
-                    pass
+                    pass """
 
 if __name__ == "__main__":
     """INIT"""

@@ -15,7 +15,7 @@ class Config():
                     cd = os.path.abspath(os.path.dirname(sys.executable))
             else:
                 cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-        self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=list(os.path.join(cd,"addons")), lang=os.path.join(cd, "language"), image=os.path.join(cd,"image"))
+        self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=[os.path.join(cd,"addons")], lang=os.path.join(cd, "language"), image=os.path.join(cd,"image"))
         if platform.system() == "Linux":
             self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname, module+".conf")
             if self.appinfo["machine"] == "armv7":
@@ -50,21 +50,23 @@ class Config():
         json.dump(self.conf, open(self.conf_path, "w"))
     def readConf(self):
         if os.path.exists(self.conf_path):
+            f=open(self.conf_path, "r")
             try:
-                self.conf = json.load(open(self.conf_path, "r"))
+                self.conf = json.load(f)
             except:
+                f.close()
                 print("Conf file was broken. So Backup old and create new one.")
-                os.rename(self.conf_path, self.conf_path+".conf.bak")
+                os.rename(self.conf_path, self.conf_path+".bak")
                 self.appinfo.update(first=True)
-                self.conf=self.default_data
+                self.conf=self.default_conf
                 self._syncData()
         else:
             self.appinfo.update(first=True)
-            self.conf=self.default_data
+            self.conf=self.default_conf
             self._syncData()
-        for index in self.default_data:
-            if not index in self.data:
-                self.data[index]=self.default_data[index]
+        for index in self.default_conf:
+            if not index in self.conf:
+                self.conf[index]=self.default_conf[index]
     def addConf(self, key, value):
         self.conf.update([(key,value)])
         self._syncData()

@@ -38,7 +38,7 @@ class Addon():
                 self.extdict[addon.file_types].append(addon.name)
     def unload(self):
         pass
-    def loadAll(self, load_dirs:list, addon_type, ignorelist=[]):
+    def loadAll(self, load_dirs, addon_type, ignorelist=[]):
         sys.path.extend(load_dirs)
         for load_dir in load_dirs:
             for addon_file in os.listdir(load_dir):

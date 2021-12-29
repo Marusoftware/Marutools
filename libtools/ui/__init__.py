@@ -5,7 +5,7 @@ def UI(config, logger):
 
 def GUI(config, logger, library="auto"):
     from .GUI_tkinter import TKINTER
-    return TKINTER(config.conf, logger)
+    return TKINTER(config, logger)
 
 def TUI():
     pass

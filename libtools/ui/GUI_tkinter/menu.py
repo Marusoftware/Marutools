@@ -5,17 +5,20 @@ import platform
 import libtools
 
 class Menu():
-    def __init__(self, master, type, aqua=False, **options):
+    def __init__(self, master, type, aqua=False, label="", **options):
         self.type=type
         self.master=master
         self.aqua=aqua
         if type=="bar":
             self.children={}
+            self.menu=_Menu(master=master, tearoff=False, **options)
             self.master.config(menu=self.menu)
-            self.menu=_Menu(master=master, **options)
         elif type=="bar_child":
-            self.menu=_Menu(master=master, **options)
-            self.master.add_cascade(menu=self.menu)
+            self.menu=_Menu(master=master, tearoff=False, **options)
+            self.master.add_cascade(menu=self.menu, label=label)
+        elif type=="cascade":
+            self.menu=_Menu(master=master, tearoff=False, **options)
+            self.master.add_cascade(menu=self.menu, label=label)
         elif type=="popup":
             pass
         elif type=="button":
@@ -31,12 +34,19 @@ class Menu():
             if name=="apple":
                 if self.aqua:
                     pass
+                else:
+                    return
             elif name=="system":
                 if platform.system()=="Windows":
                     pass
-            self.children[name]=Menu(self.menu, "bar_child", name=name, **options)
+                else:
+                    return
+            else:
+                self.children[name]=Menu(self.menu, "bar_child", name=name, label=label, **options)
         elif self.type == "bar_child":
-            self.children[name]=Menu(self.menu, "bar_child", name=name, **options)
+            self.children[name]=Menu(self.menu, "bar_child", name=name, label=label, **options)
+        else:
+            self.children[name]=Menu(self.menu, "cascade", name=name, label=label, **options)
         return self.children[name]
     def add_item(self, type, accelerator=None, command=None, child=None, bind=True, **options):
         if self.type == "bar":

@@ -16,11 +16,11 @@ class Addon():
             module=import_module(os.path.splitext(os.path.basename(addon_file))[0], os.path.dirname(addon_file).replace(os.path.sep, "."))
         except:
             self.logger.warn(f"Can't import addon({addon_file}). (Not a collect python file.)")
-            return
+            return False
         if addon_type == "editor" and hasattr(module, "Edit"):
             if not callable(module.Edit):
                 self.logger.warn(f"Can't import addon({addon_file}). (Edit class is not callable.)")
-                return
+                return False
             attrs=["name","file_types"]
             addon=module.Edit()#add args
             for attr in attrs:
@@ -30,12 +30,15 @@ class Addon():
             else:
                 if addon.name in self.loaded_addon:
                     self.logger.warn(f"Can't import addon({addon_file}). (Used addon name.)")
-                    return
+                    return False
                 self.loaded_addon[addon.name]=addon
                 self.loaded_addon_info[addon.name]={"name":addon.name,"file_types":addon.file_types}
                 if not addon.file_types in self.extdict:
                     self.extdict[addon.file_types]=[]
                 self.extdict[addon.file_types].append(addon.name)
+                self.logger.debug(f"{addon.name} was loaded")
+                return True
+            return False
     def unload(self):
         pass
     def loadAll(self, load_dirs, addon_type, ignorelist=[]):
@@ -45,6 +48,7 @@ class Addon():
                 addon_path=os.path.join(load_dir, addon_file)
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
+        self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
                 
 
 class AddonAPI():

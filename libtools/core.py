@@ -12,7 +12,7 @@ def adjustEnv(logger, appinfo):
             if bundle:
                 info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
                 if info and info['CFBundleName'] == 'Python':
-                    info['CFBundleName'] = appinfo["appname"]
+                    info['CFBundleName'] = appinfo["appname"].lower()
         except:
             logger.debug("Error was happen on changeing MacOS ProcessName")
         else:
@@ -41,6 +41,7 @@ class Logger():
         logger.stdErrOut.setFormatter(logging.Formatter('%(levelname)s:%(asctime)s:%(name)s| %(message)s'))
         logger.fileOut= logging.FileHandler(os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
         logger.fileOut.setLevel(log_level)
+        logger.fileOut.setFormatter(logging.Formatter('%(levelname)s:%(asctime)s:%(name)s| %(message)s'))
         logger.addHandler(logger.fileOut)
         self.logger=logger
         self.childs=[]

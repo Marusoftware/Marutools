@@ -6,9 +6,10 @@ __revision__="0"
 class DefaultArgv:
     log_level=0
 
-class Main():
-    def __init__(self, argv=DefaultArgv, appinfo=None):
+class Editor():
+    def __init__(self, argv=DefaultArgv):
         self.argv=argv
+    def Setup(self, appinfo=None):
         self.LoadConfig()
         self.Loadl10n()
         self.LoadLogger()
@@ -21,6 +22,8 @@ class Main():
         self.ui=libtools.UI.UI(self.config, self.logger.getLogger("UI"))
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
+    def exit(self):
+        sys.exit()
     def LoadConfig(self):
         import platform, locale
         default_conf={"welcome":1, "lang":"ja_JP"}
@@ -34,7 +37,7 @@ class Main():
             default_conf.update([("lang",locale.getlocale()[0]),("encode",locale.getlocale()[1])])
         else:
             default_conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
-        self.config=libtools.Config("marueditor", default_conf=default_conf)
+        self.config=libtools.Config("Marueditor", default_conf=default_conf)
         self.appinfo=self.config.appinfo
         self.conf=self.config.conf
     def Loadl10n(self, language=None):
@@ -55,8 +58,8 @@ class Main():
             log_dir = self.appinfo["log"]
         self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level)
     def CreateMenu(self):
-        self.ui.menu=self.ui.Menu("bar")
-        self.ui.menu.apple=self.ui.menu.add_category("apple")
+        self.ui.menu=self.ui.Menu(type="bar")
+        self.ui.menu.apple=self.ui.menu.add_category("apple", name="apple")
 """     def main(self):
         import tkinter, threading, platform
         from tkinter import ttk
@@ -569,6 +572,11 @@ class Main():
                 def update():
                     pass """
 
+def run(argv=DefaultArgv):
+    app=Editor(argv)
+    app.Setup()
+    app.CreateMenu()
+
 if __name__ == "__main__":
     """INIT"""
     #argvParse
@@ -577,4 +585,4 @@ if __name__ == "__main__":
     argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
     argv_parser.add_argument("-log_level", action="store", type=int, dest="log_level", default=0 ,help="set Log level.(0-50)")
     argv = argv_parser.parse_args()
-    app=Main(argv)
+    run(argv)

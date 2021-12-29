@@ -17,7 +17,7 @@ class Config():
                 cd = os.path.abspath(os.path.dirname(sys.argv[0]))
         self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=[os.path.join(cd,"addons")], lang=os.path.join(cd, "language"), image=os.path.join(cd,"image"))
         if platform.system() == "Linux":
-            self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname, module+".conf")
+            self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname.lower(), module+".conf")
             if self.appinfo["machine"] == "armv7":
                 self.appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
             else:
@@ -27,21 +27,21 @@ class Config():
                     self.appinfo["share_os"]=os.path.join(cd,"share_os","linux32")
         elif platform.system() == "Windows":
             try:
-                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname, module+".conf")
+                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname.lower(), module+".conf")
             except:
-                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname, module+".conf")
+                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname.lower(), module+".conf")
             if self.appinfo["arch"]:
                 self.appinfo["share_os"]=os.path.join(cd,"share_os","win64")
             else:
                 self.appinfo["share_os"]=os.path.join(cd,"share_os","win32")
         elif platform.system() == "Darwin":
-            self.conf_path = os.path.join(os.path.expanduser("~"), ".config", appname, module+".conf")
+            self.conf_path = os.path.join(os.path.expanduser("~"), ".config", appname.lower(), module+".conf")
             self.appinfo["share_os"]=os.path.join(cd,"share_os","macos")
         else:
             print(f'Unknown System. ({self.appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
             exit(-1)
         if not conf_dir is None:
-            self.conf_path=os.path.join(conf_dir, appname, module+".conf")
+            self.conf_path=os.path.join(conf_dir, appname.lower(), module+".conf")
         self.conf_dir = os.path.dirname(self.conf_path)
         os.makedirs(self.conf_dir,exist_ok=True)
         self.appinfo.update(conf=self.conf_dir, log=os.path.join(self.conf_dir, "log"))

@@ -59,60 +59,28 @@ class Editor():
         self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level)
     def CreateMenu(self):
         self.ui.menu=self.ui.Menu(type="bar")
-        self.ui.menu.apple=self.ui.menu.add_category("apple", name="apple")
-"""     def main(self):
-        import tkinter, threading, platform
-        from tkinter import ttk
-        root=self.ui.root
-        conf=self.conf
-        txt=self.txt
-        #create Menu(master)
-        root.menu = tkinter.Menu(root)
-        #File Menu
-        root.menu.m_f = tkinter.Menu(root.menu, tearoff=0)
-        root.menu.m_f.add_command(label=txt["new"]+" (N)", command=mfile.new ,under=len(txt["new"])+2)
-        root.menu.m_f.add_command(label=txt["open"]+" (O)", command=lambda: threading.Thread(target=mfile.open_file,args=[1]).start(),under=len(txt["open"])+2)
-        if "open_other" in conf:
-            if conf["open_other"] == 1:
-                root.menu.m_f.add_command(label=txt["open_from"]+" (P)", command=lambda: threading.Thread(target=mfile.open_file,args=[2]).start(),under=len(txt["open_from"])+2)
-        root.menu.m_f.add_command(label=txt["save_as"]+" (A)", command=lambda:mfile.save(other_name=1),under=len(txt["save_as"])+2)
-        root.menu.m_f.add_command(label=txt["save"]+" (S)", command=mfile.save,under=len(txt["save"])+2)
-        root.menu.m_f.add_command(label=txt["close_tab"]+" (C)",command=mfile.close_tab,under=len(txt["close_tab"])+2)
-        root.menu.m_f.add_command(label=txt["close_all"]+" (X)", command=mfile.exit,under=len(txt["close_all"])+2)
-        #Window Menu
-        root.menu.m_d = tkinter.Menu(root.menu, tearoff=0, name="window")
-        fl = tkinter.BooleanVar()
-        root.menu.m_d.add_command(label=txt["open_new"]+" (N)", command=window.newwin,under=len(txt["open_new"])+2)
-        root.menu.m_d.add_checkbutton(label=txt["full_screen"]+" (F)", variable=fl, command=window.fullscreen,under=len(txt["full_screen"])+2)
-        root.menu.m_h = tkinter.Menu(root.menu, tearoff=0)
-        root.menu.m_e = tkinter.Menu(root.menu, tearoff=0, name="edit")
-        ws = root.tk.call('tk', 'windowingsystem')
-        print(ws)
-        if platform.system() == "Darwin" and ws == "aqua":
-            root.menu.apple = tkinter.Menu(root.menu, name='apple')
-            root.menu.apple.add_command(label='About Marueditor', command=hlp.var)
-            root.menu.apple.add_separator()
-            root.menu.add_cascade(menu=root.menu.apple)
-            root.menu.add_cascade(label=txt["file"], menu=root.menu.m_f)
-            root.menu.add_cascade(label=txt["window"], menu=root.menu.m_d)
-            root.menu.add_cascade(label="Edit", menu=root.menu.m_e)#todo(newtext)
-            root.createcommand('tk::mac::ShowPreferences', mfile.setting)
-            root.menu.m_h = tkinter.Menu(root.menu, name='help')
-            root.createcommand('tk::mac::ShowHelp', hlp.help)
-            root.menu.add_cascade(label=txt["help"], menu=root.menu.m_h)
-            root.createcommand('tk::mac::Quit', mfile.exit)
-        else:
-            root.menu.add_cascade(label=txt["file"]+" (F)", menu=root.menu.m_f, under=len(txt["file"])+2)
-            root.menu.add_cascade(label=txt["window"]+" (W)", menu=root.menu.m_d, under=len(txt["window"])+2)
-            root.menu.add_cascade(label="Edit"+" (E)", menu=root.menu.m_e, under=len("Edit")+2)#todo(newtext)
-            root.menu.m_h.add_command(label=txt["about"]+" (V)", command=hlp.var,under=len(txt["about"])+2)
-            root.menu.add_command(label=txt["setting"]+" (S)", under=len(txt["setting"])+2,command=mfile.setting)
-            root.menu.add_cascade(label=txt["help"]+" (H)", menu=root.menu.m_h,under=len(txt["help"])+2)
-        root.menu.m_h.add_command(label=txt["help"]+" (H)", command=hlp.help,under=len(txt["help"])+2)
-        root.menu.m_h.add_command(label=txt["chk_upd"]+" (C)", command=hlp.help,under=len(txt["chk_upd"])+2)
-        root.config(menu=root.menu)
-        root.__root = ttk.Frame(root)
-        root.__root.pack(fill="both",expand=True)
+        self.ui.menu.apple=self.ui.menu.add_category("apple", name="apple")#Macos apple menu
+        if not self.ui.menu.apple is None:
+            self.ui.menu.apple.add_item(type="button", label="About Marueditor")
+            self.ui.menu.apple.add_item(type="separator")
+        #self.ui.menu.system=self.ui.menu.add_category("system", name="system")#Windows icon menu(Disabled)
+        #if not self.ui.menu.system is None:
+        #    self.ui.menu.system.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
+        #    self.ui.menu.system.add_item(type="separator")
+        self.ui.menu.file=self.ui.menu.add_category("File")#File
+        self.ui.menu.file.add_item(type="button", label="New File")
+        self.ui.menu.file.add_item(type="button", label="Open")
+        self.ui.menu.file.add_item(type="button", label="Open as...")
+        self.ui.menu.file.add_item(type="button", label="Save")
+        self.ui.menu.file.add_item(type="button", label="Save as...")
+        self.ui.menu.file.add_item(type="button", label="Close tab")
+        self.ui.menu.file.add_item(type="button", label="Close all")
+        self.ui.menu.edit=self.ui.menu.add_category("Edit", name="edit")#Edit
+        self.ui.menu.window=self.ui.menu.add_category("Window", name="window")#Window
+        self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
+        self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings")#Settings
+        self.ui.menu.edit=self.ui.menu.add_category("Help", name="help")#Help
+"""
         root.note = CustomNotebook(root.__root, style=root.style)
         root.note.pack(fill="both",expand=True)
         root.note.enable_traversal()

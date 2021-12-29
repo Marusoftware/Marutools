@@ -23,31 +23,38 @@ class TKINTER():
             self.dnd = False
         else:
             self.dnd = True
-        self.root=Tk(className=self.appinfo["appname"])
+        self._root=Tk(className=self.appinfo["appname"])
         #ttkthemes
         try:
             from ttkthemes import ThemedStyle as Style
         except:
             from tkinter.ttk import Style
         try:
-            self.root.style = Style()
+            self._root.style = Style()
         except:
             from tkinter.ttk import Style as oStyle
-            self.root.style = oStyle()
-        self.root.report_callback_exception=self.tkerror
+            self._root.style = oStyle()
+        self._root.report_callback_exception=self.tkerror
         self.changeTitle(self.appinfo["appname"])
         if "theme" in self.conf:
             self.changeStyle(self.conf["theme"])
-        self.aqua=(self.appinfo["os"] == "Darwin" and self.root.tk.call('tk', 'windowingsystem') == "aqua")
+        self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
+        import tkinter.ttk as ttk
+        self.root=ttk.Frame(self._root)
+        self.root.pack(fill="both", expand=True)
     def changeTitle(self, title):
-        self.root.title(title)
+        self._root.title(title)
     def changeStyle(self, name):
-        self.root.style.theme_use(name)
+        self._root.style.theme_use(name)
         self.logger.info("Theme:"+self.conf["theme"])
     def changeIcon(self, icon_path):
         from PIL import Image, ImageTk
         icon=ImageTk.PhotoImage(Image.open(icon_path))
-        self.root.iconphoto(True, icon)
+        self._root.iconphoto(True, icon)
+    def fullscreen(self, tf=None):
+        if tf is None:
+            tf = not self._root.attributes("-fullscreen")
+        self._root.attributes("-fullscreen", tf)
     def tkerror(self, exception, value, t):
         import tkinter
         sorry = tkinter.Toplevel()
@@ -68,17 +75,16 @@ class TKINTER():
             from .scrolledtext import ScrolledText
         from .widgets import CustomNotebook
         import tkinter.simpledialog as sdg
-        import tkinter.ttk as ttk
         import tkinter.messagebox as tkmsg
         from . import filedialog
     def setcallback(self, name, callback):
         if name=="close":
-            self.root.protocol("WM_DELETE_WINDOW", callback)
+            self._root.protocol("WM_DELETE_WINDOW", callback)
             if self.aqua:
-                self.root.createcommand('tk::mac::Quit', callback)
+                self._root.createcommand('tk::mac::Quit', callback)
         elif name=="macos_help" and self.aqua:
-            self.root.createcommand('tk::mac::ShowHelp', callback)
+            self._root.createcommand('tk::mac::ShowHelp', callback)
         elif name=="macos_settings" and self.aqua:
-            self.root.createcommand('tk::mac::ShowPreferences')
+            self._root.createcommand('tk::mac::ShowPreferences')
     def Menu(self, **options):
-        return _Menu(self.root, **options)
+        return _Menu(self._root, **options)

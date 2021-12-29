@@ -1,7 +1,6 @@
 from tkinter import Menu as _Menu
 from tkinter.ttk import Menubutton, OptionMenu
 import platform
-
 import libtools
 
 class Menu():
@@ -29,20 +28,15 @@ class Menu():
             self.menu=OptionMenu(master=master, **options)
     def add_category(self, label, name=None, **options):
         if name is None:
-            name=label
+            name=libtools.core.randomstr(10).lower()
         if self.type == "bar":
             if name=="apple":
-                if self.aqua:
-                    pass
-                else:
+                if not self.aqua:
                     return
             elif name=="system":
-                if platform.system()=="Windows":
-                    pass
-                else:
+                if platform.system()!="Windows":
                     return
-            else:
-                self.children[name]=Menu(self.menu, "bar_child", name=name, label=label, **options)
+            self.children[name]=Menu(self.menu, "bar_child", name=name, label=label, **options)
         elif self.type == "bar_child":
             self.children[name]=Menu(self.menu, "bar_child", name=name, label=label, **options)
         else:

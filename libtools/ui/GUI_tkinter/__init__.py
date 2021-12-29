@@ -102,5 +102,15 @@ class TKINTER():
             note.bind("<<NotebookTabClosed>>",lambda null: command)
         note.pack(fill="both", expand=True)
         return note
+    def Dialog(self, type, **options):
+        from .dialog import Dialog
+        if type=="askfile":
+            return Dialog.askfile(**options)
+        elif type=="askdir":
+            return Dialog.askdir(**options)
     def mainloop(self):
         self._root.mainloop()
+
+class WidgetBase():
+    def __init__(self):
+        pass

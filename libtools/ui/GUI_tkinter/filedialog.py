@@ -1,18 +1,11 @@
 import platform
 import tkinter.filedialog as _fd1
-if platform.system() == "Linux":
+try:
     import tkfilebrowser as _fd2
-elif platform.system() == "Darwin":
-    import tkfilebrowser as _fd2
+except:
+    mode=0
 else:
-    try:
-        import tkfilebrowser as _fd2
-    except:
-        pass
-#from TkinterDnD2 import *
-import tkinter
-from tkinter import ttk
-#import tkdnd
+    mode=1
 
 #default setting
 if platform.system() == "Linux":

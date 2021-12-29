@@ -84,8 +84,26 @@ class Editor():
         self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings")#Settings
         self.ui.menu.edit=self.ui.menu.add_category("Help", name="help")#Help
-    def open(self, as_diff_type=False, self_select=False):
-        pass
+    def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
+        def select_addon(exts, recom=None):
+            pass
+        if file is None:
+            file=self.ui.Dialog(type="askfile")
+        ext=os.path.splitext(file)
+        if force_select:
+            addon=select_addon(list(self.addon.extdict.keys()), recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
+        else:
+            if ext in self.addon.extdict:
+                pass
+            else:
+                if as_diff_type:
+                    pass
+                else:
+                    self.ui.Dialog(type="error", title="Error", message="Can't find valid addon.")
+                    addon=None
+        if not addon is None:
+            pass
+
     def save(self):
         pass
     def new(self):

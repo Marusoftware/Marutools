@@ -73,8 +73,8 @@ class Editor():
         #    self.ui.menu.system.add_item(type="separator")
         self.ui.menu.file=self.ui.menu.add_category("File")#File
         self.ui.menu.file.add_item(type="button", label="New File")
-        self.ui.menu.file.add_item(type="button", label="Open")
-        self.ui.menu.file.add_item(type="button", label="Open as...")
+        self.ui.menu.file.add_item(type="button", label="Open", command=self.open)
+        self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
         self.ui.menu.file.add_item(type="button", label="Save")
         self.ui.menu.file.add_item(type="button", label="Save as...")
         self.ui.menu.file.add_item(type="button", label="Close tab")

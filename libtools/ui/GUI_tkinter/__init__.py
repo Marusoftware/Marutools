@@ -3,45 +3,50 @@ from libtools.exception import UIError
 from libtools.ui.GUI_tkinter.menu import Menu as _Menu
 
 class TKINTER():
-    def __init__(self, config, logger):
+    def __init__(self, config, logger, type="main", master=None):
+        self.master=master
         self.logger=logger
         self.config=config
+        self.type=type
         self.conf=config.conf
         self.appinfo=config.appinfo
         self.backend="tkinter"
-        try:
-            import tkinter
-        except:
-            self.appinfo["GUI"]=False
-            raise UIError("GUI is not supported")
-        os.environ['TKDND_LIBRARY'] = os.path.join(self.appinfo["share_os"],"tkdnd")
-        try:
-            from .tkdnd import Tk
-        except Exception as e:
-            self.logger.exception(e)
-            from tkinter import Tk
-            self.dnd = False
-        else:
-            self.dnd = True
-        self._root=Tk(className=self.appinfo["appname"])
-        #ttkthemes
-        try:
-            from ttkthemes import ThemedStyle as Style
-        except:
-            from tkinter.ttk import Style
-        try:
-            self._root.style = Style()
-        except:
-            from tkinter.ttk import Style as oStyle
-            self._root.style = oStyle()
-        self._root.report_callback_exception=self.tkerror
-        self.changeTitle(self.appinfo["appname"])
-        if "theme" in self.conf:
-            self.changeStyle(self.conf["theme"])
+        if type=="main":
+            try:
+                import tkinter
+            except:
+                raise UIError("GUI is not supported")
+            os.environ['TKDND_LIBRARY'] = os.path.join(self.appinfo["share_os"],"tkdnd")
+            try:
+                from .tkdnd import Tk
+            except Exception as e:
+                self.logger.exception(e)
+                from tkinter import Tk
+                self.dnd = False
+            else:
+                self.dnd = True
+            self._root=Tk(className=self.appinfo["appname"])
+            #ttkthemes
+            try:
+                from ttkthemes import ThemedStyle as Style
+                self._root.style = Style()
+            except:
+                from tkinter.ttk import Style
+                self._root.style = Style()
+            self._root.report_callback_exception=self.tkerror
+            self.changeTitle(self.appinfo["appname"])
+            if "theme" in self.conf:
+                self.changeStyle(self.conf["theme"])
+        elif type=="sub":
+            from tkinter import Toplevel
+            self._root=Toplevel()
+            self.master
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
         import tkinter.ttk as ttk
         self.root=ttk.Frame(self._root)
         self.root.pack(fill="both", expand=True)
+        from .dialog import Dialog
+        self.Dialog=Dialog()
     def changeTitle(self, title):
         self._root.title(title)
     def changeStyle(self, name):
@@ -75,10 +80,6 @@ class TKINTER():
             from tkinter.scrolledtext import ScrolledText
         except:
             from .scrolledtext import ScrolledText
-        from .widgets import CustomNotebook
-        import tkinter.simpledialog as sdg
-        import tkinter.messagebox as tkmsg
-        from . import filedialog
     def setcallback(self, name, callback):
         if name=="close":
             self._root.protocol("WM_DELETE_WINDOW", callback)
@@ -102,15 +103,10 @@ class TKINTER():
             note.bind("<<NotebookTabClosed>>",lambda null: command)
         note.pack(fill="both", expand=True)
         return note
-    def Dialog(self, type, **options):
-        from .dialog import Dialog
-        if type=="askfile":
-            return Dialog.askfile(**options)
-        elif type=="askdir":
-            return Dialog.askdir(**options)
     def mainloop(self):
         self._root.mainloop()
 
 class WidgetBase():
-    def __init__(self):
-        pass
+    def __init__(self, master):
+        self.backend="tkinter"
+        self.master=master

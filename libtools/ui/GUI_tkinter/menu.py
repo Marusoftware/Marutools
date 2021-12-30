@@ -5,6 +5,7 @@ import libtools
 
 class Menu():
     def __init__(self, master, type, aqua=False, label="", **options):
+        self.backend="tkinter"
         self.type=type
         self.master=master
         self.aqua=aqua

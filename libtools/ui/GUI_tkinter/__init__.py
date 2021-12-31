@@ -3,14 +3,15 @@ from libtools.exception import UIError
 from libtools.ui.GUI_tkinter.menu import Menu as _Menu
 
 class TKINTER():
-    def __init__(self, config, logger, type="main", master=None):
-        self.master=master
+    def __init__(self, config, logger, type="main", parent=None):
+        self.parent=parent
         self.logger=logger
         self.config=config
         self.type=type
         self.conf=config.conf
         self.appinfo=config.appinfo
         self.backend="tkinter"
+        self.children=[]
         if type=="main":
             try:
                 import tkinter
@@ -37,16 +38,20 @@ class TKINTER():
             self.changeTitle(self.appinfo["appname"])
             if "theme" in self.conf:
                 self.changeStyle(self.conf["theme"])
-        elif type=="sub":
+        else:
             from tkinter import Toplevel
-            self._root=Toplevel()
-            self.master
+            self._root=Toplevel(master=self.parent._root)
+            self.dnd=self.parent.dnd
+            if type=="dialog":
+                self._root.resizable(0,0)
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
         import tkinter.ttk as ttk
         self.root=ttk.Frame(self._root)
         self.root.pack(fill="both", expand=True)
         from .dialog import Dialog
-        self.Dialog=Dialog()
+        self.Dialog=Dialog(self._root)
+        from .input import Input
+        self.Input=Input(self.root)
     def changeTitle(self, title):
         self._root.title(title)
     def changeStyle(self, name):
@@ -103,6 +108,12 @@ class TKINTER():
             note.bind("<<NotebookTabClosed>>",lambda null: command)
         note.pack(fill="both", expand=True)
         return note
+    def makeSubWindow(self, dialog=False):
+        child=TKINTER(self.config, self.logger, type=("dialog" if dialog else"sub"), parent=self)
+        self.children.append(child)
+        return child
+    def close(self):
+        self._root.destroy()
     def mainloop(self):
         self._root.mainloop()
 
@@ -110,3 +121,22 @@ class WidgetBase():
     def __init__(self, master):
         self.backend="tkinter"
         self.master=master
+        self.placer=None
+    def pack(self, **options):
+        self.widget.pack(**options)
+        self.placer="pack"
+    def grid(self, **options):
+        self.widget.grid(**options)
+        self.placer="grid"
+    def place(self, **options):
+        self.widget.place(**options)
+        self.placer="place"
+    def hide(self, **options):
+        if self.placer is None:
+            pass
+        elif "pack":
+            self.widget.pack_forget(**options)
+        elif "grid":
+            self.widget.pack_forget(**options)
+        elif "place":
+            self.widget.pack_forget(**options)

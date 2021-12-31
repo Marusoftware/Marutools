@@ -83,33 +83,48 @@ class Editor():
         self.ui.menu.window=self.ui.menu.add_category("Window", name="window")#Window
         self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings")#Settings
-        self.ui.menu.edit=self.ui.menu.add_category("Help", name="help")#Help
+        self.ui.menu.help=self.ui.menu.add_category("Help", name="help")#Help
+        self.ui.menu.help.add_item(type="button", label="Version and License", command=self.version)
+    def welcome(self):
+        pass
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
-        def select_addon(exts, recom=None):
-            pass
+        def select_addon(exts, values, recom=None):
+            root=self.ui.makeSubWindow(dialog=True)
+            #title
+            root.list=root.Input.List()
+            root.list.pack(expand=True, fill="both")
+            root.ok=root.Input.Button(label="OK")
+            root.ok.pack(expand=True, fill="both", side="bottom")
+            root.cancel=root.Input.Button(label="Cancel", command=root.close)
+            root.cancel.pack(expand=True, fill="both", side="bottom")
+            for i in exts:
+                root.list.add_item(label=i, values=exts[i])
         if file is None:
-            file=self.ui.Dialog(type="askfile")
+            file=self.ui.Dialog.askfile()
+            if not os.path.exists(file):
+                return
         ext=os.path.splitext(file)
         if force_select:
-            addon=select_addon(list(self.addon.extdict.keys()), recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
+            addon=select_addon(list(self.addon.extdict), list(self.addon.extdict.values()), recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
         else:
             if ext in self.addon.extdict:
-                pass
+                addon=self.addon.extdict[ext][0]
             else:
                 if as_diff_type:
-                    pass
+                    addon=select_addon(self.addon.extdict, list(self.addon.extdict.values()))
                 else:
-                    self.ui.Dialog(type="error", title="Error", message="Can't find valid addon.")
+                    self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     addon=None
         if not addon is None:
             pass
-
     def save(self):
         pass
     def new(self):
         pass
     def close(self):
         pass
+    def version(self):
+        root=self.ui.makeSubWindow(dialog=True)
 """
         print(setup_info)
         if setup_info["gui_dnd"]:
@@ -124,14 +139,6 @@ class Editor():
         window.welcome()
         # window class
         class window():
-            #fullscreen
-            def fullscreen():
-                if fl.get() == 1:
-                    root.attributes("-fullscreen", True)
-                    print("[window]fullscreen on")
-                else:
-                    root.attributes("-fullscreen", False)
-                    print("[window]fullscreen off")
             #open new window
             def newwin():
                 subprocess.Popen(["python3",sys.argv[0]])
@@ -165,11 +172,8 @@ class Editor():
 
             #file edit class
             class mfile():
-                def __init__(self):
-                    pass
                 #save file
                 def save(other_name=0, save_all=1):
-                    print("[save]")
                     if not root.note.welcome.opened:
                         if save_all == 1:
                             if other_name == 0:
@@ -183,109 +187,6 @@ class Editor():
                         else:
                             for i in range(len(openning)):
                                 threading.Thread(target=lambda:openning[i][1].file_save(openning[i][0],"0")).start()
-                #open file
-                def open_file(ofps=0, open_path=None, dnd=None):#todo: rebuild
-                    print("[file][open] run")
-                    if ofps == 1:
-                        if os.name == "posix":
-                            ftype = [(txt["marueditor_file"],str(file_addon_type).lstrip("[").rstrip("]").replace(".","*.").replace("'","").replace(", ","|"))]
-                        elif os.name == "nt":
-                            ftype = [(txt["marueditor_file"],tuple(file_addon_type))]
-                        else:
-                            ftype = []
-                        for i in range(len(file_addons)):
-                            ftype.append((file_addon_type_ex[i],file_addon_type[i]))
-                        ftype.append((txt["all"],"*.*"))
-                        time.sleep(0.1)
-                        if dnd != None:
-                            print(dnd.data)
-                            open_path = str(dnd.data).encode("iso8859-1").decode("utf-8")
-                        else:
-                            open_path = filedialog.askopenfilename(filetypes=ftype, master=root)
-                    elif ofps == 2:
-                        open_path = filedialog.askopenfilename(filetypes=[(txt["all"],"*.*")])
-                    elif ofps == 3:
-                        pass
-                    if open_path == '':
-                        print("[file:warn](001):no file select.")
-                    elif type(open_path) != str:
-                        print("[file:warn](002):no such file or directory.({})".format(open_path))
-                    elif ofps != 0 and not os.path.exists(open_path):
-                        print("[file:warn](002):no such file or directory.({})".format(open_path))
-                    else:
-                        if ofps == 0 or ofps == 1:
-                            for i in range(len(file_addon_list)):
-                                if file_addon_type[i] in open_path:
-                                    openning.append([ttk.Frame(root.note),file_addons[i]])
-                                    openning[-1][0].pack(fill="both")
-                                    #root.tkdnd.bindtarget(openning[-1][0], lambda event: mfile.open_file(dnd=event), "text/uri-list")
-                                    root.note.add(openning[-1][0], text=os.path.basename(open_path), sticky="nsew")
-                                    window.welcome()
-                                    openning[-1][0].temp_dir = os.path.join(os.path.dirname(config.conf_path),mfile._randomstr(10))
-                                    os.makedirs(openning[-1][0].temp_dir,exist_ok=True)
-                                    file_addons[i].file_open(open_path, ofps, openning[-1][0])
-                                    main(open_path, len(openning)-1, i)
-                                    break
-                                elif len(file_addon_list)-1 == i:
-                                    tkmsg.showerror(txt["error"],txt["error_cant_open"])
-                                os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
-                        elif ofps == 3:
-                            for i in range(len(file_addon_list)):
-                                if file_addon_type[i] in open_path:
-                                    openning.append([ttk.Frame(root.note),file_addons[i]])
-                                    openning[-1][0].pack(fill="both")
-                                    #root.tkdnd.bindtarget(openning[-1][0], lambda event: mfile.open_file(dnd=event), "text/uri-list")
-                                    root.note.add(openning[-1][0], text=os.path.basename(open_path), sticky="nsew")
-                                    window.welcome()
-                                    openning[-1][0].temp_dir = os.path.join(os.path.dirname(config.conf_path),mfile._randomstr(10))
-                                    os.makedirs(openning[-1][0].temp_dir,exist_ok=True)
-                                    file_addons[i].file_open(open_path, ofps, openning[-1][0])
-                                    main(open_path, len(openning)-1, i)
-                                    break
-                                elif len(file_addon_list)-1 == i:
-                                    self = tkinter.Toplevel()
-                                    self.title(txt["select_file_type"])
-                                    self.lb = tkinter.Listbox(self)
-                                    self.lb.pack()
-                                    for i in range(len(file_addons)):
-                                        self.lb.insert("end",(file_addon_type_ex[i],file_addon_type[i]))
-                                    def fileopen(open_path):
-                                        global openning
-                                        openning.append([ttk.Frame(root.note),file_addons[i]])
-                                        openning[-1][0].pack(fill="both")
-                                        #root.tkdnd.bindtarget(openning[-1][0], lambda event: mfile.open_file(dnd=event), "text/uri-list")
-                                        root.note.add(openning[-1][0], text=os.path.basename(config.open_path), sticky="nsew")
-                                        window.welcome()
-                                        openning[-1][0].temp_dir = os.path.join(os.path.dirname(config.conf_path),mfile._randomstr(10))
-                                        os.makedirs(openning[-1][0].temp_dir,exist_ok=True)
-                                        file_addons[i].file_open(open_path, ofps, openning[-1][0])
-                                        main(open_path, len(openning)-1, self.lb.curselection()[0])
-                                    self.bt1 = ttk.Button(self, text=txt["next"], command=lambda:(fileopen(open_path),self.destroy()))
-                                    self.bt1.pack()
-                                    #self.mainloop()
-                                    break
-                            os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
-                        else:
-                            self = tkinter.Toplevel()
-                            self.title(txt["select_file_type"])
-                            self.lb = tkinter.Listbox(self)
-                            self.lb.pack()
-                            for i in range(len(file_addons)):
-                                self.lb.insert("end",(file_addon_type_ex[i],file_addon_type[i]))
-                            def fileopen(open_path):
-                                global openning
-                                openning.append([ttk.Frame(root.note),file_addons[i]])
-                                openning[-1][0].pack(fill="both")
-                                #root.tkdnd.bindtarget(openning[-1][0], lambda event: mfile.open_file(dnd=event), "text/uri-list")
-                                root.note.add(openning[-1][0], text=os.path.basename(open_path))
-                                window.welcome()
-                                openning[-1][0].temp_dir = os.path.join(os.path.dirname(config.conf_path),mfile._randomstr(10))
-                                os.makedirs(openning[-1][0].temp_dir,exist_ok=True)
-                                file_addons[i].file_open(open_path, ofps, openning[-1][0])
-                                main(open_path, len(openning)-1, self.lb.curselection()[0])
-                            self.bt1 = ttk.Button(self, text=txt["next"], command=lambda:(fileopen(open_path),self.destroy()))
-                            self.bt1.pack()
-                            #self.mainloop()
                 #exit  
                 def exit():
                     def remove():

@@ -1,22 +1,25 @@
 from . import WidgetBase
 
-class Input(WidgetBase):
-    pass
-
-class Button(WidgetBase):
+class _Button(WidgetBase):
     def __init__(self, master, label, **options):
         super().__init__(master)
         from tkinter import Button
-        self.button=Button(self.master, text=label, **options)
-        self.button.pack(expand=True, fill="both")
-class List(WidgetBase):
-    def __init__(self, master, label, **options):
+        self.widget=Button(self.master, text=label, **options)
+class _List(WidgetBase):
+    def __init__(self, master, **options):
         super().__init__(master)
         from tkinter.ttk import Treeview
-        self.list=Treeview(self.master, **options)
-        self.list.pack(expand=True, fill="both")
-        self.category=[]
-    def add_category(self):
-        pass
-    def add_item(self):
-        pass
+        self.widget=Treeview(self.master, **options)
+    def set_header(self, column, text):
+        self.widget.heading("#"+str(column), text=text)
+    def add_item(self, parent="", index=0, id=None, label="", values=None, **options):
+        if not id is None:
+            options.update(iid=id)
+        if not values is None:
+            options.update(values=values)
+        self.widget.insert(parent=parent, index=index, text=label, **options)
+class Input(WidgetBase):
+    def Button(self, **options):
+        return _Button(self.master, **options)
+    def List(self, **options):
+        return _List(self.master, **options)

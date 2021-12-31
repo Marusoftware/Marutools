@@ -3,7 +3,7 @@ from libtools.exception import UIError
 from libtools.ui.GUI_tkinter.menu import Menu as _Menu
 
 class TKINTER():
-    def __init__(self, config, logger, type="main", parent=None):
+    def __init__(self, config, logger, type="main", parent=None, label=None, **options):
         self.parent=parent
         self.logger=logger
         self.config=config
@@ -38,6 +38,12 @@ class TKINTER():
             self.changeTitle(self.appinfo["appname"])
             if "theme" in self.conf:
                 self.changeStyle(self.conf["theme"])
+        elif type=="frame":
+            from tkinter.ttk import Frame, Labelframe
+            if label is None:
+                self._root=Frame(self.master, **options)
+            else:
+                self._root=Labelframe(self.master, text=label, **options)
         else:
             from tkinter import Toplevel
             self._root=Toplevel(master=self.parent._root)
@@ -65,17 +71,16 @@ class TKINTER():
         if tf is None:
             tf = not self._root.attributes("-fullscreen")
         self._root.attributes("-fullscreen", tf)
-    def tkerror(self, exception, value, t):
-        import tkinter
+    def tkerror(self, *args):
+        import tkinter, traceback
+        err = traceback.format_exception(*args)
         sorry = tkinter.Toplevel()
         sorry.title("Marueditor - Error")
         tkinter.Label(sorry,text="We're sorry.\n\nError is happen.").pack()
         t = tkinter.Text(sorry)
         t.pack()
         t.insert("end","Error report=========\n")
-        t.insert("end",str(exception)+"\n")
-        t.insert("end",str(value)+"\n")
-        t.insert("end",str(t)+"\n")
+        t.insert("end",str("\n".join(err))+"\n")
         tkinter.Button(sorry, text="EXIT", command=sorry.destroy).pack()
         #sorry.protocol("WM_DELETE_WINDOW",sorry.destroy)
     def changeSize(self, size):
@@ -97,21 +102,17 @@ class TKINTER():
     def Menu(self, **options):
         return _Menu(self._root, **options)
     def Notebook(self, close=None, command=None, **options):
-        if close is None:
-            from tkinter.ttk import Notebook
-            note=Notebook(self.root)
-        else:
-            from .widgets import CustomNotebook
-            note=CustomNotebook(self.root)
-        note.enable_traversal()
-        if not command is None:
-            note.bind("<<NotebookTabClosed>>",lambda null: command)
-        note.pack(fill="both", expand=True)
-        return note
+        from .note import Notebook
+        return Notebook(self.root, command=command, close=close, **options)
     def makeSubWindow(self, dialog=False):
         child=TKINTER(self.config, self.logger, type=("dialog" if dialog else"sub"), parent=self)
         self.children.append(child)
         return child
+    def Frame(self):
+        pass
+    def Label(self, **options):
+        from .base import Label
+        return Label(self.root, **options)
     def close(self):
         self._root.destroy()
     def mainloop(self):
@@ -140,3 +141,8 @@ class WidgetBase():
             self.widget.pack_forget(**options)
         elif "place":
             self.widget.pack_forget(**options)
+
+class Frame(TKINTER, WidgetBase):
+    def __init__(self, master, logger, parent, label=None, **options):
+        super().__init__(master=master, logger=logger, type="frame", parent=parent)
+        

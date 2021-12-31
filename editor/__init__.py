@@ -90,7 +90,7 @@ class Editor():
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
         def select_addon(exts, values, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            #title
+            root.Label(image="marueditor.png")
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
             root.ok=root.Input.Button(label="OK")
@@ -105,18 +105,17 @@ class Editor():
                 return
         ext=os.path.splitext(file)
         if force_select:
-            addon=select_addon(list(self.addon.extdict), list(self.addon.extdict.values()), recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
+            select_addon(list(self.addon.extdict), list(self.addon.extdict.values()), recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
         else:
             if ext in self.addon.extdict:
                 addon=self.addon.extdict[ext][0]
+                self.addon.run(addon, file, ext)
             else:
                 if as_diff_type:
-                    addon=select_addon(self.addon.extdict, list(self.addon.extdict.values()))
+                    select_addon(self.addon.extdict, list(self.addon.extdict.values()))
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
-                    addon=None
-        if not addon is None:
-            pass
+                    return
     def save(self):
         pass
     def new(self):
@@ -125,6 +124,7 @@ class Editor():
         pass
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
+        root.title=root.Label(text="")
 """
         print(setup_info)
         if setup_info["gui_dnd"]:

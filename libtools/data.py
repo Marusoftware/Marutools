@@ -2,44 +2,48 @@ import os, getpass, json, locale, platform, sys
 __all__ = ["Config"]
 
 class Config():
-    def __init__(self, appname, module=None, default_conf={}, cd=None, conf_dir=None):
+    def __init__(self, appname, module=None, default_conf={}, cd=None, conf_dir=None, addon=None):
         if module is None:
             module=appname
         self.default_conf = default_conf
-        self.appinfo={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine(), "appname":appname}
-        if cd is None:
-            if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-                if platform.system() == "Darwin":
-                    cd = sys._MEIPASS
-                elif platform.system() == "Windows":
-                    cd = os.path.abspath(os.path.dirname(sys.executable))
-            else:
-                cd = os.path.abspath(os.path.dirname(sys.argv[0]))
-        self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=[os.path.join(cd,"addons")], lang=os.path.join(cd, "language"), image=os.path.join(cd,"image"))
-        if platform.system() == "Linux":
-            self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname.lower(), module+".conf")
-            if self.appinfo["machine"] == "armv7":
-                self.appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
-            else:
-                if self.appinfo["arch"]:
-                    self.appinfo["share_os"]=os.path.join(cd,"share_os","linux64")
+        if addon is None:
+            self.appinfo={"arch":(sys.maxsize > 2 ** 32), "os":platform.system(), "machine":platform.machine(), "appname":appname}
+            if cd is None:
+                if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+                    if platform.system() == "Darwin":
+                        cd = sys._MEIPASS
+                    elif platform.system() == "Windows":
+                        cd = os.path.abspath(os.path.dirname(sys.executable))
                 else:
-                    self.appinfo["share_os"]=os.path.join(cd,"share_os","linux32")
-        elif platform.system() == "Windows":
-            try:
-                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname.lower(), module+".conf")
-            except:
-                self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname.lower(), module+".conf")
-            if self.appinfo["arch"]:
-                self.appinfo["share_os"]=os.path.join(cd,"share_os","win64")
+                    cd = os.path.abspath(os.path.dirname(sys.argv[0]))
+            self.appinfo.update(cd=cd, share=os.path.join(cd,"share"), addons=[os.path.join(cd,"addons")], lang=os.path.join(cd, "language"), image=os.path.join(cd,"image"))
+            if platform.system() == "Linux":
+                self.conf_path = os.path.join(os.path.expanduser("~"),".config", appname.lower(), module+".conf")
+                if self.appinfo["machine"] == "armv7":
+                    self.appinfo["share_os"]=os.path.join(cd,"share_os","raspi")
+                else:
+                    if self.appinfo["arch"]:
+                        self.appinfo["share_os"]=os.path.join(cd,"share_os","linux64")
+                    else:
+                        self.appinfo["share_os"]=os.path.join(cd,"share_os","linux32")
+            elif platform.system() == "Windows":
+                try:
+                    self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname.lower(), module+".conf")
+                except:
+                    self.conf_path = os.path.join(os.path.expanduser("~"),"Appdata","Roaming", appname.lower(), module+".conf")
+                if self.appinfo["arch"]:
+                    self.appinfo["share_os"]=os.path.join(cd,"share_os","win64")
+                else:
+                    self.appinfo["share_os"]=os.path.join(cd,"share_os","win32")
+            elif platform.system() == "Darwin":
+                self.conf_path = os.path.join(os.path.expanduser("~"), ".config", appname.lower(), module+".conf")
+                self.appinfo["share_os"]=os.path.join(cd,"share_os","macos")
             else:
-                self.appinfo["share_os"]=os.path.join(cd,"share_os","win32")
-        elif platform.system() == "Darwin":
-            self.conf_path = os.path.join(os.path.expanduser("~"), ".config", appname.lower(), module+".conf")
-            self.appinfo["share_os"]=os.path.join(cd,"share_os","macos")
+                print(f'Unknown System. ({self.appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
+                exit(-1)
         else:
-            print(f'Unknown System. ({self.appinfo["os"]})Please report this to Marusoftware(marusoftware@outlook.jp).')
-            exit(-1)
+            self.appinfo=addon
+            self.conf_path=os.path.join(self.appinfo["conf"], appname, module+".conf")
         if not conf_dir is None:
             self.conf_path=os.path.join(conf_dir, appname.lower(), module+".conf")
         self.conf_dir = os.path.dirname(self.conf_path)

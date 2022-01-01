@@ -2,11 +2,12 @@ import libtools, os, sys
 from importlib import import_module
 
 class Addon():
-    def __init__(self, logger):
+    def __init__(self, logger, appinfo):
         self.loaded_addon={}
         self.loaded_addon_info={}
         self.extdict={}
         self.logger=logger
+        self.appinfo=appinfo
     def install(self):
         pass
     def uninstall(self):
@@ -21,10 +22,10 @@ class Addon():
             if not callable(module.Edit):
                 self.logger.warn(f"Can't import addon({addon_file}). (Edit class is not callable.)")
                 return False
-            attrs=["name","file_types"]
-            addon=module.Edit()#add args
+            attrs=["name","file_types","open"]
+            addon=module.Edit#add args
             for attr in attrs:
-                if not hasattr(addon.Edit, attr):
+                if not hasattr(addon, attr):
                     self.logger.warn(f"Can't import addon({addon_file}). (Missing {attr} attr.)")
                     break
             else:
@@ -33,9 +34,10 @@ class Addon():
                     return False
                 self.loaded_addon[addon.name]=addon
                 self.loaded_addon_info[addon.name]={"name":addon.name,"file_types":addon.file_types}
-                if not addon.file_types in self.extdict:
-                    self.extdict[addon.file_types]=[]
-                self.extdict[addon.file_types].append(addon.name)
+                for ext in addon.file_types:
+                    if not ext in self.extdict:
+                        self.extdict[ext]=[]
+                    self.extdict[ext].append(addon.name)
                 self.logger.debug(f"{addon.name} was loaded")
                 return True
             return False
@@ -49,11 +51,16 @@ class Addon():
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
         self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
-    def run(self, addon, file, ext):
-        self.loaded_addon[addon].open(file, ext)
-                
-
+    def open(self, addon, file, ext):
+        pass
 class AddonAPI():
-    def __init__(self, name, conf):
+    def __init__(self, name, appinfo, addon):
         self.name=name
         self.logger=libtools.core.Logger(name=name)
+        self.appinfo=appinfo
+        self.addon=addon
+    def getConfig(self, module="main", default_conf={}):
+        self.appinfo
+        self.config=libtools.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)
+    def open(self):
+        self.addon.open()

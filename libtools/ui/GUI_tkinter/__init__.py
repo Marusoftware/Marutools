@@ -50,10 +50,14 @@ class TKINTER():
             self.dnd=self.parent.dnd
             if type=="dialog":
                 self._root.resizable(0,0)
+                self._root.grab_set()
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
-        import tkinter.ttk as ttk
-        self.root=ttk.Frame(self._root)
-        self.root.pack(fill="both", expand=True)
+        if type!="frame":
+            import tkinter.ttk as ttk
+            self.root=ttk.Frame(self._root)
+            self.root.pack(fill="both", expand=True)
+        else:
+            self.root=self._root
         from .dialog import Dialog
         self.Dialog=Dialog(self._root)
         from .input import Input
@@ -103,18 +107,28 @@ class TKINTER():
         return _Menu(self._root, **options)
     def Notebook(self, close=None, command=None, **options):
         from .note import Notebook
-        return Notebook(self.root, command=command, close=close, **options)
-    def makeSubWindow(self, dialog=False):
-        child=TKINTER(self.config, self.logger, type=("dialog" if dialog else"sub"), parent=self)
+        child=Notebook(self.root, self, command=command, close=close, **options)
         self.children.append(child)
         return child
-    def Frame(self):
-        pass
+    def makeSubWindow(self, dialog=False):
+        child=TKINTER(self.config, self.logger, type=("dialog" if dialog else "sub"), parent=self)
+        self.children.append(child)
+        return child
+    def Frame(self, **options):
+        child=Frame(self.root, self.logger, self, **options)
+        self.children.append(child)
+        return child
     def Label(self, **options):
         from .base import Label
+        if "image" in options:
+            if "/" in options["image"]:
+                return
+            options.update(image=os.path.join(self.appinfo["image"],options["image"]))
         return Label(self.root, **options)
     def close(self):
         self._root.destroy()
+    def wait(self):
+        self._root.wait_window()
     def mainloop(self):
         self._root.mainloop()
 
@@ -142,7 +156,25 @@ class WidgetBase():
         elif "place":
             self.widget.pack_forget(**options)
 
-class Frame(TKINTER, WidgetBase):
+class Frame(TKINTER):
     def __init__(self, master, logger, parent, label=None, **options):
         super().__init__(master=master, logger=logger, type="frame", parent=parent)
+    def pack(self, **options):
+        self.root.pack(**options)
+        self.placer="pack"
+    def grid(self, **options):
+        self.root.grid(**options)
+        self.placer="grid"
+    def place(self, **options):
+        self.root.place(**options)
+        self.placer="place"
+    def hide(self, **options):
+        if self.placer is None:
+            pass
+        elif "pack":
+            self.root.pack_forget(**options)
+        elif "grid":
+            self.root.pack_forget(**options)
+        elif "place":
+            self.root.pack_forget(**options)
         

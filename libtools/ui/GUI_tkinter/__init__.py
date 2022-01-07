@@ -41,9 +41,9 @@ class TKINTER():
         elif type=="frame":
             from tkinter.ttk import Frame, Labelframe
             if label is None:
-                self._root=Frame(self.master, **options)
+                self._root=Frame(self.parent.root, **options)
             else:
-                self._root=Labelframe(self.master, text=label, **options)
+                self._root=Labelframe(self.parent.root, text=label, **options)
         else:
             from tkinter import Toplevel
             self._root=Toplevel(master=self.parent._root)
@@ -115,7 +115,7 @@ class TKINTER():
         self.children.append(child)
         return child
     def Frame(self, **options):
-        child=Frame(self.root, self.logger, self, **options)
+        child=Frame(master=self.root, logger=self.logger, parent=self, config=self.config, **options)
         self.children.append(child)
         return child
     def Label(self, **options):
@@ -157,8 +157,8 @@ class WidgetBase():
             self.widget.pack_forget(**options)
 
 class Frame(TKINTER):
-    def __init__(self, master, logger, parent, label=None, **options):
-        super().__init__(master=master, logger=logger, type="frame", parent=parent)
+    def __init__(self, master, logger, parent, config, label=None, **options):
+        super().__init__(logger=logger, config=config, type="frame", parent=parent)
     def pack(self, **options):
         self.root.pack(**options)
         self.placer="pack"

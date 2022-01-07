@@ -3,7 +3,7 @@ from . import WidgetBase
 class _Button(WidgetBase):
     def __init__(self, master, label, **options):
         super().__init__(master)
-        from tkinter import Button
+        from tkinter.ttk import Button
         self.widget=Button(self.master, text=label, **options)
 class _List(WidgetBase):
     def __init__(self, master, **options):

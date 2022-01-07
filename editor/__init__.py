@@ -23,7 +23,7 @@ class Editor():
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
-        self.ui.notebook=self.ui.Notebook()
+        self.ui.notebook=self.ui.Notebook(close=True)
     def mainloop(self):
         self.ui.mainloop()
     def exit(self):
@@ -86,11 +86,17 @@ class Editor():
         self.ui.menu.help=self.ui.menu.add_category("Help", name="help")#Help
         self.ui.menu.help.add_item(type="button", label="Version and License", command=self.version)
     def welcome(self):
-        pass
+        self.welcome_tab=self.ui.notebook.add_tab(label="Welcome!")
+        self.welcome_tab.label=self.welcome_tab.Label(text="Welcome to Marueditor!\nWhat would you like to do?")
+        self.welcome_tab.label.pack()
+        self.welcome_tab.new=self.welcome_tab.Input.Button(label="Create New File", command=self.new)
+        self.welcome_tab.new.pack()
+        self.welcome_tab.open=self.welcome_tab.Input.Button(label="Open File", command=lambda: self.open(as_diff_type=True))
+        self.welcome_tab.open.pack()
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
         def select_addon(exts, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            root.title=root.Label(text="test")
+            root.title=root.Label(text="Please select an file.")
             root.title.pack()
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
@@ -119,14 +125,26 @@ class Editor():
                 return
         ext=os.path.splitext(file)
         if force_select:
-            print(select_addon(self.addon.extdict, recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None)))
+            selected=select_addon(self.addon.extdict, recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
+            if selected is None:
+                return
+            selected=selected.split(".")
+            addon=selected[0]
+            if len(selected) == 2:
+                ext=selected[1]
         else:
             if ext in self.addon.extdict:
                 addon=self.addon.extdict[ext][0]
                 self.addon.run(addon, file, ext)
             else:
                 if as_diff_type:
-                    select_addon(self.addon.extdict)
+                    selected=select_addon(self.addon.extdict)
+                    if selected is None:
+                        return
+                    selected=selected.split(".")
+                    addon=selected[0]
+                    if len(selected) == 2:
+                        ext=selected[1]
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     return
@@ -475,6 +493,7 @@ def run(argv=DefaultArgv):
     app=Editor(argv)
     app.Setup()
     app.CreateMenu()
+    app.welcome()
     app.mainloop()
 
 if __name__ == "__main__":

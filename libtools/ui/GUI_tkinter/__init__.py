@@ -39,6 +39,7 @@ class TKINTER():
             if "theme" in self.conf:
                 self.changeStyle(self.conf["theme"])
         elif type=="frame":
+            self.dnd=self.parent.dnd
             from tkinter.ttk import Frame, Labelframe
             if label is None:
                 self._root=Frame(self.parent.root, **options)
@@ -69,8 +70,8 @@ class TKINTER():
         self.logger.info("Theme:"+self.conf["theme"])
     def changeIcon(self, icon_path):
         from PIL import Image, ImageTk
-        icon=ImageTk.PhotoImage(Image.open(icon_path))
-        self._root.iconphoto(True, icon)
+        self._icon=ImageTk.PhotoImage(Image.open(icon_path))
+        self._root.iconphoto(True, self._icon)
     def fullscreen(self, tf=None):
         if tf is None:
             tf = not self._root.attributes("-fullscreen")
@@ -115,7 +116,7 @@ class TKINTER():
         self.children.append(child)
         return child
     def Frame(self, **options):
-        child=Frame(master=self.root, logger=self.logger, parent=self, config=self.config, **options)
+        child=_Frame(logger=self.logger, parent=self, config=self.config, **options)
         self.children.append(child)
         return child
     def Label(self, **options):
@@ -156,9 +157,9 @@ class WidgetBase():
         elif "place":
             self.widget.pack_forget(**options)
 
-class Frame(TKINTER):
-    def __init__(self, master, logger, parent, config, label=None, **options):
-        super().__init__(logger=logger, config=config, type="frame", parent=parent)
+class _Frame(TKINTER):
+    def __init__(self, logger, parent, config, label=None, **options):
+        super().__init__(logger=logger, config=config, type="frame", parent=parent, label=label)
     def pack(self, **options):
         self.root.pack(**options)
         self.placer="pack"
@@ -177,4 +178,15 @@ class Frame(TKINTER):
             self.root.pack_forget(**options)
         elif "place":
             self.root.pack_forget(**options)
+    def setup_dnd(self, command, target):
+        if self.dnd:
+            from .tkdnd import DND_ALL, DND_FILES, DND_TEXT
+            if target=="file":
+                target=DND_FILES
+            elif target=="text":
+                target=DND_TEXT
+            else:
+                target=DND_ALL
+            self.root.drop_target_register(target)
+            self.root.dnd_bind('<<Drop>>', command)
         

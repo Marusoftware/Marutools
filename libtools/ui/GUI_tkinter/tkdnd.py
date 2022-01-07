@@ -8,7 +8,7 @@ except ImportError:
     import tkinter
     from tkinter import tix
     from tkinter import ttk
-import os
+import os, re, platform
 TkdndVersion = None
 # dnd actions
 PRIVATE = 'private'
@@ -75,7 +75,27 @@ class DnDWrapper:
         ev.codes = splitlist_event(c)
         ev.commonsourcetypes = splitlist_event(CST)
         ev.commontargettypes = splitlist_event(CTT)
-        ev.data = D
+        ev.data=[]
+        state=""
+        for i in D:
+            if state=="{":
+                if i == "}":
+                    state=""
+                else:
+                    ev.data[-1]+=i
+            elif i=="{":
+                state="{"
+                if len(ev.data) != 0:
+                    if ev.data[-1]=="":
+                        continue
+                ev.data.append("")
+            else:
+                if i == " ":
+                    ev.data.append("")
+                else:
+                    if len(ev.data)==0:
+                        ev.data.append("")
+                    ev.data[-1]+=i
         ev.name = e
         ev.types = splitlist_event(L)
         ev.modifiers = splitlist_event(m)

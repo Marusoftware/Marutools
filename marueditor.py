@@ -96,10 +96,18 @@ class Editor():
         self.welcome_tab.new.pack()
         self.welcome_tab.open=self.welcome_tab.Input.Button(label="Open File", command=lambda: self.open(as_diff_type=True))
         self.welcome_tab.open.pack()
+        # if self.welcome_tab.backend=="tkinter":
+        #     if self.welcome_tab.dnd:
+        def dnd_process(event):
+            for file in event.data:
+                self.open(file=file, as_diff_type=True)
+        self.welcome_tab.frame=self.welcome_tab.Frame(label="Drop file here!")
+        self.welcome_tab.frame.pack(fill="both", expand=True)
+        self.welcome_tab.frame.setup_dnd(dnd_process, "file")
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
         def select_addon(exts, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            root.title=root.Label(text="Please select an file.")
+            root.title=root.Label(text="Please select an file.\nFile:"+file)
             root.title.pack()
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
@@ -165,10 +173,6 @@ class Editor():
         root.text=root.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
         root.text.pack()
 """
-        if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:
-            print("[info] open from argv("+sys.argv[-1]+")")
-            mfile.open_file(ofps=3,open_path=sys.argv[-1])
-        window.welcome()
         # window class
         class window():
             #open new window

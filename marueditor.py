@@ -156,12 +156,12 @@ class Editor():
         pass
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
+        root.changeTitle(self.appinfo["appname"]+" - Version and License")
         root.title=root.Label(image="init.png")
         root.title.pack()
         root.text=root.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
         root.text.pack()
 """
-        print(setup_info)
         if setup_info["gui_dnd"]:
             print("[info] tkdnd enable")
             #oot.__root.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
@@ -177,34 +177,6 @@ class Editor():
             #open new window
             def newwin():
                 subprocess.Popen(["python3",sys.argv[0]])
-            def welcome():
-                if root.note.index("end") == 0:
-                    root.note.welcome = ttk.Frame(root.note)
-                    root.note.welcome.pack(fill="both")
-                    #root.tkdnd.bindtarget(root.note.welcome, lambda event: mfile.open_file(dnd=event), "text/uri-list")
-                    root.note.welcome.bt1 = ttk.Button(root.note.welcome,text=txt["new"],command=mfile.new)
-                    root.note.welcome.bt1.pack(fill="both")#,side="left")
-                    root.note.welcome.bt2 = ttk.Button(root.note.welcome,text=txt["open"],command=lambda: mfile.open_file(2))
-                    root.note.welcome.bt2.pack(fill="both")#,side="right")
-                    root.note.add(root.note.welcome,text=txt["welcome"])
-                    root.note.welcome.opened = 1
-                    root.menu.m_f.entryconfigure(txt["save"]+" (S)",state="disabled")
-                    root.menu.m_f.entryconfigure(txt["save_as"]+" (A)",state="disabled")
-                    root.menu.m_f.entryconfigure(txt["close_tab"]+" (C)",state="disabled")
-                    if setup_info["gui_dnd"]:
-                        root.note.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
-                        root.note.dnd_frame.pack(anchor="c",fill="both",expand=True)
-                        root.note.dnd_frame.drop_target_register(DND_FILES)
-                        root.note.dnd_frame.dnd_bind('<<Drop>>', lambda event: mfile.open_file(open_path=event.data))
-                else:
-                    if len(openning) != 0:
-                        if root.note.welcome.opened == 1:
-                            root.note.forget(0)
-                            root.note.welcome.opened = 0
-                            root.menu.m_f.entryconfigure(txt["save"]+" (S)",state="normal")
-                            root.menu.m_f.entryconfigure(txt["save_as"]+" (A)",state="normal")
-                            root.menu.m_f.entryconfigure(txt["close_tab"]+" (C)",state="normal")
-
             #file edit class
             class mfile():
                 #save file

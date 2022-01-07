@@ -110,8 +110,8 @@ class TKINTER():
         child=Notebook(self.root, self, command=command, close=close, **options)
         self.children.append(child)
         return child
-    def makeSubWindow(self, dialog=False):
-        child=TKINTER(self.config, self.logger, type=("dialog" if dialog else "sub"), parent=self)
+    def makeSubWindow(self, dialog=False, **options):
+        child=TKINTER(self.config, self.logger, type=("dialog" if dialog else "sub"), parent=self, **options)
         self.children.append(child)
         return child
     def Frame(self, **options):

@@ -5,6 +5,7 @@ __revision__="0"
 
 class DefaultArgv:
     log_level=0
+    filepath=None
 
 class Editor():
     def __init__(self, argv=DefaultArgv):
@@ -24,6 +25,8 @@ class Editor():
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
         self.ui.notebook=self.ui.Notebook(close=True)
+        if not self.argv.filepath is None:
+            self.open(file=self.argv.filepath, as_diff_type=True)
     def mainloop(self):
         self.ui.mainloop()
     def exit(self):
@@ -162,12 +165,6 @@ class Editor():
         root.text=root.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
         root.text.pack()
 """
-        if setup_info["gui_dnd"]:
-            print("[info] tkdnd enable")
-            #oot.__root.dnd_frame = ttk.LabelFrame(root.note.welcome,text="Drop file here")
-            #root.__root.dnd_frame.pack(anchor="c",fill="both",expand=True)
-            root.__root.drop_target_register(DND_FILES)
-            root.__root.dnd_bind('<<Drop>>', lambda event: mfile.open_file(ofps=3, open_path=event.data))
         if os.path.exists(sys.argv[-1]) and sys.argv[0] != sys.argv[-1]:
             print("[info] open from argv("+sys.argv[-1]+")")
             mfile.open_file(ofps=3,open_path=sys.argv[-1])
@@ -471,9 +468,10 @@ def run(argv=DefaultArgv):
 if __name__ == "__main__":
     """INIT"""
     #argvParse
-    argv_parser = argparse.ArgumentParser("Marueditor", description="Marueditor. The best editor.")
+    argv_parser = argparse.ArgumentParser("marueditor", description="Marueditor. The best editor.")
     argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
     argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
     argv_parser.add_argument("-log_level", action="store", type=int, dest="log_level", default=0 ,help="set Log level.(0-50)")
+    argv_parser.add_argument("filepath", action="store", type=str, default=None ,help="Open file path.", nargs='?')
     argv = argv_parser.parse_args()
     run(argv)

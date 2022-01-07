@@ -5,7 +5,7 @@ def randomstr(n):
 
 def adjustEnv(logger, appinfo):
     #change macOS Bundle name
-    if getattr(sys, "frozen", False) and platform.system() == "Darwin":
+    if getattr(sys, "frozen", False) and appinfo["os"] == "Darwin":
         try:
             from Foundation import NSBundle
             bundle = NSBundle.mainBundle()
@@ -30,6 +30,8 @@ def adjustEnv(logger, appinfo):
         import ctypes
         ctypes.windll.shcore.SetProcessDpiAwareness(True)
         logger.debug("HiDPI Support is enabled.")
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appinfo["appname"])
+        logger.debug("Icon changing was fixed.")
 class Logger():
     def __init__(self, log_dir=None, name="main", log_level=0):
         os.makedirs(log_dir ,exist_ok=True)

@@ -16,9 +16,9 @@ class CustomNotebook(ttk.Notebook):
             self.__initialize_custom_style()
             self.__inititialized = True
 
-        kwargs["style"] = "CustomNotebook"
+        kwargs["style"] = "WithClose.TNotebook"
+        print(self.style.layout("WithClose.TNotebook"))
         ttk.Notebook.__init__(self, *args, **kwargs)
-
         self._active = None
 
         self.bind("<ButtonPress-1>", self.on_close_press, True)
@@ -51,45 +51,47 @@ class CustomNotebook(ttk.Notebook):
 
     def __initialize_custom_style(self):
         style = ttk.Style()
-        self.images = (
-            tk.PhotoImage("img_close", data='''
-                R0lGODlhCAAIAMIBAAAAADs7O4+Pj9nZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
-                d2l0aCBHSU1QACH5BAEKAAQALAAAAAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU
-                5kEJADs=
-                '''),
-            tk.PhotoImage("img_closeactive", data='''
-                R0lGODlhCAAIAMIEAAAAAP/SAP/bNNnZ2cbGxsbGxsbGxsbGxiH5BAEKAAQALAAA
-                AAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU5kEJADs=
-                '''),
-            tk.PhotoImage("img_closepressed", data='''
-                R0lGODlhCAAIAMIEAAAAAOUqKv9mZtnZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
-                d2l0aCBHSU1QACH5BAEKAAQALAAAAAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU
-                5kEJADs=
-            ''')
-        )
+        self.style=style
+        if not "close" in style.element_names():
+            self.images = (
+                tk.PhotoImage("img_close", data='''
+                    R0lGODlhCAAIAMIBAAAAADs7O4+Pj9nZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
+                    d2l0aCBHSU1QACH5BAEKAAQALAAAAAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU
+                    5kEJADs=
+                    '''),
+                tk.PhotoImage("img_closeactive", data='''
+                    R0lGODlhCAAIAMIEAAAAAP/SAP/bNNnZ2cbGxsbGxsbGxsbGxiH5BAEKAAQALAAA
+                    AAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU5kEJADs=
+                    '''),
+                tk.PhotoImage("img_closepressed", data='''
+                    R0lGODlhCAAIAMIEAAAAAOUqKv9mZtnZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
+                    d2l0aCBHSU1QACH5BAEKAAQALAAAAAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU
+                    5kEJADs=
+                ''')
+            )
 
-        style.element_create("close", "image", "img_close",
-                            ("active", "pressed", "!disabled", "img_closepressed"),
-                            ("active", "!disabled", "img_closeactive"), border=8, sticky='')
-        style.layout("CustomNotebook", [("CustomNotebook.client", {"sticky": "nswe"})])
-        style.layout("CustomNotebook.Tab", [
-            ("CustomNotebook.tab", {
+            style.element_create("close", "image", "img_close",
+                                ("active", "pressed", "!disabled", "img_closepressed"),
+                                ("active", "!disabled", "img_closeactive"), border=8, sticky='')
+        style.layout("WithClose.TNotebook", [("WithClose.TNotebook.client", {"sticky": "nswe"})])
+        style.layout("WithClose.TNotebook.Tab", [
+            ("WithClose.TNotebook.tab", {
                 "sticky": "nswe", 
                 "children": [
-                    ("CustomNotebook.padding", {
+                    ("WithClose.TNotebook.padding", {
                         "side": "top", 
                         "sticky": "nswe",
                         "children": [
-                            ("CustomNotebook.focus", {
+                            ("WithClose.TNotebook.focus", {
                                 "side": "top", 
                                 "sticky": "nswe",
                                 "children": [
-                                    ("CustomNotebook.label", {"side": "left", "sticky": ''}),
-                                    ("CustomNotebook.close", {"side": "left", "sticky": ''}),
+                                    ("WithClose.TNotebook.label", {"side": "left", "sticky": ''}),
+                                    ("WithClose.TNotebook.close", {"side": "left", "sticky": ''}),
                                 ]
-                        })
-                    ]
-                })
-            ]
-        })
-    ])
+                            })
+                        ]
+                    })
+                ]
+            })   
+        ])

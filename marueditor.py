@@ -85,6 +85,7 @@ class Editor():
         self.ui.menu.edit=self.ui.menu.add_category("Edit", name="edit")#Edit
         self.ui.menu.window=self.ui.menu.add_category("Window", name="window")#Window
         self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
+        self.ui.menu.window.add_item(type="button", label="Open New Window", command=lambda: run(argv=self.argv))
         self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings")#Settings
         self.ui.menu.help=self.ui.menu.add_category("Help", name="help")#Help
         self.ui.menu.help.add_item(type="button", label="Version and License", command=self.version)
@@ -176,8 +177,6 @@ class Editor():
         # window class
         class window():
             #open new window
-            def newwin():
-                subprocess.Popen(["python3",sys.argv[0]])
             #file edit class
             class mfile():
                 #save file

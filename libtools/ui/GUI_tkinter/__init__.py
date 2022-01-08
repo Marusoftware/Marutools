@@ -12,6 +12,7 @@ class TKINTER():
         self.appinfo=config.appinfo
         self.backend="tkinter"
         self.children=[]
+        self.icons=[]
         if type=="main":
             try:
                 import tkinter
@@ -70,8 +71,9 @@ class TKINTER():
         self.logger.info("Theme:"+self.conf["theme"])
     def changeIcon(self, icon_path):
         from PIL import Image, ImageTk
-        self._icon=ImageTk.PhotoImage(Image.open(icon_path))
-        self._root.iconphoto(True, self._icon)
+        icon=ImageTk.PhotoImage(Image.open(icon_path), master=self._root)
+        self._root.iconphoto(True, icon)
+        self.icons.append(icon)
     def fullscreen(self, tf=None):
         if tf is None:
             tf = not self._root.attributes("-fullscreen")

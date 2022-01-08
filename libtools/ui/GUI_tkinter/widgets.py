@@ -17,7 +17,6 @@ class CustomNotebook(ttk.Notebook):
             self.__inititialized = True
 
         kwargs["style"] = "WithClose.TNotebook"
-        print(self.style.layout("WithClose.TNotebook"))
         ttk.Notebook.__init__(self, *args, **kwargs)
         self._active = None
 
@@ -52,7 +51,7 @@ class CustomNotebook(ttk.Notebook):
     def __initialize_custom_style(self):
         style = ttk.Style()
         self.style=style
-        if not "close" in style.element_names():
+        if not "WithClose.TNotebook.close" in style.element_names():
             self.images = (
                 tk.PhotoImage("img_close", data='''
                     R0lGODlhCAAIAMIBAAAAADs7O4+Pj9nZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
@@ -70,7 +69,7 @@ class CustomNotebook(ttk.Notebook):
                 ''')
             )
 
-            style.element_create("close", "image", "img_close",
+            style.element_create("WithClose.TNotebook.close", "image", "img_close",
                                 ("active", "pressed", "!disabled", "img_closepressed"),
                                 ("active", "!disabled", "img_closeactive"), border=8, sticky='')
         style.layout("WithClose.TNotebook", [("WithClose.TNotebook.client", {"sticky": "nswe"})])

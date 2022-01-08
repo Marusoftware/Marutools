@@ -158,6 +158,10 @@ class WidgetBase():
             self.widget.pack_forget(**options)
         elif "place":
             self.widget.pack_forget(**options)
+    def configure(self, **options):
+        self.widget.configure(**options)
+    def destroy(self):
+        self.widget.destroy()
 
 class _Frame(TKINTER):
     def __init__(self, logger, parent, config, label=None, **options):

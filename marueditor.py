@@ -75,7 +75,7 @@ class Editor():
         #    self.ui.menu.system.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         #    self.ui.menu.system.add_item(type="separator")
         self.ui.menu.file=self.ui.menu.add_category("File")#File
-        self.ui.menu.file.add_item(type="button", label="New File")
+        self.ui.menu.file.add_item(type="button", label="New File", command=self.new)
         self.ui.menu.file.add_item(type="button", label="Open", command=self.open)
         self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
         self.ui.menu.file.add_item(type="button", label="Save")
@@ -162,15 +162,39 @@ class Editor():
                     return
     def save(self):
         pass
-    def new(self):
+    def new(self, **options):
         def dialog():
             root=self.ui.makeSubWindow(dialog=True)
             body=root.Frame()
             body.pack()
+            body.title=body.Label(text="You can make new files using this dialog.")
+            body.title.pack()
             buttons=root.Frame()
             buttons.pack(side="bottom", expand=True)
-            options={}
-            
+            buttons.cancel=buttons.Input.Button(label="Cancel", command=root.close)
+            buttons.cancel.pack()
+            buttons.next=buttons.Input.Button(label="Next")
+            buttons.next.pack()
+            options={"file":None}
+            buttons.next.wait()
+            while 1:
+                for i in options:
+                    if options[i] is None:
+                        break
+                else:
+                    break
+                if i == "file":
+                    body.title.configure(text="Please set file path.")
+                    body.file=body.Label(text="(Here comes file chooser)")
+                buttons.next.wait()
+                if i == "file":
+                    options["file"]="test"#body.file.value
+                    body.file.destroy()
+            root.close()
+        dialog()
+                    
+
+                
     def close(self):
         pass
     def version(self):

@@ -4,7 +4,18 @@ class _Button(WidgetBase):
     def __init__(self, master, label, **options):
         super().__init__(master)
         from tkinter.ttk import Button
-        self.widget=Button(self.master, text=label, **options)
+        if not "command" in options:
+            from tkinter import IntVar
+            self.var=IntVar(master=self.master, value=0)
+            options["command"]=lambda: self.var.set(self.var.get()+1)
+            self.widget=Button(self.master, text=label, **options)
+        else:
+            self.var=None
+            self.widget=Button(self.master, text=label, **options)
+    def wait(self):
+        if self.var is None:
+            return
+        self.widget.wait_variable(self.var)
 class _List(WidgetBase):
     def __init__(self, master, **options):
         super().__init__(master)

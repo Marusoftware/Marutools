@@ -16,6 +16,10 @@ class _Button(WidgetBase):
         if self.var is None:
             return
         self.widget.wait_variable(self.var)
+    def release(self):
+        if self.var is None:
+            return
+        self.var.set(self.var.get()+1)
 class _List(WidgetBase):
     def __init__(self, master, **options):
         super().__init__(master)

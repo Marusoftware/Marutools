@@ -164,37 +164,41 @@ class Editor():
         pass
     def new(self, **options):
         def dialog():
+            def close():
+                buttons.next.release()
+                root.close()
             root=self.ui.makeSubWindow(dialog=True)
+            root.setcallback("close", close)
             body=root.Frame()
             body.pack()
             body.title=body.Label(text="You can make new files using this dialog.")
             body.title.pack()
             buttons=root.Frame()
             buttons.pack(side="bottom", expand=True)
-            buttons.cancel=buttons.Input.Button(label="Cancel", command=root.close)
+            buttons.cancel=buttons.Input.Button(label="Cancel", command=close)
             buttons.cancel.pack()
             buttons.next=buttons.Input.Button(label="Next")
             buttons.next.pack()
             options={"file":None}
             buttons.next.wait()
-            while 1:
-                for i in options:
-                    if options[i] is None:
+            try:
+                while 1:
+                    for i in options:
+                        if options[i] is None:
+                            break
+                    else:
                         break
-                else:
-                    break
-                if i == "file":
-                    body.title.configure(text="Please set file path.")
-                    body.file=body.Label(text="(Here comes file chooser)")
-                buttons.next.wait()
-                if i == "file":
-                    options["file"]="test"#body.file.value
-                    body.file.destroy()
+                    if i == "file":
+                        body.title.configure(text="Please set file path.")
+                        body.file=body.Label(text="(Here comes file chooser)")
+                    buttons.next.wait()
+                    if i == "file":
+                        options["file"]="test"#body.file.value
+                        body.file.destroy()
+            except Exception as e:
+                self.logger.exception(e)
             root.close()
-        dialog()
-                    
-
-                
+        dialog()                
     def close(self):
         pass
     def version(self):

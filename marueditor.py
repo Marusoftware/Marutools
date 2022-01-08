@@ -97,14 +97,14 @@ class Editor():
         self.welcome_tab.new.pack()
         self.welcome_tab.open=self.welcome_tab.Input.Button(label="Open File", command=lambda: self.open(as_diff_type=True))
         self.welcome_tab.open.pack()
-        # if self.welcome_tab.backend=="tkinter":
-        #     if self.welcome_tab.dnd:
-        def dnd_process(event):
-            for file in event.data:
-                self.open(file=file, as_diff_type=True)
-        self.welcome_tab.frame=self.welcome_tab.Frame(label="Drop file here!")
-        self.welcome_tab.frame.pack(fill="both", expand=True)
-        self.welcome_tab.frame.setup_dnd(dnd_process, "file")
+        if self.welcome_tab.backend=="tkinter":
+            if self.welcome_tab.dnd:
+                def dnd_process(event):
+                    for file in event.data:
+                        self.open(file=file, as_diff_type=True)
+                self.welcome_tab.frame=self.welcome_tab.Frame(label="Drop file here!")
+                self.welcome_tab.frame.pack(fill="both", expand=True)
+                self.welcome_tab.frame.setup_dnd(dnd_process, "file")
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
         def select_addon(exts, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
@@ -163,7 +163,14 @@ class Editor():
     def save(self):
         pass
     def new(self):
-        pass
+        def dialog():
+            root=self.ui.makeSubWindow(dialog=True)
+            body=root.Frame()
+            body.pack()
+            buttons=root.Frame()
+            buttons.pack(side="bottom", expand=True)
+            options={}
+            
     def close(self):
         pass
     def version(self):

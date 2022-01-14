@@ -20,6 +20,19 @@ class _Button(WidgetBase):
         if self.var is None:
             return
         self.var.set(self.var.get()+1)
+class _Form(WidgetBase):
+    def __init__(self, master, parent, type="text", **options):
+        from tkinter.ttk import Entry
+        super().__init__(master)
+        if type=="password":
+            options.update(show="●")
+        if type=="file":
+            self.widget=parent.Frame()
+            self.widget.form=Entry(self.master, **options)
+            from tkinter.ttk import Button
+            self.widget.button=Button(self.master, text="Select...", command=self.parent.Dialog.askfile)
+        else:
+            self.widget=Entry(self.master, **options)
 class _List(WidgetBase):
     def __init__(self, master, **options):
         super().__init__(master)
@@ -45,3 +58,5 @@ class Input(WidgetBase):
         return _Button(self.master, **options)
     def List(self, **options):
         return _List(self.master, **options)
+    def Form(self, **options):
+        return _Form(self.master, self.parent, **options)

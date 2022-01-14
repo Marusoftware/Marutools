@@ -108,7 +108,7 @@ class Editor():
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
         def select_addon(exts, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            root.title=root.Label(text="Please select an file.\nFile:"+file)
+            root.title=root.Label(text="Please select an addon.\nFile:"+file)
             root.title.pack()
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
@@ -190,13 +190,14 @@ class Editor():
                         break
                     if i == "file":
                         body.title.configure(text="Please set file path.")
-                        body.file=body.Label(text="(Here comes file chooser)")
+                        body.file=body.Input.Form(type="password")
+                        body.file.pack(fill="both", expand=True)
                     buttons.next.wait()
                     if i == "file":
                         options["file"]="test"#body.file.value
                         body.file.destroy()
-            except Exception as e:
-                self.logger.exception(e)
+            except:
+                self.logger.exception("Known Error(Button):")
             root.close()
         dialog()                
     def close(self):
@@ -209,9 +210,6 @@ class Editor():
         root.text=root.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
         root.text.pack()
 """
-        # window class
-        class window():
-            #open new window
             #file edit class
             class mfile():
                 #save file

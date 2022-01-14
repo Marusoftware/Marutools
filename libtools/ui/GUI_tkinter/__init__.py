@@ -52,9 +52,9 @@ class TKINTER():
             self.dnd=self.parent.dnd
             if type=="dialog":
                 self._root.resizable(0,0)
-                self._root.grab_set()
+                #self._root.grab_set()
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
-        if type!="frame":
+        if type=="main" or type=="sub":
             import tkinter.ttk as ttk
             self.root=ttk.Frame(self._root)
             self.root.pack(fill="both", expand=True)
@@ -63,7 +63,7 @@ class TKINTER():
         from .dialog import Dialog
         self.Dialog=Dialog(self._root)
         from .input import Input
-        self.Input=Input(self.root)
+        self.Input=Input(self.root, parent=self)
     def changeTitle(self, title):
         self._root.title(title)
     def changeStyle(self, name):
@@ -136,10 +136,12 @@ class TKINTER():
         self._root.mainloop()
 
 class WidgetBase():
-    def __init__(self, master):
+    def __init__(self, master, **options):
         self.backend="tkinter"
         self.master=master
         self.placer=None
+        if "parent" in options:
+            self.parent=options["parent"]
     def pack(self, **options):
         self.widget.pack(**options)
         self.placer="pack"

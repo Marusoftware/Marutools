@@ -168,24 +168,35 @@ class WidgetBase():
 class _Frame(TKINTER):
     def __init__(self, logger, parent, config, label=None, **options):
         super().__init__(logger=logger, config=config, type="frame", parent=parent, label=label)
+        self.widget=self.root
+        self.master=self.parent.root
+        self.placer=None
     def pack(self, **options):
-        self.root.pack(**options)
+        self.widget.pack(**options)
         self.placer="pack"
     def grid(self, **options):
-        self.root.grid(**options)
+        self.widget.grid(**options)
         self.placer="grid"
     def place(self, **options):
-        self.root.place(**options)
+        self.widget.place(**options)
         self.placer="place"
     def hide(self, **options):
         if self.placer is None:
             pass
         elif "pack":
-            self.root.pack_forget(**options)
+            self.widget.pack_forget(**options)
         elif "grid":
-            self.root.pack_forget(**options)
+            self.widget.pack_forget(**options)
         elif "place":
-            self.root.pack_forget(**options)
+            self.widget.pack_forget(**options)
+    def configure(self, **options):
+        self.widget.configure(**options)
+    def destroy(self):
+        self.widget.destroy()
+    def configure(self, **options):
+        self.widget.configure(**options)
+    def destroy(self):
+        self.widget.destroy()
     def setup_dnd(self, command, target):
         if self.dnd:
             from .tkdnd import DND_ALL, DND_FILES, DND_TEXT

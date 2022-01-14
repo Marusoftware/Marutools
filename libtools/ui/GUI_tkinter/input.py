@@ -1,4 +1,5 @@
 from . import WidgetBase
+import os
 
 class _Button(WidgetBase):
     def __init__(self, master, label, **options):
@@ -23,21 +24,32 @@ class _Button(WidgetBase):
 class _Form(WidgetBase):
     def __init__(self, master, parent, type="text", **options):
         from tkinter.ttk import Entry
-        super().__init__(master)
+        super().__init__(master, parent=parent)
         if type=="password":
             options.update(show="●")
         if type=="file":
+            def on_press(event=None):
+                if event is None:
+                    file=self.parent.Dialog.askfile()
+                    if not os.path.exists(file):
+                        return
+                else:
+                    file=event.data
+                self.widget.form.insert("end", file)
             self.widget=parent.Frame()
-            self.widget.form=Entry(self.master, **options)
+            self.widget.setup_dnd(on_press, "file")
+            self.widget.form=Entry(self.widget.root, **options)
+            self.widget.form.pack(fill="both", side="left", expand=True)
             from tkinter.ttk import Button
-            self.widget.button=Button(self.master, text="Select...", command=self.parent.Dialog.askfile)
+            self.widget.button=Button(self.widget.root, text="Select...", command=on_press)
+            self.widget.button.pack(side="right")
         else:
             self.widget=Entry(self.master, **options)
 class _List(WidgetBase):
     def __init__(self, master, **options):
         super().__init__(master)
         from tkinter.ttk import Treeview
-        self.widget=Treeview(self.master, **options)
+        self.widget=Treeview(self.master, show="tree", **options)
         self.widget.bind("<<TreeviewSelect>>", self.callback)
         self.value=()
     def set_header(self, column, text):

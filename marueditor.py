@@ -190,7 +190,7 @@ class Editor():
                         break
                     if i == "file":
                         body.title.configure(text="Please set file path.")
-                        body.file=body.Input.Form(type="password")
+                        body.file=body.Input.Form(type="file")
                         body.file.pack(fill="both", expand=True)
                     buttons.next.wait()
                     if i == "file":
@@ -199,7 +199,7 @@ class Editor():
             except:
                 self.logger.exception("Known Error(Button):")
             root.close()
-        dialog()                
+        dialog()
     def close(self):
         pass
     def version(self):

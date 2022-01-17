@@ -23,7 +23,7 @@ class Addon():
                 self.logger.warn(f"Can't import addon({addon_file}). (Edit class is not callable.)")
                 return False
             attrs=["name","file_types","open"]
-            addon=module.Edit#add args
+            addon=module.Edit
             for attr in attrs:
                 if not hasattr(addon, attr):
                     self.logger.warn(f"Can't import addon({addon_file}). (Missing {attr} attr.)")
@@ -51,8 +51,8 @@ class Addon():
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
         self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
-    def open(self, addon, file, ext):
-        pass
+    def runaddon(self):
+        self
 class AddonAPI():
     def __init__(self, name, appinfo, addon):
         self.name=name
@@ -62,5 +62,3 @@ class AddonAPI():
     def getConfig(self, module="main", default_conf={}):
         self.appinfo
         self.config=libtools.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)
-    def open(self):
-        self.addon.open()

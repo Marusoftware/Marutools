@@ -179,8 +179,10 @@ class Editor():
             buttons.cancel.pack()
             buttons.next=buttons.Input.Button(label="Next")
             buttons.next.pack()
-            options={"file":None}
+            options={"file":None, "filetype":None}
             buttons.next.wait()
+            if not body.exist():
+                return
             try:
                 while 1:
                     for i in options:
@@ -190,11 +192,18 @@ class Editor():
                         break
                     if i == "file":
                         body.title.configure(text="Please set file path.")
-                        body.file=body.Input.Form(type="file")
+                        body.file=body.Input.Form(type="filesave")
                         body.file.pack(fill="both", expand=True)
+                    elif i == "filetype":
+                        body.title.configure(text="Please set file type.")
+                        body.filetype=body.Input.List()
+                        body.filetype.pack(fill="both", expand=True)
                     buttons.next.wait()
+                    if not body.exist():
+                        break
                     if i == "file":
-                        options["file"]="test"#body.file.value
+                        if body.file.value != "":
+                            options["file"]=body.file.value
                         body.file.destroy()
             except:
                 self.logger.exception("Known Error(Button):")

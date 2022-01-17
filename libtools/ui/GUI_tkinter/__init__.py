@@ -134,6 +134,8 @@ class TKINTER():
         self._root.wait_window()
     def mainloop(self):
         self._root.mainloop()
+    def exist(self):
+        return self._root.winfo_exists()
 
 class WidgetBase():
     def __init__(self, master, **options):
@@ -164,6 +166,8 @@ class WidgetBase():
         self.widget.configure(**options)
     def destroy(self):
         self.widget.destroy()
+    def exist(self):
+        return self.widget.winfo_exists()
 
 class _Frame(TKINTER):
     def __init__(self, logger, parent, config, label=None, **options):

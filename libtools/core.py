@@ -32,8 +32,10 @@ def adjustEnv(logger, appinfo):
         logger.debug("HiDPI Support is enabled.")
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appinfo["appname"])
         logger.debug("Icon changing was fixed.")
+
 class Logger():
-    def __init__(self, log_dir, name="main", log_level=0):
+    def __init__(self, log_dir, name="", log_level=0):
+        log_dir=os.path.join(log_dir, name)
         os.makedirs(log_dir ,exist_ok=True)
         print("Start Logging on ",os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
         logging.basicConfig(format='%(levelname)s:%(asctime)s:%(name)s| %(message)s',level=log_level)
@@ -51,10 +53,6 @@ class Logger():
         child=self.logger.getChild(name)
         self.childs.append(child)
         return child
-    def getLogger(self, name):
-        logger=logging.getLogger(name)
-        self.childs.append(logger)
-        return logger
     def info(self, text):
         self.logger.info(text)
     def error(self, text):

@@ -10,7 +10,7 @@ class DefaultArgv:
 class Editor():
     def __init__(self, argv=DefaultArgv):
         self.argv=argv
-        self.opening=[]
+        self.opening={}
     def Setup(self, appinfo=None):
         self.LoadConfig()
         self.Loadl10n()
@@ -18,10 +18,10 @@ class Editor():
         if not appinfo is None:
             self.appinfo.update(**appinfo)
         libtools.core.adjustEnv(self.logger.getChild("AdjustEnv"), self.appinfo)
-        self.addon=libtools.Addon(self.logger.getLogger("Addon"), self.appinfo)
+        self.addon=libtools.Addon(self.logger.getChild("Addon"), self.appinfo)
         self.addon.loadAll(self.appinfo["addons"],"editor")
         self.logger.info("start")
-        self.ui=libtools.UI.UI(self.config, self.logger.getLogger("UI"))
+        self.ui=libtools.UI.UI(self.config, self.logger.getChild("UI"))
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
@@ -63,7 +63,7 @@ class Editor():
         if "log_dir" in self.conf:
             self.appinfo["log"] = self.conf["log_dir"]
         log_dir = self.appinfo["log"]
-        self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level)
+        self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level, name="")
     def CreateMenu(self):
         self.ui.menu=self.ui.Menu(type="bar")
         self.ui.menu.apple=self.ui.menu.add_category("apple", name="apple")#Macos apple menu
@@ -80,8 +80,8 @@ class Editor():
         self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
         self.ui.menu.file.add_item(type="button", label="Save", command=self.save)
         self.ui.menu.file.add_item(type="button", label="Save as...", command=lambda: self.save(as_other=True))
-        self.ui.menu.file.add_item(type="button", label="Close tab")
-        self.ui.menu.file.add_item(type="button", label="Close all")
+        self.ui.menu.file.add_item(type="button", label="Close tab", command=self.close)
+        self.ui.menu.file.add_item(type="button", label="Close all", command=self.exit)
         self.ui.menu.edit=self.ui.menu.add_category("Edit", name="edit")#Edit
         self.ui.menu.window=self.ui.menu.add_category("Window", name="window")#Window
         self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
@@ -160,11 +160,21 @@ class Editor():
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     return
-        tab=self.ui.notebook.add_tab(label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1] else ""}')
-        ctx=self.addon.getAddon(addon, file, ext, tab)
-        self.opening.append(ctx)
+        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1] else ""}'
+        tab=self.ui.notebook.add_tab(label=label)
+        ctx=self.addon.getAddon(addon, file, ext, tab, self)
+        self.opening[label]=ctx
+        self.ui.notebook.select_tab("end")
     def save(self, as_other=False):
-        print(self.ui.notebook.value)
+        if self.ui.notebook.value == "Welcome!":
+            return
+        if as_other:
+            file=self.ui.Dialog.askfile()
+            if not os.path.exists(file):
+                return
+            self.opening[self.ui.notebook.value].save(file)
+        else:
+            self.opening[self.ui.notebook.value].save()
     def new(self, **options):
         def dialog():
             def close():
@@ -213,7 +223,11 @@ class Editor():
             root.close()
         dialog()
     def close(self):
-        pass
+        if self.ui.notebook.value == "Welcome!":
+            return
+        #save
+        self.opening[self.ui.notebook.value].close()
+        #pop and del_tab
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
         root.changeTitle(self.appinfo["appname"]+" - Version and License")
@@ -224,21 +238,6 @@ class Editor():
 """
             #file edit class
             class mfile():
-                #save file
-                def save(other_name=0, save_all=1):
-                    if not root.note.welcome.opened:
-                        if save_all == 1:
-                            if other_name == 0:
-                                threading.Thread(target=lambda:openning[root.note.index("current")][1].file_save(openning[root.note.index("current")][0],"0")).start()
-                            else:
-                                path = filedialog.asksaveasfilename()
-                                if path == None:
-                                    pass
-                                else:
-                                    threading.Thread(target=lambda:openning[root.note.index("current")][1].file_save(openning[root.note.index("current")][0],path)).start()
-                        else:
-                            for i in range(len(openning)):
-                                threading.Thread(target=lambda:openning[i][1].file_save(openning[i][0],"0")).start()
                 #exit  
                 def exit():
                     def remove():
@@ -269,32 +268,6 @@ class Editor():
                         sys.exit()
                     else:
                         pass
-                #close tab
-                def close_tab():
-                    if not root.note.welcome.opened:
-                        def remove(select):
-                            try:
-                                openning[select][1].file_exit(openning[select][0])
-                            except:
-                                pass
-                            openning.pop(select)
-                        select = root.note.index("current")
-                        e = tkmsg.askyesnocancel(txt["check"], txt["save_check"], parent=root)
-                        if e == True:
-                            mfile.save()
-                            remove(select)
-                            print("[file]close tab")
-                            root.note.forget("current")
-                            window.welcome()
-                        elif e == False:
-                            remove(select)
-                            print("[file]close tab(No saved)")
-                            root.note.forget("current")
-                            window.welcome()
-                        else:
-                            pass
-                    else:
-                        mfile.exit()
                 #new file
                 def new():
                     def delaw(self):

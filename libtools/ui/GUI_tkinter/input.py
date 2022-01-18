@@ -33,6 +33,8 @@ class _Form(WidgetBase):
         if type=="password":
             options.update(show="●")
             self.widget=Entry(self.master, textvariable=self.var, **options)
+        elif type=="text":
+            self.widget=Entry(self.master, textvariable=self.var, **options)
         elif "file" in type:
             def on_press(event=None):
                 if event is None:
@@ -65,6 +67,27 @@ class _Form(WidgetBase):
         self.value=self.var.get()
     def set(self, value):
         self.var.set(value)
+class _Text(WidgetBase):
+    def __init__(self, master, parent, scroll=False, **options):
+        from tkinter import Text
+        super().__init__(master, parent=parent)
+        self.type=type
+        if scroll:
+            try:
+                from tkinter.scrolledtext import ScrolledText as Text
+            except:
+                from .scrolledtext import ScrolledText as Text
+        self.widget=Text(self.master, **options)
+    def insert(self, *args, **options):
+        self.widget.insert(*args, **options)
+    def get(self, *args, **options):
+        self.widget.get(*args, **options)
+    def delete(self, *args, **options):
+        self.widget.delete(*args, **options)
+    def undo(self):
+        self.widget.edit_undo()
+    def redo(self):
+        self.widget.edit_redo()
 class _List(WidgetBase):
     def __init__(self, master, **options):
         super().__init__(master)
@@ -94,3 +117,5 @@ class Input(WidgetBase):
         return _List(self.master, **options)
     def Form(self, **options):
         return _Form(self.master, self.parent, **options)
+    def Text(self, **options):
+        return _Text(self.master, self.parent, **options)

@@ -21,5 +21,9 @@ class Notebook(WidgetBase):
         #child.pack()
         self.widget.add(child=child.root, text=label)
         return child
+    def select_tab(self, tab):
+        if tab=="end":
+            tab=self.widget.tabs()[-1]
+        self.widget.select(tab)
     def callback(self, event):
-        self.value=self.widget.tab(self.widget.index("current"), "text")#select()
+        self.value=self.widget.tab(self.widget.index("current"), "text")

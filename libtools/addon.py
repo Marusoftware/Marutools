@@ -1,3 +1,4 @@
+from pkgutil import extend_path
 import libtools, os, sys
 from importlib import import_module
 
@@ -51,14 +52,15 @@ class Addon():
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
         self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
-    def run(self, type, addon, *args, **options):
-        getattr(self.loaded_addon[addon], type)(*args, **options)
+    def getAddon(self, addon, filepath, ext, ui):
+        return self.loaded_addon[addon](AddonAPI(addon, self.appinfo, filepath, ext, ui))
 class AddonAPI():
-    def __init__(self, name, appinfo, addon):
+    def __init__(self, name, appinfo, filepath, ext, ui):
         self.name=name
-        self.logger=libtools.core.Logger(name=name)
+        self.logger=libtools.core.Logger(name=name, log_dir=appinfo["log"])
         self.appinfo=appinfo
-        self.addon=addon
+        self.filepath=filepath
+        self.ext=ext
+        self.ui=ui
     def getConfig(self, module="main", default_conf={}):
-        self.appinfo
         self.config=libtools.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)

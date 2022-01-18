@@ -13,9 +13,13 @@ class Notebook(WidgetBase):
         self.widget.enable_traversal()
         if not command is None:
             self.widget.bind("<<NotebookTabClosed>>",lambda null: command)
+        self.value=None
+        self.widget.bind("<<NotebookTabChanged>>", self.callback)
         self.widget.pack(fill="both", expand=True)
     def add_tab(self, label=""):
         child=self.parent.Frame()
         #child.pack()
         self.widget.add(child=child.root, text=label)
         return child
+    def callback(self, event):
+        self.value=self.widget.tab(self.widget.index("current"), "text")#select()

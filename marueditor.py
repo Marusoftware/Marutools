@@ -10,6 +10,7 @@ class DefaultArgv:
 class Editor():
     def __init__(self, argv=DefaultArgv):
         self.argv=argv
+        self.opening=[]
     def Setup(self, appinfo=None):
         self.LoadConfig()
         self.Loadl10n()
@@ -60,9 +61,8 @@ class Editor():
     def LoadLogger(self):
         #logging
         if "log_dir" in self.conf:
-            log_dir = self.conf["log_dir"]
-        else:
-            log_dir = self.appinfo["log"]
+            self.appinfo["log"] = self.conf["log_dir"]
+        log_dir = self.appinfo["log"]
         self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level)
     def CreateMenu(self):
         self.ui.menu=self.ui.Menu(type="bar")
@@ -78,8 +78,8 @@ class Editor():
         self.ui.menu.file.add_item(type="button", label="New File", command=self.new)
         self.ui.menu.file.add_item(type="button", label="Open", command=self.open)
         self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
-        self.ui.menu.file.add_item(type="button", label="Save")
-        self.ui.menu.file.add_item(type="button", label="Save as...")
+        self.ui.menu.file.add_item(type="button", label="Save", command=self.save)
+        self.ui.menu.file.add_item(type="button", label="Save as...", command=lambda: self.save(as_other=True))
         self.ui.menu.file.add_item(type="button", label="Close tab")
         self.ui.menu.file.add_item(type="button", label="Close all")
         self.ui.menu.edit=self.ui.menu.add_category("Edit", name="edit")#Edit
@@ -105,7 +105,7 @@ class Editor():
                 self.welcome_tab.frame=self.welcome_tab.Frame(label="Drop file here!")
                 self.welcome_tab.frame.pack(fill="both", expand=True)
                 self.welcome_tab.frame.setup_dnd(dnd_process, "file")
-    def open(self, file=None, as_diff_type=False, force_select=False):#TODO: open func.
+    def open(self, file=None, as_diff_type=False, force_select=False):#TODO: mime and directory
         def select_addon(exts, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
             root.title=root.Label(text="Please select an addon.\nFile:"+file)
@@ -122,10 +122,11 @@ class Editor():
             root.ok.pack(expand=True, fill="both", side="bottom")
             root.cancel=root.Input.Button(label="Cancel", command=cancel)
             root.cancel.pack(expand=True, fill="both", side="bottom")
-            for i in exts:
-                root.list.add_item(label=i, id=i)
-                for j in exts[i]:
-                    root.list.add_item(label=j, parent=i, id=i+"."+j)
+            for ext, addons in exts.items():
+                for addon in addons:
+                    if not root.list.exist_item(addon):
+                        root.list.add_item(label=addon, id=addon)
+                    root.list.add_item(label=ext, id=addon+"."+ext, parent=addon)
             root.wait()
             if len(root.list.value) == 1:
                 return root.list.value[0]
@@ -147,7 +148,6 @@ class Editor():
         else:
             if ext in self.addon.extdict:
                 addon=self.addon.extdict[ext][0]
-                self.addon.run(addon, file, ext)
             else:
                 if as_diff_type:
                     selected=select_addon(self.addon.extdict)
@@ -160,8 +160,11 @@ class Editor():
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     return
-    def save(self):
-        pass
+        tab=self.ui.notebook.add_tab(label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1] else ""}')
+        ctx=self.addon.getAddon(addon, file, ext, tab)
+        self.opening.append(ctx)
+    def save(self, as_other=False):
+        print(self.ui.notebook.value)
     def new(self, **options):
         def dialog():
             def close():

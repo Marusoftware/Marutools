@@ -85,6 +85,8 @@ class _List(WidgetBase):
     def set_selection(self, items):
         self.value=items
         self.widget.selection_set(items)
+    def exist_item(self, id):
+        return self.widget.exists(id)
 class Input(WidgetBase):
     def Button(self, **options):
         return _Button(self.master, **options)

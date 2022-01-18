@@ -33,7 +33,7 @@ def adjustEnv(logger, appinfo):
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appinfo["appname"])
         logger.debug("Icon changing was fixed.")
 class Logger():
-    def __init__(self, log_dir=None, name="main", log_level=0):
+    def __init__(self, log_dir, name="main", log_level=0):
         os.makedirs(log_dir ,exist_ok=True)
         print("Start Logging on ",os.path.join(log_dir, str(len(os.listdir(log_dir))+1)+".log"))
         logging.basicConfig(format='%(levelname)s:%(asctime)s:%(name)s| %(message)s',level=log_level)

@@ -51,8 +51,8 @@ class Addon():
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
         self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
-    def runaddon(self):
-        self
+    def run(self, type, addon, *args, **options):
+        getattr(self.loaded_addon[addon], type)(*args, **options)
 class AddonAPI():
     def __init__(self, name, appinfo, addon):
         self.name=name

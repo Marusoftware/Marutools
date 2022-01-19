@@ -27,8 +27,6 @@ class Editor():
         self.ui.changeSize('500x500')
         self.ui.notebook=self.ui.Notebook(close=True, command=self.close, onzero=self.exit)
         self.ui.notebook.pack(fill="both", expand=True)
-        if not self.argv.filepath is None:
-            self.open(file=self.argv.filepath, as_diff_type=True)
     def mainloop(self):
         self.ui.mainloop()
     def LoadConfig(self):
@@ -384,6 +382,8 @@ def run(argv=DefaultArgv):
     app.Setup()
     app.CreateMenu()
     app.welcome()
+    if not argv.filepath is None:
+        app.open(file=argv.filepath, as_diff_type=True)
     app.mainloop()
 
 if __name__ == "__main__":

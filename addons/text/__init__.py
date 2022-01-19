@@ -7,7 +7,7 @@ class Edit():
         self.encoding="utf-8"
         self.lang="lang"
         self.api=api
-        self.text=self.api.ui.Input.Text(scroll=True)
+        self.text=self.api.ui.Input.Text(scroll=True, command=self.on_modify)
         self.text.pack(fill="both", expand=True)
         if os.path.exists(self.api.filepath):
             try:
@@ -31,8 +31,17 @@ class Edit():
                 self.lang=detector.result["language"]
             with open(api.filepath, "r", encoding=self.encoding) as f:
                 self.text.insert("end", f.read())
-    def save(self, filename=None):
-        pass
+            self.api.saved=True
+        else:
+            self.api.saved=False
+    def on_modify(self):
+        self.api.saved=False
+    def save(self, file=None):
+        if file is None:
+            file=self.api.filepath
+        with open(file, mode="w", encoding=self.encoding) as f:
+            f.write(self.text.get(0, "end"))
+        self.api.saved=True
     def new(self):
         pass
     def close(self):

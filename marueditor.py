@@ -26,6 +26,7 @@ class Editor():
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
         self.ui.notebook=self.ui.Notebook(close=True, command=self.close, onzero=self.exit)
+        self.ui.notebook.pack(fill="both", expand=True)
         if not self.argv.filepath is None:
             self.open(file=self.argv.filepath, as_diff_type=True)
     def mainloop(self):
@@ -285,10 +286,18 @@ class Editor():
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
         root.changeTitle(self.appinfo["appname"]+" - Version and License")
-        root.title=root.Label(image="init.png")
-        root.title.pack()
-        root.text=root.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
-        root.text.pack()
+        root.note=root.Notebook()
+        root.note.pack(fill="both", expand=True)
+        version=root.note.add_tab(label="Version")
+        version.title=version.Label(image="init.png")
+        version.title.pack()
+        version.text=version.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
+        version.text.pack()
+        licence=root.note.add_tab(label="Licence")
+        licence.text=licence.Input.Text(scroll=True, readonly=True)
+        licence.text.pack(fill="both", expand=True)
+        with open(os.path.join(self.appinfo["cd"], "LICENCE")) as f:
+            licence.text.insert("end", f.read())
 """
 # setting
 def setting():
@@ -364,31 +373,11 @@ def setting():
         s.a_fl.insert("end", "  " + file_addon_list[i] + "(" + file_addon_type[i] + " " +file_addon_type_ex[i] + ")")
 #help
 class hlp():
-#show version
-def var():
-    print("[info] show version")
-    h = tkinter.Toplevel(root)
-    h.title(txt["about"])
-    h.note = ttk.Notebook(h)
-    h.note.pack(fill="both",expand=True)
-    h._h = ttk.Frame(h)
-    h.note.add(h._h,text=txt["version"])
-    h.img = tkinter.PhotoImage(file='./image/init.png', master=h._h)
-    h_l1 = ttk.Label(h._h, image=h.img)
-    h_l1.pack(side="top")
-    h_l2 = ttk.Label(h._h, text="Version:" + info[0] + "  subVersion:" + info[1].lstrip("rever=") + "  2019-2021 Marusoftware")
-    h_l2.pack(side="bottom")
-    h._h2 = ttk.Frame(h)
-    h.note.add(h._h2,text=txt["licence"])
-    h_t1 = ScrolledText(h._h2)
-    h_t1.pack(fill="both",expand=True)
-    h_t1.insert("end",open("./LICENCE","r").read())
-    h_t1.configure(state="disabled")
-#show help
-def help():
-    pass
-def update():
-    pass """
+    #show help
+    def help():
+        pass
+    def update():
+        pass """
 
 def run(argv=DefaultArgv):
     app=Editor(argv)

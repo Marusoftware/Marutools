@@ -15,7 +15,6 @@ class Notebook(WidgetBase):
             self.widget.bind("<<NotebookTabClosed>>",lambda null: command(self.value))
         self.value=None
         self.widget.bind("<<NotebookTabChanged>>", self.callback)
-        self.widget.pack(fill="both", expand=True)
         self.onzero=onzero
     def add_tab(self, label="", **options):
         child=self.parent.Frame()

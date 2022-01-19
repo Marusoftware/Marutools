@@ -68,7 +68,7 @@ class _Form(WidgetBase):
     def set(self, value):
         self.var.set(value)
 class _Text(WidgetBase):
-    def __init__(self, master, parent, scroll=False, **options):
+    def __init__(self, master, parent, scroll=True, command=None, readonly=False, **options):
         from tkinter import Text
         super().__init__(master, parent=parent)
         self.type=type
@@ -77,9 +77,16 @@ class _Text(WidgetBase):
                 from tkinter.scrolledtext import ScrolledText as Text
             except:
                 from .scrolledtext import ScrolledText as Text
-        self.widget=Text(self.master, **options)
+        self.readonly=readonly
+        self.widget=Text(self.master, state=("disabled" if self.readonly else "normal"),**options)
+        if not command is None:
+            self.widget.bind("<<Modified>>", lambda event: command())
     def insert(self, *args, **options):
+        if self.readonly:
+            self.configure(state="normal")
         self.widget.insert(*args, **options)
+        if self.readonly:
+            self.configure(state="disabled")
     def get(self, *args, **options):
         self.widget.get(*args, **options)
     def delete(self, *args, **options):

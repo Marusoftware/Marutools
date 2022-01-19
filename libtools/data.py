@@ -85,7 +85,8 @@ class Lang():
     def getText(self, lang):
         lang_path=os.path.join(self.appinfo["lang"],lang+".lang")
         if os.path.exists(lang_path):
-            txt = json.load(open(lang_path,"r"))
+            with open(lang_path,"r", encoding="utf8") as f:
+                txt = json.load(f)
             for i in range(len(self.req)):
                 if self.req[i] in txt:
                     tmp = 1

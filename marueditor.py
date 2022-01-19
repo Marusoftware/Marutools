@@ -172,9 +172,9 @@ class Editor():
             file=self.ui.Dialog.askfile()
             if not os.path.exists(file):
                 return
-            self.opening[self.ui.notebook.value].save(file)
+            self.opening[self.ui.notebook.value].addon.save(file)
         else:
-            self.opening[self.ui.notebook.value].save()
+            self.opening[self.ui.notebook.value].addon.save()
     def new(self, **options):
         def dialog():
             def close():
@@ -211,6 +211,11 @@ class Editor():
                         body.title.configure(text="Please set file type.")
                         body.filetype=body.Input.List()
                         body.filetype.pack(fill="both", expand=True)
+                        for ext, addons in self.addon.extdict.items():
+                            for addon in addons:
+                                if not body.filetype.exist_item(addon):
+                                    body.filetype.add_item(label=addon, id=addon)
+                                body.filetype.add_item(label=ext, id=addon+"."+ext, parent=addon)
                     buttons.next.wait()
                     if not body.exist():
                         break
@@ -218,6 +223,9 @@ class Editor():
                         if body.file.value != "":
                             options["file"]=body.file.value
                         body.file.destroy()
+                    elif i == "filetype":
+                        body.filetype.value
+                        body.filetype.destroy()
             except:
                 self.logger.exception("Known Error(Button):")
             root.close()
@@ -225,9 +233,26 @@ class Editor():
     def close(self):
         if self.ui.notebook.value == "Welcome!":
             return
-        #save
-        self.opening[self.ui.notebook.value].close()
-        #pop and del_tab
+        if not self.opening[self.ui.notebook.value].saved:
+            question=self.ui.Dialog.question("yesnocancel", "Save...?", "Do you want to save?")
+            if question == True:
+                self.save()
+            elif question != False:
+                return
+        self.opening[self.ui.notebook.value].addon.close()
+        self.opening.pop(self.ui.notebook.value)
+        self.ui.notebook.del_tab("current")
+    def update_state(self, addon):
+        index:str=self.ui.notebook.value
+        before=self.opening[index]
+        if addon.saved and "*" in index:
+            self.opening.pop(index)
+            index=index.lstrip("*")
+            self.opening[index]=before
+        elif not addon.saved and not "*" in index:
+            self.opening.pop(index)
+            index="*"+index
+            self.opening[index]=before
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
         root.changeTitle(self.appinfo["appname"]+" - Version and License")

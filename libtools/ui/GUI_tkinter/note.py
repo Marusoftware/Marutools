@@ -25,5 +25,7 @@ class Notebook(WidgetBase):
         if tab=="end":
             tab=self.widget.tabs()[-1]
         self.widget.select(tab)
+    def del_tab(self, tab):
+        self.widget.forget(tab)
     def callback(self, event):
         self.value=self.widget.tab(self.widget.index("current"), "text")

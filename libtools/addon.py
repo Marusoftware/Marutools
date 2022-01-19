@@ -57,7 +57,7 @@ class Addon():
         addon_ctx=self.loaded_addon[addon](api)
         api.addon=addon_ctx
         return api
-class AddonAPI():
+class AddonAPI(object):
     def __init__(self, name, appinfo, filepath, ext, ui, app):
         self.name=name
         self.logger=libtools.core.Logger(name=name, log_dir=appinfo["log"])
@@ -66,5 +66,10 @@ class AddonAPI():
         self.ext=ext
         self.ui=ui
         self.app=app
+        self.saved=False
+    def __setattr__(self, __name, __value):
+        if __name == "saved":
+            self.app.update_state(self)
+        super().__setattr__(__name, __value)
     def getConfig(self, module="main", default_conf={}):
         self.config=libtools.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)

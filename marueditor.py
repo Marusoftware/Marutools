@@ -25,7 +25,7 @@ class Editor():
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
-        self.ui.notebook=self.ui.Notebook(close=True)
+        self.ui.notebook=self.ui.Notebook(close=True, command=self.close, onzero=self.exit)
         if not self.argv.filepath is None:
             self.open(file=self.argv.filepath, as_diff_type=True)
     def mainloop(self):
@@ -92,9 +92,9 @@ class Editor():
         self.welcome_tab.label=self.welcome_tab.Label(text="Welcome to Marueditor!\nWhat would you like to do?")
         self.welcome_tab.label.pack()
         self.welcome_tab.new=self.welcome_tab.Input.Button(label="Create New File", command=self.new)
-        self.welcome_tab.new.pack()
+        self.welcome_tab.new.pack(fill="x", side="top")
         self.welcome_tab.open=self.welcome_tab.Input.Button(label="Open File", command=lambda: self.open(as_diff_type=True))
-        self.welcome_tab.open.pack()
+        self.welcome_tab.open.pack(fill="x", side="top")
         if self.welcome_tab.backend=="tkinter":
             if self.welcome_tab.dnd:
                 def dnd_process(event):
@@ -127,22 +127,20 @@ class Editor():
                     root.list.add_item(label=ext, id=addon+"."+ext, parent=addon)
             root.wait()
             if len(root.list.value) == 1:
-                return root.list.value[0]
+                value=root.list.value[0].split(".")
+                return value[0], (value[1] if len(value)==2 else self.addon.loaded_addon_info[value[0]]["filetypes"][0])
             else:
                 return
         if file is None:
             file=self.ui.Dialog.askfile()
             if not os.path.exists(file):
                 return
-        ext=os.path.splitext(file)
+        ext=os.path.splitext(file)[1].lstrip(".")
         if force_select:
             selected=select_addon(self.addon.extdict, recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
             if selected is None:
                 return
-            selected=selected.split(".")
-            addon=selected[0]
-            if len(selected) == 2:
-                ext=selected[1]
+            addon, ext = selected
         else:
             if ext in self.addon.extdict:
                 addon=self.addon.extdict[ext][0]
@@ -151,10 +149,7 @@ class Editor():
                     selected=select_addon(self.addon.extdict)
                     if selected is None:
                         return
-                    selected=selected.split(".")
-                    addon=selected[0]
-                    if len(selected) == 2:
-                        ext=selected[1]
+                    addon, ext = selected
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     return
@@ -163,6 +158,7 @@ class Editor():
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
         self.ui.notebook.select_tab("end")
+        ctx.saved=False
     def save(self, as_other=False):
         if not self.ui.notebook.value in self.opening:
             return
@@ -193,7 +189,7 @@ class Editor():
             options={"file":None, "filetype":None}
             buttons.next.wait()
             if not body.exist():
-                return
+                return options
             while 1:
                 for i in options:
                     if options[i] is None:
@@ -224,15 +220,13 @@ class Editor():
                     if len(body.filetype.value) == 1:
                         options["filetype"]=body.filetype.value[0]
                         if "." in body.filetype.value[0]:
-                            options["filetype"]+=("."+self.addon.loaded_addon_info["filetypes"][0])
-                    else:
-                        continue
+                            options["filetype"]+=("."+self.addon.loaded_addon_info[options["filetype"].split(".")[0]]["filetypes"][0])
                     body.filetype.destroy()
             root.close()
             return options
         if not "file" in options or not "filetype" in options:
             options=dialog()
-        if options is None:
+        if None in options.items():
             return
         file=options["file"]
         addon=options["filetype"].split(".")[0]
@@ -242,13 +236,15 @@ class Editor():
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
         ctx.addon.new()
-    def close(self, value=None):
+    def close(self, value=None, question=-1):
         if value is None:
             value=self.ui.notebook.value
-        if  value in self.opening:
+        if not value in self.opening:
+            self.ui.notebook.del_tab("current")
             return
         if not self.opening[value].saved:
-            question=self.ui.Dialog.question("yesnocancel", "Save...?", f"Do you want to save?\nFile:{value}")
+            if question == -1:
+                question=self.ui.Dialog.question("yesnocancel", "Save...?", f"Do you want to save?\nFile:{value}")
             if question == True:
                 self.save()
             elif question != False:
@@ -257,21 +253,34 @@ class Editor():
         self.opening.pop(value)
         self.ui.notebook.del_tab("current")
     def exit(self):
-        for i in self.opening:
-            self.close(self.opening)
-        sys.exit()
+        try:
+            for i in self.opening:
+                if not self.opening[i].saved:
+                    question=self.ui.Dialog.question("yesnocancel", "Save...?", f"Do you want to save?\nFile:{i}")
+                    if question is None:
+                        break
+                else:
+                    question=None
+                self.close(i, question)
+            else:
+                self.ui.close()
+        except RuntimeError:
+            self.exit()
     def update_state(self, addon):
         index=self.ui.notebook.value
         if not index in self.opening:
             return
         before=self.opening[index]
+        old_index=index
         if addon.saved and "*" in index:
             self.opening.pop(index)
             index=index.lstrip("*")
+            self.ui.notebook.config_tab(old_index, text=index)
             self.opening[index]=before
         elif not addon.saved and not "*" in index:
             self.opening.pop(index)
             index="*"+index
+            self.ui.notebook.config_tab(old_index, text=index)
             self.opening[index]=before
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
@@ -281,248 +290,105 @@ class Editor():
         root.text=root.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
         root.text.pack()
 """
-            #file edit class
-            class mfile():
-                #exit  
-                def exit():
-                    def remove():
-                        if not root.note.welcome.opened:
-                            for j in range(len(openning)):
-                                for i in range(len(file_addon_list)):
-                                    try:
-                                        openning[i][1].file_exit(openning[j][0])
-                                        if os.path.exists(openning[i][0].temp_dir):
-                                            shutil.rmtree(openning[i][0].temp_dir)
-                                    except:
-                                        pass
-                                    break
-                    e = tkmsg.askyesnocancel(txt["check"], txt["save_check"], parent=root)
-                    if e == True:
-                        mfile.save()
-                        remove()
-                        print("[info] exit")
-                        root.destroy()
-                        os._exit(0)
-                        sys.exit()
-                        
-                    elif e == False:
-                        remove()
-                        print("[info] exit(Not saved)")
-                        root.destroy()
-                        os._exit(0)
-                        sys.exit()
-                    else:
-                        pass
-                #new file
-                def new():
-                    def delaw(self):
-                        if len(self.widgets) != 0:
-                            for tmp in self.widgets:
-                                tmp.destroy()
-                            for tmp in range(len(self.widgets)):
-                                self.widgets.pop(0)
-                    def packaw(self):
-                        if len(self.widgets) != 0:
-                            for tmp in self.widgets:
-                                tmp.pack()
-                    print("[file][new] run")
-                    win = tkinter.Toplevel()
-                    win.resizable(0,0)
-                    win.title(txt["new"])
-                    win.geometry('500x300')
-                    self = ttk.Frame(win)
-                    self.pack(fill="both",expand=True)
-                    self.nstep = tkinter.IntVar(self, value=0)
-                    self.n_l = ttk.Label(self, text=txt["new_main"])
-                    self.n_f = ttk.Frame(self)
-                    self.n_b1 = ttk.Button(self.n_f, text=txt["next"], command=lambda:self.nstep.set(self.nstep.get()+1))
-                    self.n_b2 = ttk.Button(self.n_f, text=txt["back"], command=lambda:self.nstep.set(self.nstep.get()-1))
-                    self.n_b3 = ttk.Button(self.n_f, text=txt["cancel"], command=lambda:self.nstep.set(-1))
-                    self.n_l.pack()
-                    self.n_f.pack(side="bottom", fill="y")
-                    self.n_b1.pack(side="right")
-                    self.n_b2.pack(side="right")
-                    self.n_b3.pack(side="right")
-                    self.widgets = []
-                    self.directory = ""
-                    self.filename = ""
-                    while 1:
-                        self.wait_variable(self.nstep)
-                        if self.nstep.get() == -1:
-                            delaw(self)
-                            self.nstep.set(0)
-                            win.destroy()
-                            break
-                        elif self.nstep.get() == 0:
-                            delaw(self)
-                            self.n_l.configure(text=txt["new_main"])
-                        elif self.nstep.get() == 1:
-                            delaw(self)
-                            self.widgets.append(ttk.Label(self, text=txt["dir_name"]+":"))
-                            self.widgets.append(ttk.Entry(self))
-                            self.widgets.append(ttk.Button(self, text=txt["choose_dir"],
-                            command=lambda:(self.widgets[1].delete("-1","end"),self.widgets[1].insert("end",filedialog.askdirectory(parent=self)))))
-                            self.widgets.append(ttk.Label(self, text=txt["file_name"]+":"))
-                            self.widgets.append(ttk.Entry(self))
-                            self.n_l.configure(text=txt["new_main"]+"\n"+txt["new_sub1"])
-                            packaw(self)
-                        elif self.nstep.get() == 2:
-                            self.n_l.configure(text=txt["new_main"]+"\n"+txt["new_sub2"])
-                            self.directory = self.widgets[1].get()
-                            self.filename = self.widgets[4].get()
-                            delaw(self)
-                            self.widgets.append(tkinter.Listbox(self, width=30))
-                            packaw(self)
-                            self.filetypes=[]
-                            for i in range(len(file_addons)):
-                                self.filetypes.append(file_addon_type[i] + "(" + file_addon_type_ex[i] + ")")
-                            for i in range(len(self.filetypes)):
-                                self.widgets[0].insert("end", self.filetypes[i])
-                        elif self.nstep.get() == 3:
-                            if type(self.directory) != str or not os.path.exists(self.directory):
-                                tkmsg.showerror(txt["error"],txt["new_e3"],parent=win)
-                                self.n_b2.configure(command=None)
-                                self.nstep.set(2)
-                                self.directory = filedialog.askdirectory(parent=win)
-                            elif len(self.widgets[0].curselection()) == 0:
-                                self.n_b2.configure(command=None)
-                                self.nstep.set(2)
-                                tkmsg.showerror(txt["error"],txt["new_e2"],parent=win)
-                            elif len(self.filename) == 0:
-                                tkmsg.showerror(txt["error"],txt["new_e1"],parent=win)
-                                self.n_b2.configure(command=None)
-                                self.nstep.set(2)
-                                self.filename=tkinter.simpledialog.askstring(txt["file_name"],txt["new_e1_msg"],parent=win)
-                                print(self.filename)
-                            else:
-                                if "." in self.filename:
-                                    self.open_path = self.directory +"/" + self.filename
-                                else:
-                                    self.open_path = self.directory +"/" + self.filename + file_addon_type[int(self.widgets[0].curselection()[0])]
-                                if os.path.exists(self.open_path):
-                                    if not tkmsg.askyesno(txt["check"], txt["new_check2"], parent=win):
-                                        self.n_b2.configure(command=None)
-                                        self.nstep.set(2)
-                                    else:
-                                        self.nstep.set(4)
-                                else:
-                                    self.nstep.set(4)
-                                if self.nstep.get() == 4:
-                                    self.filetype = self.widgets[0].get(self.widgets[0].curselection())
-                                    if tkmsg.askyesno(txt["check"], txt["new_check"].replace("(_path_)",self.open_path).replace("(_type_)",str(self.filetype)), parent=win):
-                                        print("[file][new]:Path" + self.directory +"/" + self.filename + "\n[file][new]Type:" + str(self.filetype))
-                                        delaw(self)
-                                        self.n_l.configure(text=txt["wait"])
-                                        for i in range(len(file_addon_list)):
-                                            if file_addon_list[i] in self.open_path:
-                                                file_addons[i].file_new(self.open_path)
-                                                break
-                                        self.n_l.configure(text=txt["done_msg"])
-                                        self.n_b2.destroy()
-                                        self.n_b3.destroy()
-                                        self.n_b1.configure(text=txt["done"], command=lambda:(mfile.open_file(open_path=self.open_path),self.nstep.set(-1)))
-                                    else:
-                                        self.nstep.set(2)                               
-
-                # setting
-                def setting():
-                    def done():
-                        conf.update(theme=s.style.get())
-                        conf.update(open_other=s_v1.get())
-                        if conf["lang"] != s.lang.get():
-                            tkmsg.showinfo("Info","Language Changing will apply when you start Marueditor next time.", parent=s)
-                            conf.update(lang=s.lang.get())
-                        config.setConfig(conf)
-                        #pickle.dump(conf, open(conf_path, "wb"))
-                        s.destroy()
-                    def cancel():
-                        root.style.theme_use(conf["theme"])
-                        s.destroy()
-                    def change(gomi, argv):
-                        if argv == "style":
-                            root.style.theme_use(s.style.get())
-                        elif argv == "lang":
-                            pass
-                    s = tkinter.Toplevel()
-                    s.title(txt["setting"])
-                    s.note = ttk.Notebook(s)
-                    s.note.pack(fill="both",expand=True)
-                    s.frames = {}
-                    s.frames.update(Main=ttk.Frame(s.note))
-                    s.note.add(s.frames["Main"],text="Main")
-                    s.frames["Main"].note = ttk.Notebook(s.frames["Main"])
-                    s.frames["Main"].note.pack(fill="both",expand=True)
-                    Main = {"Appearance" : "", "File" : "", "Addons" : ""}
-                    for i in Main.keys():
-                        Main[i] = (ttk.Frame(s.frames["Main"].note))
-                        s.frames["Main"].note.add(Main[i], text=i)
-                    s_b1 = ttk.Button(s, text=txt["done"], command=done)
-                    s_b2 = ttk.Button(s, text=txt["cancel"], command=cancel)
-                    if "open_other" in conf:
-                        s_v1 = tkinter.IntVar(Main["File"], value=conf["open_other"])
-                    else:
-                        s_v1 = tkinter.IntVar(Main["File"], value=0)
-                    if "en_dnd" in conf:
-                        s_v2 = tkinter.IntVar(Main["File"], value=conf["en_dnd"])
-                    else:
-                        s_v2 = tkinter.IntVar(Main["File"], value=0)
-                    s_c1 = ttk.Checkbutton(Main["File"], text=txt["st_open_from"], variable=s_v1)
-                    s_c1.pack(side="top",fill="x")
-                    s_c2 = ttk.Checkbutton(Main["File"], text=txt["st_dnd"], variable=s_v2)
-                    s_c2.pack(side="top",fill="x")
-                    s_b1.pack(side="left",fill="both",expand=True)
-                    s_b2.pack(side="left",fill="both",expand=True)
-                    def remove():
-                        try:
-                            addons.remove(addons.get_file()[s.a_fl.curselection()[0]-1])
-                            s.a_fl.delete(s.a_fl.curselection()[0]-1)
-                        except:
-                            pass
-                        os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
-                    s.style = ttk.Combobox(Main["Appearance"], width=30, value=root.style.theme_names())
-                    s.style.pack()
-                    s.lang = ttk.Combobox(Main["Appearance"], width=30, value=list(map(lambda value: value.replace(".lang",""), list(filter(lambda value: ".lang" in value, os.listdir(cd+"/language"))))))
-                    s.lang.pack()
-                    s.a_fl = tkinter.Listbox(Main["Addons"], width=30)
-                    s.a_fl.pack()
-                    s.a_fl.insert("end",txt["file_addon"]+":")
-                    s.a_b1 = ttk.Button(Main["Addons"], text=txt["delete"], command=remove)
-                    s.a_b1.pack()
-                    s.style.insert("end",root.style.theme_use())
-                    s.lang.insert("end",conf["lang"])
-                    s.style.bind('<<ComboboxSelected>>', lambda null: change(gomi=null, argv="style"))
-                    s.lang.bind('<<ComboboxSelected>>', lambda null: change(gomi=null, argv="lang"))
-                    s.style.bind('<Return>', lambda null: change(gomi=null, argv="style"))
-                    s.lang.bind('<Return>', lambda null: change(gomi=null, argv="lang"))
-                    for i in range(len(file_addons)):
-                        s.a_fl.insert("end", "  " + file_addon_list[i] + "(" + file_addon_type[i] + " " +file_addon_type_ex[i] + ")")
-            #help
-            class hlp():
-                #show version
-                def var():
-                    print("[info] show version")
-                    h = tkinter.Toplevel(root)
-                    h.title(txt["about"])
-                    h.note = ttk.Notebook(h)
-                    h.note.pack(fill="both",expand=True)
-                    h._h = ttk.Frame(h)
-                    h.note.add(h._h,text=txt["version"])
-                    h.img = tkinter.PhotoImage(file='./image/init.png', master=h._h)
-                    h_l1 = ttk.Label(h._h, image=h.img)
-                    h_l1.pack(side="top")
-                    h_l2 = ttk.Label(h._h, text="Version:" + info[0] + "  subVersion:" + info[1].lstrip("rever=") + "  2019-2021 Marusoftware")
-                    h_l2.pack(side="bottom")
-                    h._h2 = ttk.Frame(h)
-                    h.note.add(h._h2,text=txt["licence"])
-                    h_t1 = ScrolledText(h._h2)
-                    h_t1.pack(fill="both",expand=True)
-                    h_t1.insert("end",open("./LICENCE","r").read())
-                    h_t1.configure(state="disabled")
-                #show help
-                def help():
-                    pass
-                def update():
-                    pass """
+# setting
+def setting():
+    def done():
+        conf.update(theme=s.style.get())
+        conf.update(open_other=s_v1.get())
+        if conf["lang"] != s.lang.get():
+            tkmsg.showinfo("Info","Language Changing will apply when you start Marueditor next time.", parent=s)
+            conf.update(lang=s.lang.get())
+        config.setConfig(conf)
+        #pickle.dump(conf, open(conf_path, "wb"))
+        s.destroy()
+    def cancel():
+        root.style.theme_use(conf["theme"])
+        s.destroy()
+    def change(gomi, argv):
+        if argv == "style":
+            root.style.theme_use(s.style.get())
+        elif argv == "lang":
+            pass
+    s = tkinter.Toplevel()
+    s.title(txt["setting"])
+    s.note = ttk.Notebook(s)
+    s.note.pack(fill="both",expand=True)
+    s.frames = {}
+    s.frames.update(Main=ttk.Frame(s.note))
+    s.note.add(s.frames["Main"],text="Main")
+    s.frames["Main"].note = ttk.Notebook(s.frames["Main"])
+    s.frames["Main"].note.pack(fill="both",expand=True)
+    Main = {"Appearance" : "", "File" : "", "Addons" : ""}
+    for i in Main.keys():
+        Main[i] = (ttk.Frame(s.frames["Main"].note))
+        s.frames["Main"].note.add(Main[i], text=i)
+    s_b1 = ttk.Button(s, text=txt["done"], command=done)
+    s_b2 = ttk.Button(s, text=txt["cancel"], command=cancel)
+    if "open_other" in conf:
+        s_v1 = tkinter.IntVar(Main["File"], value=conf["open_other"])
+    else:
+        s_v1 = tkinter.IntVar(Main["File"], value=0)
+    if "en_dnd" in conf:
+        s_v2 = tkinter.IntVar(Main["File"], value=conf["en_dnd"])
+    else:
+        s_v2 = tkinter.IntVar(Main["File"], value=0)
+    s_c1 = ttk.Checkbutton(Main["File"], text=txt["st_open_from"], variable=s_v1)
+    s_c1.pack(side="top",fill="x")
+    s_c2 = ttk.Checkbutton(Main["File"], text=txt["st_dnd"], variable=s_v2)
+    s_c2.pack(side="top",fill="x")
+    s_b1.pack(side="left",fill="both",expand=True)
+    s_b2.pack(side="left",fill="both",expand=True)
+    def remove():
+        try:
+            addons.remove(addons.get_file()[s.a_fl.curselection()[0]-1])
+            s.a_fl.delete(s.a_fl.curselection()[0]-1)
+        except:
+            pass
+        os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
+    s.style = ttk.Combobox(Main["Appearance"], width=30, value=root.style.theme_names())
+    s.style.pack()
+    s.lang = ttk.Combobox(Main["Appearance"], width=30, value=list(map(lambda value: value.replace(".lang",""), list(filter(lambda value: ".lang" in value, os.listdir(cd+"/language"))))))
+    s.lang.pack()
+    s.a_fl = tkinter.Listbox(Main["Addons"], width=30)
+    s.a_fl.pack()
+    s.a_fl.insert("end",txt["file_addon"]+":")
+    s.a_b1 = ttk.Button(Main["Addons"], text=txt["delete"], command=remove)
+    s.a_b1.pack()
+    s.style.insert("end",root.style.theme_use())
+    s.lang.insert("end",conf["lang"])
+    s.style.bind('<<ComboboxSelected>>', lambda null: change(gomi=null, argv="style"))
+    s.lang.bind('<<ComboboxSelected>>', lambda null: change(gomi=null, argv="lang"))
+    s.style.bind('<Return>', lambda null: change(gomi=null, argv="style"))
+    s.lang.bind('<Return>', lambda null: change(gomi=null, argv="lang"))
+    for i in range(len(file_addons)):
+        s.a_fl.insert("end", "  " + file_addon_list[i] + "(" + file_addon_type[i] + " " +file_addon_type_ex[i] + ")")
+#help
+class hlp():
+#show version
+def var():
+    print("[info] show version")
+    h = tkinter.Toplevel(root)
+    h.title(txt["about"])
+    h.note = ttk.Notebook(h)
+    h.note.pack(fill="both",expand=True)
+    h._h = ttk.Frame(h)
+    h.note.add(h._h,text=txt["version"])
+    h.img = tkinter.PhotoImage(file='./image/init.png', master=h._h)
+    h_l1 = ttk.Label(h._h, image=h.img)
+    h_l1.pack(side="top")
+    h_l2 = ttk.Label(h._h, text="Version:" + info[0] + "  subVersion:" + info[1].lstrip("rever=") + "  2019-2021 Marusoftware")
+    h_l2.pack(side="bottom")
+    h._h2 = ttk.Frame(h)
+    h.note.add(h._h2,text=txt["licence"])
+    h_t1 = ScrolledText(h._h2)
+    h_t1.pack(fill="both",expand=True)
+    h_t1.insert("end",open("./LICENCE","r").read())
+    h_t1.configure(state="disabled")
+#show help
+def help():
+    pass
+def update():
+    pass """
 
 def run(argv=DefaultArgv):
     app=Editor(argv)

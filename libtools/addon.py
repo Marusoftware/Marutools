@@ -34,7 +34,7 @@ class Addon():
                     self.logger.warn(f"Can't import addon({addon_file}). (Used addon name.)")
                     return False
                 self.loaded_addon[addon.name]=addon
-                self.loaded_addon_info[addon.name]={"name":addon.name,"file_types":addon.file_types}
+                self.loaded_addon_info[addon.name]={"name":addon.name,"filetypes":addon.file_types}
                 for ext in addon.file_types:
                     if not ext in self.extdict:
                         self.extdict[ext]=[]

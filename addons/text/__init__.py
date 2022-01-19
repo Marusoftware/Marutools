@@ -33,5 +33,7 @@ class Edit():
                 self.text.insert("end", f.read())
     def save(self, filename=None):
         pass
+    def new(self):
+        pass
     def close(self):
         pass

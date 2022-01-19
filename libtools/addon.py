@@ -23,7 +23,7 @@ class Addon():
             if not callable(module.Edit):
                 self.logger.warn(f"Can't import addon({addon_file}). (Edit class is not callable.)")
                 return False
-            attrs=["name", "file_types", "save", "close"]
+            attrs=["name", "file_types", "save", "close", "new"]
             addon=module.Edit
             for attr in attrs:
                 if not hasattr(addon, attr):
@@ -68,8 +68,8 @@ class AddonAPI(object):
         self.app=app
         self.saved=False
     def __setattr__(self, __name, __value):
+        super().__setattr__(__name, __value)
         if __name == "saved":
             self.app.update_state(self)
-        super().__setattr__(__name, __value)
     def getConfig(self, module="main", default_conf={}):
         self.config=libtools.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)

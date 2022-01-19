@@ -30,8 +30,6 @@ class Editor():
             self.open(file=self.argv.filepath, as_diff_type=True)
     def mainloop(self):
         self.ui.mainloop()
-    def exit(self):
-        sys.exit()
     def LoadConfig(self):
         import platform, locale
         default_conf={"welcome":1, "lang":"ja_JP"}
@@ -160,13 +158,13 @@ class Editor():
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     return
-        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1] else ""}'
+        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!=ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
         self.ui.notebook.select_tab("end")
     def save(self, as_other=False):
-        if self.ui.notebook.value == "Welcome!":
+        if not self.ui.notebook.value in self.opening:
             return
         if as_other:
             file=self.ui.Dialog.askfile()
@@ -196,54 +194,76 @@ class Editor():
             buttons.next.wait()
             if not body.exist():
                 return
-            try:
-                while 1:
-                    for i in options:
-                        if options[i] is None:
-                            break
+            while 1:
+                for i in options:
+                    if options[i] is None:
+                        break
+                else:
+                    break
+                if i == "file":
+                    body.title.configure(text="Please set file path.")
+                    body.file=body.Input.Form(type="filesave")
+                    body.file.pack(fill="both", expand=True)
+                elif i == "filetype":
+                    body.title.configure(text="Please set file type.")
+                    body.filetype=body.Input.List()
+                    body.filetype.pack(fill="both", expand=True)
+                    for ext, addons in self.addon.extdict.items():
+                        for addon in addons:
+                            if not body.filetype.exist_item(addon):
+                                body.filetype.add_item(label=addon, id=addon)
+                            body.filetype.add_item(label=ext, id=addon+"."+ext, parent=addon)
+                buttons.next.wait()
+                if not body.exist():
+                    break
+                if i == "file":
+                    if body.file.value != "":
+                        options["file"]=body.file.value
+                    body.file.destroy()
+                elif i == "filetype":
+                    if len(body.filetype.value) == 1:
+                        options["filetype"]=body.filetype.value[0]
+                        if "." in body.filetype.value[0]:
+                            options["filetype"]+=("."+self.addon.loaded_addon_info["filetypes"][0])
                     else:
-                        break
-                    if i == "file":
-                        body.title.configure(text="Please set file path.")
-                        body.file=body.Input.Form(type="filesave")
-                        body.file.pack(fill="both", expand=True)
-                    elif i == "filetype":
-                        body.title.configure(text="Please set file type.")
-                        body.filetype=body.Input.List()
-                        body.filetype.pack(fill="both", expand=True)
-                        for ext, addons in self.addon.extdict.items():
-                            for addon in addons:
-                                if not body.filetype.exist_item(addon):
-                                    body.filetype.add_item(label=addon, id=addon)
-                                body.filetype.add_item(label=ext, id=addon+"."+ext, parent=addon)
-                    buttons.next.wait()
-                    if not body.exist():
-                        break
-                    if i == "file":
-                        if body.file.value != "":
-                            options["file"]=body.file.value
-                        body.file.destroy()
-                    elif i == "filetype":
-                        body.filetype.value
-                        body.filetype.destroy()
-            except:
-                self.logger.exception("Known Error(Button):")
+                        continue
+                    body.filetype.destroy()
             root.close()
-        dialog()
-    def close(self):
-        if self.ui.notebook.value == "Welcome!":
+            return options
+        if not "file" in options or not "filetype" in options:
+            options=dialog()
+        if options is None:
             return
-        if not self.opening[self.ui.notebook.value].saved:
-            question=self.ui.Dialog.question("yesnocancel", "Save...?", "Do you want to save?")
+        file=options["file"]
+        addon=options["filetype"].split(".")[0]
+        ext=options["filetype"].split(".")[1]
+        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!=ext else ""}'
+        tab=self.ui.notebook.add_tab(label=label)
+        ctx=self.addon.getAddon(addon, file, ext, tab, self)
+        self.opening[label]=ctx
+        ctx.addon.new()
+    def close(self, value=None):
+        if value is None:
+            value=self.ui.notebook.value
+        if  value in self.opening:
+            return
+        if not self.opening[value].saved:
+            question=self.ui.Dialog.question("yesnocancel", "Save...?", f"Do you want to save?\nFile:{value}")
             if question == True:
                 self.save()
             elif question != False:
                 return
-        self.opening[self.ui.notebook.value].addon.close()
-        self.opening.pop(self.ui.notebook.value)
+        self.opening[value].addon.close()
+        self.opening.pop(value)
         self.ui.notebook.del_tab("current")
+    def exit(self):
+        for i in self.opening:
+            self.close(self.opening)
+        sys.exit()
     def update_state(self, addon):
-        index:str=self.ui.notebook.value
+        index=self.ui.notebook.value
+        if not index in self.opening:
+            return
         before=self.opening[index]
         if addon.saved and "*" in index:
             self.opening.pop(index)

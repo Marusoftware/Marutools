@@ -217,9 +217,13 @@ class Editor():
                     body.file.destroy()
                 elif i == "filetype":
                     if len(body.filetype.value) == 1:
-                        options["filetype"]=body.filetype.value[0]
-                        if "." in body.filetype.value[0]:
-                            options["filetype"]+=("."+self.addon.loaded_addon_info[options["filetype"].split(".")[0]]["filetypes"][0])
+                        filetype=body.filetype.value[0].split(".")
+                        options["filetype"]=filetype
+                        options["addon"]=filetype[0]
+                        if len(filetype) == 1:
+                            options["ext"]=self.addon.loaded_addon_info[addon]["filetypes"][0]
+                        else:
+                            options["ext"]=filetype[1]
                     body.filetype.destroy()
             root.close()
             return options
@@ -228,13 +232,15 @@ class Editor():
         if None in options.items():
             return
         file=options["file"]
-        addon=options["filetype"].split(".")[0]
-        ext=options["filetype"].split(".")[1]
+        addon=options["addon"]
+        ext=options["ext"]
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!=ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
+        ctx.saved=False
         ctx.addon.new()
+        self.ui.notebook.select_tab("end")
     def close(self, value=None, question=-1):
         if value is None:
             value=self.ui.notebook.value

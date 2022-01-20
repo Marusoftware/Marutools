@@ -28,7 +28,7 @@ class Notebook(WidgetBase):
         self.widget.tab(self.tab2id(tab), **options)
     def list_tab(self):
         return [self.widget.tab(i, "text") for i in self.widget.tabs()]
-    def callback(self, event):
+    def callback(self, *event):
         try:
             id=self.widget.index("current")
         except:

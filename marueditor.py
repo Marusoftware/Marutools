@@ -152,7 +152,7 @@ class Editor():
                 else:
                     self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
                     return
-        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!=ext else ""}'
+        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
@@ -234,7 +234,9 @@ class Editor():
         file=options["file"]
         addon=options["addon"]
         ext=options["ext"]
-        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!=ext else ""}'
+        if getattr(self.addon.loaded_addon[addon], "append_ext", True):
+            file+="."+ext
+        label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
@@ -287,6 +289,7 @@ class Editor():
             index="*"+index
             self.ui.notebook.config_tab(old_index, text=index)
             self.opening[index]=before
+        self.ui.notebook.callback()
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
         root.changeTitle(self.appinfo["appname"]+" - Version and License")

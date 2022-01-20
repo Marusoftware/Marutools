@@ -3,6 +3,7 @@ import os
 class Edit():
     name="Text"
     file_types=["txt","py"]
+    append_ext=True
     def __init__(self, api):
         self.encoding="utf-8"
         self.lang="lang"

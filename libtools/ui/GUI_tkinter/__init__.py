@@ -21,13 +21,14 @@ class TKINTER():
             os.environ['TKDND_LIBRARY'] = os.path.join(self.appinfo["share_os"],"tkdnd")
             try:
                 from .tkdnd import Tk
+                self._root=Tk(className=self.appinfo["appname"])
             except Exception as e:
                 self.logger.exception(e)
                 from tkinter import Tk
+                self._root=Tk(className=self.appinfo["appname"])
                 self.dnd = False
             else:
                 self.dnd = True
-            self._root=Tk(className=self.appinfo["appname"])
             #ttkthemes
             try:
                 from ttkthemes import ThemedStyle as Style

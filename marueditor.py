@@ -83,7 +83,7 @@ class Editor():
         self.ui.menu.window=self.ui.menu.add_category("Window", name="window")#Window
         self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         self.ui.menu.window.add_item(type="button", label="Open New Window", command=lambda: run(argv=self.argv))
-        self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings")#Settings
+        self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings", command=self.setting)#Settings
         self.ui.menu.help=self.ui.menu.add_category("Help", name="help")#Help
         self.ui.menu.help.add_item(type="button", label="Version and License", command=self.version)
     def welcome(self):
@@ -305,6 +305,11 @@ class Editor():
         licence.text.pack(fill="both", expand=True)
         with open(os.path.join(self.appinfo["cd"], "LICENCE")) as f:
             licence.text.insert("end", f.read())
+    def setting(self):
+        root=self.ui.makeSubWindow(dialog=True)
+        root.note=root.Notebook()
+        root.note.pack(fill="both", expand=True)
+        editor=root.note.add_tab("Editor")
 """
 # setting
 def setting():

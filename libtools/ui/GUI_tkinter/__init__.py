@@ -52,10 +52,10 @@ class TKINTER():
             self._root=Toplevel(master=self.parent._root)
             self.dnd=self.parent.dnd
             if type=="dialog":
-                self._root.resizable(0,0)
-                #self._root.grab_set()
+                self._root.focus_set()
+                self._root.grab_set()
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
-        if type=="main" or type=="sub":
+        if type!="frame":
             import tkinter.ttk as ttk
             self.root=ttk.Frame(self._root)
             self.root.pack(fill="both", expand=True)

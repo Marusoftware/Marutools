@@ -61,5 +61,7 @@ class Logger():
         self.logger.warn(text)
     def critical(self, text):
         self.logger.critical(text)
-    def exception(self, exp):
-        self.logger.exception(exp)
+    def exception(self, text):
+        self.logger.exception(text)
+    def debug(self, text):
+        self.logger.debug(text)

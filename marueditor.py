@@ -154,9 +154,9 @@ class Editor():
                     return
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
+        self.ui.notebook.select_tab("end")
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
-        self.ui.notebook.select_tab("end")
         ctx.saved=False
     def save(self, as_other=False):
         if not self.ui.notebook.value in self.opening:
@@ -175,16 +175,17 @@ class Editor():
                 root.close()
             root=self.ui.makeSubWindow(dialog=True)
             root.setcallback("close", close)
+            root.changeSize('300x300')
             body=root.Frame()
-            body.pack()
-            body.title=body.Label(text="You can make new files using this dialog.")
+            body.pack(side="top", fill="x")
+            body.title=body.Label(text="You can make new file using this dialog.")
             body.title.pack()
             buttons=root.Frame()
-            buttons.pack(side="bottom", expand=True)
+            buttons.pack(side="bottom", fill="x")
             buttons.cancel=buttons.Input.Button(label="Cancel", command=close)
-            buttons.cancel.pack()
+            buttons.cancel.pack(side="left", fill="x")
             buttons.next=buttons.Input.Button(label="Next")
-            buttons.next.pack()
+            buttons.next.pack(side="right", fill="x")
             options={"file":None, "filetype":None}
             buttons.next.wait()
             if not body.exist():
@@ -202,7 +203,7 @@ class Editor():
                 elif i == "filetype":
                     body.title.configure(text="Please set file type.")
                     body.filetype=body.Input.List()
-                    body.filetype.pack(fill="both", expand=True)
+                    body.filetype.pack(fill="both")
                     for ext, addons in self.addon.extdict.items():
                         for addon in addons:
                             if not body.filetype.exist_item(addon):
@@ -229,7 +230,7 @@ class Editor():
             return options
         if not "file" in options or not "filetype" in options:
             options=dialog()
-        if None in options.items():
+        if None in options.values():
             return
         file=options["file"]
         addon=options["addon"]
@@ -238,11 +239,11 @@ class Editor():
             file+="."+ext
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
+        self.ui.notebook.select_tab("end")
         ctx=self.addon.getAddon(addon, file, ext, tab, self)
         self.opening[label]=ctx
         ctx.saved=False
         ctx.addon.new()
-        self.ui.notebook.select_tab("end")
     def close(self, value=None, question=-1):
         if value is None:
             value=self.ui.notebook.value
@@ -273,18 +274,18 @@ class Editor():
                 self.ui.close()
         except RuntimeError:
             self.exit()
-    def update_state(self, addon):
+    def update_state(self):
         index=self.ui.notebook.value
         if not index in self.opening:
             return
         before=self.opening[index]
         old_index=index
-        if addon.saved and "*" in index:
+        if before.saved and "*" in index:
             self.opening.pop(index)
             index=index.lstrip("*")
             self.ui.notebook.config_tab(old_index, text=index)
             self.opening[index]=before
-        elif not addon.saved and not "*" in index:
+        elif not before.saved and not "*" in index:
             self.opening.pop(index)
             index="*"+index
             self.ui.notebook.config_tab(old_index, text=index)
@@ -307,6 +308,7 @@ class Editor():
             licence.text.insert("end", f.read())
     def setting(self):
         root=self.ui.makeSubWindow(dialog=True)
+        root.changeSize('300x200')
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
         editor=root.note.add_tab("Editor")

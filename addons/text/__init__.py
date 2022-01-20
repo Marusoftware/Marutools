@@ -37,11 +37,12 @@ class Edit():
             self.api.saved=False
     def on_modify(self):
         self.api.saved=False
+        self.api.logger.debug("modify")
     def save(self, file=None):
         if file is None:
             file=self.api.filepath
         with open(file, mode="w", encoding=self.encoding) as f:
-            f.write(self.text.get(0, "end"))
+            f.write(self.text.get('1.0', 'end -1c'))
         self.api.saved=True
     def new(self):
         pass

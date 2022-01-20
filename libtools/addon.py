@@ -66,10 +66,10 @@ class AddonAPI(object):
         self.ext=ext
         self.ui=ui
         self.app=app
-        self.saved=False
+        self.saved=True
     def __setattr__(self, __name, __value):
         super().__setattr__(__name, __value)
         if __name == "saved":
-            self.app.update_state(self)
+            self.app.update_state()
     def getConfig(self, module="main", default_conf={}):
         self.config=libtools.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)

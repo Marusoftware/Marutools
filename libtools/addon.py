@@ -1,4 +1,3 @@
-from pkgutil import extend_path
 import libtools, os, sys
 from importlib import import_module
 

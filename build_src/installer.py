@@ -11,13 +11,13 @@ import subprocess
 
 ############add APP info here###############
 APP_NAME = "marueditor"
-APP_NAME_TITLE = "Maruediter"
-APP_LUA_JP = [""]
-APP_LUA_EN = [""]
+APP_NAME_TITLE = "Marueditor"
+APP_LUA_JP = ["ホームページをご覧ください", "https://marusoftware.net/documents/marutools.html"]
+APP_LUA_EN = ["Please visit and read our homepage.","https://marusoftware.net/documents/marutools.html"]
 APP_TYPE = "32" # 64 , 32 , select
 APP_ICON = "./marueditor.png"
 APP_VER = "1.0"
-APP_COMPANY = "Marusoftare"
+APP_COMPANY = "Marusoftware"
 ############################################
 
 lang = 0

@@ -120,11 +120,11 @@ class _List(WidgetBase):
     def exist_item(self, id):
         return self.widget.exists(id)
 class _CheckButton(WidgetBase):
-    def __init__(self, master, label=None, command=None, **options):
+    def __init__(self, master, label=None, command=None, default=False, **options):
         super().__init__(master)
-        from tkinter import StringVar
+        from tkinter import BooleanVar
         from tkinter.ttk import Checkbutton
-        self.var=StringVar(self.master)
+        self.var=BooleanVar(self.master, value=default)
         self.value=""
         self.var.trace("w",self.callback)
         self.command=[command]

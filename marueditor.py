@@ -31,7 +31,7 @@ class Editor():
         self.ui.mainloop()
     def LoadConfig(self):
         import platform, locale
-        default_conf={"welcome":1, "lang":"ja_JP"}
+        default_conf={"welcome":1, "lang":"ja_JP", "open_as":True}
         if platform.system() == "Windows":
             default_conf.update(theme="xpnative")
         elif platform.system() == "Darwin":
@@ -74,7 +74,8 @@ class Editor():
         self.ui.menu.file=self.ui.menu.add_category("File")#File
         self.ui.menu.file.add_item(type="button", label="New File", command=self.new)
         self.ui.menu.file.add_item(type="button", label="Open", command=self.open)
-        self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
+        if self.conf["open_as"]:
+            self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
         self.ui.menu.file.add_item(type="button", label="Save", command=self.save)
         self.ui.menu.file.add_item(type="button", label="Save as...", command=lambda: self.save(as_other=True))
         self.ui.menu.file.add_item(type="button", label="Close tab", command=self.close)
@@ -312,6 +313,8 @@ class Editor():
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
         editor=root.note.add_tab("Editor")
+        editor.open_as=editor.Input.CheckButton(label="Enable Open as", default=self.conf["open_as"], command=lambda: self.config.addConf("open_as", editor.open_as.value))
+        editor.open_as.pack()
 """
 #help
 class hlp():

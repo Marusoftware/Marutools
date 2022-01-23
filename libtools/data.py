@@ -82,6 +82,8 @@ class Lang():
     def __init__(self, appinfo, requirement_text):
         self.req=requirement_text
         self.appinfo=appinfo
+        self.lang_list=[os.path.splitext(i)[0] for i in os.listdir(self.appinfo["lang"]) if os.path.splitext(i)[1]==".lang"]
+        self.lang=None
     def getText(self, lang):
         lang_path=os.path.join(self.appinfo["lang"],lang+".lang")
         if os.path.exists(lang_path):
@@ -97,4 +99,5 @@ class Lang():
                 raise KeyError("No Enough Key is in Language File.")
         else:
             raise FileNotFoundError("Language File is not found.(Path: "+os.path.abspath("./language/"+lang+".lang")+")")
+        self.lang=lang
         return txt

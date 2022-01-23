@@ -1,5 +1,12 @@
-langs = {"en_US" : "en", "af" : "af", "zh" : "zh-CN", "zh_Hans" : "zh-CN", "zh_Hant" : "zh-TW",
- "zh_Hant_TW": "zh-TW", "zh_Hant_HK" : "zh-TW", "zh_Hant_MO" : "zh-TW"}
+langs = {"en_US" : "en",
+        "af" : "af",
+        "zh" : "zh-CN",
+        "zh_Hans" : "zh-CN",
+        "zh_Hant" : "zh-TW",
+        "zh_Hant_TW": "zh-TW",
+        "zh_Hant_HK" : "zh-TW",
+        "zh_Hant_MO" : "zh-TW"
+        }
 src_lang = ["ja_JP","ja"]
 import os
 cd=os.path.join(os.getcwd(),"language")
@@ -18,11 +25,16 @@ if len(sys.argv) > 1:
             print(sys.argv[i+1])
     langs = l1
 print(langs)
-src = json.load(open(src_lang[0]+".lang","r"))
+src = json.load(open(src_lang[0]+".lang","r", encoding="utf8"))
 for l in babel.localedata.locale_identifiers():
     if l in langs:
         if os.path.exists(l+".lang"):
-            b = json.load(open(l+".lang","r"))
+            try:
+                b = json.load(open(l+".lang","r", encoding="utf8"))
+            except:
+                import traceback
+                traceback.print_exc()
+                print(l)
         for t in src.keys():
             if not t in b:
                 try:
@@ -30,5 +42,5 @@ for l in babel.localedata.locale_identifiers():
                 except ValueError:
                     print([langs[l],t])
                     break
-        json.dump(b, open(l+".lang","w"))
+        json.dump(b, open(l+".lang","w", encoding="utf8"), ensure_ascii=False, indent=2)
         b = {}

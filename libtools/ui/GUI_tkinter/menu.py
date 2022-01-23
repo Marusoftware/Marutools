@@ -1,5 +1,4 @@
 from tkinter import Menu as _Menu
-from tkinter.ttk import Menubutton, OptionMenu
 import platform
 import libtools
 
@@ -21,12 +20,9 @@ class Menu():
             self.master.add_cascade(menu=self.menu, label=label)
         elif type=="popup":
             pass
-        elif type=="button":
-            pass
-        elif type == "menu":
-            self.menu=Menubutton(master=master, **options)
         elif type == "menubutton":
-            self.menu=OptionMenu(master=master, **options)
+            from tkinter.ttk import Menubutton
+            self.widget=Menubutton(master=master, **options)
     def add_category(self, label, name=None, **options):
         if name is None:
             name=libtools.core.randomstr(10).lower()

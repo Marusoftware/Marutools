@@ -52,5 +52,6 @@
   "version": "版本信息",
   "licence": "执照",
   "marueditor": "丸监",
-  "marueditor_file": "Marueditor兼容文件"
+  "marueditor_file": "Marueditor兼容文件",
+  "open_as": "以另一种形式开放"
 }

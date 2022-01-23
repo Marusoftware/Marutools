@@ -108,8 +108,8 @@ class TKINTER():
             self._root.createcommand('tk::mac::ShowHelp', callback)
         elif name=="macos_settings" and self.aqua:
             self._root.createcommand('tk::mac::ShowPreferences')
-    def Menu(self, **options):
-        return _Menu(self._root, **options)
+    def Menu(self, type, **options):
+        return _Menu(self._root, type=type, **options)
     def Notebook(self, close=None, command=None, **options):
         from .note import Notebook
         child=Notebook(self.root, self, command=command, close=close, **options)

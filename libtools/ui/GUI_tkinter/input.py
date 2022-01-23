@@ -1,3 +1,4 @@
+from distutils import command
 from . import WidgetBase
 import os
 
@@ -134,32 +135,43 @@ class _CheckButton(WidgetBase):
     def callback(self, *args):
         self.value=self.var.get()
         if callable(self.command[0]): self.command[0]()
-class _RadioButtonGroup(WidgetBase):
-    def __init__(self, master, default=0, command=None, **options):
+class _Select(WidgetBase):
+    def __init__(self, master, default="", command=None, values=[], inline=False, **options):
         super().__init__(master)
-        from tkinter.ttk import Frame
-        from tkinter import IntVar
-        self.widget=Frame(self.master, **options)
-        self.var=IntVar(self.master, value=default)
-        self.var.trace("w",self.callback)
-        self.value=0
+        from tkinter import StringVar
+        self.var=StringVar(self.master, value=default)
+        self.inline=inline
+        self.value=default
         self.command=[command]
-        self.children=[]
-    def add_child(self, label=None, **options):
-        from tkinter.ttk import Radiobutton
-        if not label is None:
-            options.update(text=label)
-        self.children.append(Radiobutton(self.widget, variable=self.var, **options))
-        self.remap()
-    def del_child(self, index):
-        self.children[index].destroy()
-        self.remap()
-    def remap(self):
-        for i, child in enumerate(self.children):
-            child.configure(value=i)
+        if inline:
+            from tkinter.ttk import OptionMenu
+            self.widget=OptionMenu(master=master, variable=self.var, command=self.callback, **options)
+            self.widget.set_menu(default, *values)
+            self.children=values
+        else:
+            from tkinter.ttk import Frame
+            self.widget=Frame(self.master, **options)
+            self.children={}
+            for value in values:
+                self.add_item(value)
+    def add_item(self, label=None, **options):
+        if self.inline:
+            self.children.append(label)
+            self.widget.set_menu(*self.children)
+        else:
+            from tkinter.ttk import Radiobutton
+            if not label is None:
+                options.update(text=label, value=label)
+            self.children.append(Radiobutton(self.widget, variable=self.var, command=self.callback, **options))
+    def del_item(self, label):
+        if self.inline:
+            self.children.pop(label)
+            self.widget.set_menu(*self.children)
+        else:
+            self.children[label].destroy()
     def callback(self, *args):
         self.value=self.var.get()
-        if callable(self.command[0]): self.command[0]()
+        self.command[0]()
 class Input(WidgetBase):
     def Button(self, **options):
         return _Button(self.master, **options)
@@ -171,5 +183,5 @@ class Input(WidgetBase):
         return _Text(self.master, self.parent, **options)
     def CheckButton(self, **options):
         return _CheckButton(self.master, **options)
-    def RadioButtonGroup(self, **options):
-        return _RadioButtonGroup(self.master, **options)
+    def Select(self, **options):
+        return _Select(self.master, **options)

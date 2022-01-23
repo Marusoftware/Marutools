@@ -48,7 +48,7 @@ class Editor():
     def Loadl10n(self, language=None):
         if language is None:
             language=self.conf["lang"]
-        req = ['welcome', 'marueditor', 'exit', 'close_all', 'close_tab', 'save', 'save_as', 'save_from', 'open_from', 'open',
+        req = ['welcome', 'marueditor', 'exit', 'close_all', 'close_tab', 'save', 'save_as', 'open_as', 'open',
         'new', 'file', 'open_new', 'full_screen', 'help', 'window', 'setting', 'addon', 'file_addon', 'delete', 'marueditor_file',
         'all', 'error', 'error_cant_open', 'select_file_type', 'next', 'check', 'save_check', 'were_sorry', 'new_main', 'back', 
         'cancel', 'dir_name', 'choose_dir', 'file_name', 'new_sub1', 'new_sub2', 'new_check', 'wait', 'done', 'new_e1', 'new_e2', 
@@ -72,12 +72,12 @@ class Editor():
         #    self.ui.menu.system.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         #    self.ui.menu.system.add_item(type="separator")
         self.ui.menu.file=self.ui.menu.add_category("File")#File
-        self.ui.menu.file.add_item(type="button", label="New File", command=self.new)
-        self.ui.menu.file.add_item(type="button", label="Open", command=self.open)
+        self.ui.menu.file.add_item(type="button", label=self.txt["new"], command=self.new)
+        self.ui.menu.file.add_item(type="button", label=self.txt["open"], command=self.open)
         if self.conf["open_as"]:
-            self.ui.menu.file.add_item(type="button", label="Open as...", command=lambda: self.open(force_select=True))
-        self.ui.menu.file.add_item(type="button", label="Save", command=self.save)
-        self.ui.menu.file.add_item(type="button", label="Save as...", command=lambda: self.save(as_other=True))
+            self.ui.menu.file.add_item(type="button", label=self.txt["open_as"], command=lambda: self.open(force_select=True))
+        self.ui.menu.file.add_item(type="button", label=self.txt["save"], command=self.save)
+        self.ui.menu.file.add_item(type="button", label=self.txt["save_as"], command=lambda: self.save(as_other=True))
         self.ui.menu.file.add_item(type="button", label="Close tab", command=self.close)
         self.ui.menu.file.add_item(type="button", label="Close all", command=self.exit)
         self.ui.menu.edit=self.ui.menu.add_category("Edit", name="edit")#Edit
@@ -315,6 +315,12 @@ class Editor():
         editor=root.note.add_tab("Editor")
         editor.open_as=editor.Input.CheckButton(label="Enable Open as", default=self.conf["open_as"], command=lambda: self.config.addConf("open_as", editor.open_as.value))
         editor.open_as.pack()
+        def setlang():
+            self.config.addConf("lang", editor.lang.value)
+            self.Loadl10n(language=editor.lang.value)
+        editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang)
+        editor.lang.pack()
+
 """
 #help
 class hlp():

@@ -31,7 +31,9 @@
   "st_open_from": "'別の形式で開く'の有効化",
   "st_dnd": "ドラッグ&ドロップの有効化",
   "marueditor": "Marueditor",
-
+  "lang": "言語",
+  "style": "スタイル",
+  
   "exit": "終了",
   "addon": "アドオン",
   "file_addon": "ファイルアドオン",
@@ -51,8 +53,6 @@
   "done_msg": "完了しました。",
   "new_e1_msg": "ファイル名を入力してください。",
   "chk_upd": "アップデートを確認",
-  "style": "スタイル",
-  "lang": "言語",
   "new_check2": "ファイルが既に存在します。\n上書きして続行しますか?",
   "version": "バージョン情報",
   "licence": "ライセンス",

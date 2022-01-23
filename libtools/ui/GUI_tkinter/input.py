@@ -1,4 +1,3 @@
-from distutils import command
 from . import WidgetBase
 import os
 
@@ -136,33 +135,38 @@ class _CheckButton(WidgetBase):
         self.value=self.var.get()
         if callable(self.command[0]): self.command[0]()
 class _Select(WidgetBase):
-    def __init__(self, master, default="", command=None, values=[], inline=False, **options):
+    def __init__(self, master, default="", command=None, values=[], inline=False, label="", **options):
         super().__init__(master)
         from tkinter import StringVar
+        from tkinter.ttk import Frame, Label
         self.var=StringVar(self.master, value=default)
         self.inline=inline
         self.value=default
         self.command=[command]
+        self.values=values
+        self.widget=Frame(self.master, **options)
+        if label != "":
+            self.label=Label(self.widget, text=label)
+            self.label.pack(side="left", fill="y")
         if inline:
             from tkinter.ttk import OptionMenu
-            self.widget=OptionMenu(master=master, variable=self.var, command=self.callback, **options)
-            self.widget.set_menu(default, *values)
-            self.children=values
+            self.children=OptionMenu(master=self.widget, variable=self.var, command=self.callback, **options)
+            self.children.set_menu(default, *values)
+            self.children.pack(side="right", fill="both")
         else:
-            from tkinter.ttk import Frame
-            self.widget=Frame(self.master, **options)
             self.children={}
             for value in values:
                 self.add_item(value)
     def add_item(self, label=None, **options):
         if self.inline:
-            self.children.append(label)
-            self.widget.set_menu(*self.children)
+            self.values.append(label)
+            self.children.set_menu(*self.children)
         else:
             from tkinter.ttk import Radiobutton
             if not label is None:
                 options.update(text=label, value=label)
             self.children.append(Radiobutton(self.widget, variable=self.var, command=self.callback, **options))
+            self.children[-1].pack(side="right", fill="both")
     def del_item(self, label):
         if self.inline:
             self.children.pop(label)

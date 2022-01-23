@@ -321,10 +321,10 @@ class Editor():
         def setlang():
             self.config.addConf("lang", editor.lang.value)
             self.Loadl10n(language=editor.lang.value)
-        editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang)
+        editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang, label=self.txt["lang"]+":")
         editor.lang.pack()
         if self.ui.backend=="tkinter":
-            style=editor.Input.Select(values=self.ui.style.theme_names(), inline=True, default=self.conf["theme"], command=lambda: (self.ui.style.theme_use(style.value),self.config.addConf("theme", style.value)))
+            style=editor.Input.Select(values=self.ui.style.theme_names(), inline=True, default=self.conf["theme"], command=lambda: (self.ui.style.theme_use(style.value),self.config.addConf("theme", style.value)), label=self.txt["style"]+":")
             style.pack()
 
 """

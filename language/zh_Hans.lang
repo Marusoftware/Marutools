@@ -53,5 +53,10 @@
   "licence": "执照",
   "marueditor": "丸监",
   "marueditor_file": "Marueditor兼容文件",
-  "open_as": "以另一种形式开放"
+  "open_as": "以另一种形式开放",
+  "edit": "编辑",
+  "open_window": "打开一个新窗口",
+  "welcome_tab": "欢迎来到发散人！\n你做什么工作？",
+  "dnd_area": "您可以在此处删除并打开文件。",
+  "ok": "O."
 }

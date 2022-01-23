@@ -51,5 +51,10 @@
   "version": "Weergawe-inligting",
   "licence": "lisensieer",
   "marueditor": "Maruefitor",
-  "marueditor_file": "Marueditor Compatible Lêer"
+  "marueditor_file": "Marueditor Compatible Lêer",
+  "edit": "redigeer",
+  "open_window": "Maak 'n nuwe venster oop",
+  "welcome_tab": "Welkom by Maruedeitor!\nWat doen jy?",
+  "dnd_area": "U kan die lêer hier aflaai en oopmaak.",
+  "ok": "O"
 }

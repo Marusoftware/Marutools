@@ -51,5 +51,10 @@
   "version": "version information",
   "licence": "license",
   "marueditor": "Marueditor",
-  "marueditor_file": "Marueditor compatible files"
+  "marueditor_file": "Marueditor compatible files",
+  "edit": "edit",
+  "open_window": "Open a new window",
+  "welcome_tab": "Welcome to Marueditor!\nWhat do you do?",
+  "dnd_area": "You can drop and open the file here.",
+  "ok": "OK"
 }

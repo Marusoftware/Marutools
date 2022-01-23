@@ -1,7 +1,7 @@
 import argparse, libtools, os, sys
 
 __version__="Marueditor b1.0.0"
-__revision__="0"
+__revision__="1"
 
 class DefaultArgv:
     log_level=0
@@ -71,42 +71,42 @@ class Editor():
         #if not self.ui.menu.system is None:
         #    self.ui.menu.system.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
         #    self.ui.menu.system.add_item(type="separator")
-        self.ui.menu.file=self.ui.menu.add_category("File")#File
+        self.ui.menu.file=self.ui.menu.add_category(self.txt["file"])#File
         self.ui.menu.file.add_item(type="button", label=self.txt["new"], command=self.new)
         self.ui.menu.file.add_item(type="button", label=self.txt["open"], command=self.open)
         if self.conf["open_as"]:
             self.ui.menu.file.add_item(type="button", label=self.txt["open_as"], command=lambda: self.open(force_select=True))
         self.ui.menu.file.add_item(type="button", label=self.txt["save"], command=self.save)
         self.ui.menu.file.add_item(type="button", label=self.txt["save_as"], command=lambda: self.save(as_other=True))
-        self.ui.menu.file.add_item(type="button", label="Close tab", command=self.close)
-        self.ui.menu.file.add_item(type="button", label="Close all", command=self.exit)
-        self.ui.menu.edit=self.ui.menu.add_category("Edit", name="edit")#Edit
-        self.ui.menu.window=self.ui.menu.add_category("Window", name="window")#Window
-        self.ui.menu.window.add_item(type="checkbutton", label="Fullscreen", command=self.ui.fullscreen)
-        self.ui.menu.window.add_item(type="button", label="Open New Window", command=lambda: run(argv=self.argv))
-        self.ui.menu.settings=self.ui.menu.add_item(type="button", label="Settings", command=self.setting)#Settings
-        self.ui.menu.help=self.ui.menu.add_category("Help", name="help")#Help
-        self.ui.menu.help.add_item(type="button", label="Version and License", command=self.version)
+        self.ui.menu.file.add_item(type="button", label=self.txt["close_tab"], command=self.close)
+        self.ui.menu.file.add_item(type="button", label=self.txt["close_all"], command=self.exit)
+        self.ui.menu.edit=self.ui.menu.add_category(self.txt["edit"], name="edit")#Edit
+        self.ui.menu.window=self.ui.menu.add_category(self.txt["window"], name="window")#Window
+        self.ui.menu.window.add_item(type="checkbutton", label=self.txt["full_screen"], command=self.ui.fullscreen)
+        self.ui.menu.window.add_item(type="button", label=self.txt["open_window"], command=lambda: run(argv=self.argv))
+        self.ui.menu.settings=self.ui.menu.add_item(type="button", label=self.txt["setting"], command=self.setting)#Settings
+        self.ui.menu.help=self.ui.menu.add_category(self.txt["help"], name="help")#Help
+        self.ui.menu.help.add_item(type="button", label=self.txt["about"], command=self.version)
     def welcome(self):
-        self.welcome_tab=self.ui.notebook.add_tab(label="Welcome!")
-        self.welcome_tab.label=self.welcome_tab.Label(text="Welcome to Marueditor!\nWhat would you like to do?")
+        self.welcome_tab=self.ui.notebook.add_tab(label=self.txt["welcome"])
+        self.welcome_tab.label=self.welcome_tab.Label(text=self.txt["welcome_tab"])
         self.welcome_tab.label.pack()
-        self.welcome_tab.new=self.welcome_tab.Input.Button(label="Create New File", command=self.new)
+        self.welcome_tab.new=self.welcome_tab.Input.Button(label=self.txt["new"], command=self.new)
         self.welcome_tab.new.pack(fill="x", side="top")
-        self.welcome_tab.open=self.welcome_tab.Input.Button(label="Open File", command=lambda: self.open(as_diff_type=True))
+        self.welcome_tab.open=self.welcome_tab.Input.Button(label=self.txt["open"], command=lambda: self.open(as_diff_type=True))
         self.welcome_tab.open.pack(fill="x", side="top")
         if self.welcome_tab.backend=="tkinter":
             if self.welcome_tab.dnd:
                 def dnd_process(event):
                     for file in event.data:
                         self.open(file=file, as_diff_type=True)
-                self.welcome_tab.frame=self.welcome_tab.Frame(label="Drop file here!")
+                self.welcome_tab.frame=self.welcome_tab.Frame(label=self.txt["dnd_area"])
                 self.welcome_tab.frame.pack(fill="both", expand=True)
                 self.welcome_tab.frame.setup_dnd(dnd_process, "file")
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: mime and directory
         def select_addon(exts, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            root.title=root.Label(text="Please select an addon.\nFile:"+file)
+            root.title=root.Label(text=f"{self.txt['select_file_type']}\nFile:"+file)
             root.title.pack()
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
@@ -116,9 +116,9 @@ class Editor():
             def ok():
                 if len(root.list.value) == 1:
                     root.close()
-            root.ok=root.Input.Button(label="OK", command=ok)
+            root.ok=root.Input.Button(label=self.txt["ok"], command=ok)
             root.ok.pack(expand=True, fill="both", side="bottom")
-            root.cancel=root.Input.Button(label="Cancel", command=cancel)
+            root.cancel=root.Input.Button(label=self.txt["cancel"], command=cancel)
             root.cancel.pack(expand=True, fill="both", side="bottom")
             for ext, addons in exts.items():
                 for addon in addons:
@@ -151,7 +151,7 @@ class Editor():
                         return
                     addon, ext = selected
                 else:
-                    self.ui.Dialog.error(title="Error", message="Can't find valid addon.")
+                    self.ui.Dialog.error(title=self.txt["error"], message=self.txt["error_cant_open"])
                     return
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
@@ -179,13 +179,13 @@ class Editor():
             root.changeSize('300x300')
             body=root.Frame()
             body.pack(side="top", fill="x")
-            body.title=body.Label(text="You can make new file using this dialog.")
+            body.title=body.Label(text=self.txt["new_main"])
             body.title.pack()
             buttons=root.Frame()
             buttons.pack(side="bottom", fill="x")
-            buttons.cancel=buttons.Input.Button(label="Cancel", command=close)
+            buttons.cancel=buttons.Input.Button(label=self.txt["cancel"], command=close)
             buttons.cancel.pack(side="left", fill="x")
-            buttons.next=buttons.Input.Button(label="Next")
+            buttons.next=buttons.Input.Button(label=self.txt["next"])
             buttons.next.pack(side="right", fill="x")
             options={"file":None, "filetype":None}
             buttons.next.wait()
@@ -198,11 +198,11 @@ class Editor():
                 else:
                     break
                 if i == "file":
-                    body.title.configure(text="Please set file path.")
+                    body.title.configure(text=self.txt["new_sub1"])
                     body.file=body.Input.Form(type="filesave")
                     body.file.pack(fill="both", expand=True)
                 elif i == "filetype":
-                    body.title.configure(text="Please set file type.")
+                    body.title.configure(text=self.txt["new_sub2"])
                     body.filetype=body.Input.List()
                     body.filetype.pack(fill="both")
                     for ext, addons in self.addon.extdict.items():
@@ -253,7 +253,7 @@ class Editor():
             return
         if not self.opening[value].saved:
             if question == -1:
-                question=self.ui.Dialog.question("yesnocancel", "Save...?", f"Do you want to save?\nFile:{value}")
+                question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\nFile:{value}")
             if question == True:
                 self.save()
             elif question != False:
@@ -265,7 +265,7 @@ class Editor():
         try:
             for i in self.opening:
                 if not self.opening[i].saved:
-                    question=self.ui.Dialog.question("yesnocancel", "Save...?", f"Do you want to save?\nFile:{i}")
+                    question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\nFile:{i}")
                     if question is None:
                         break
                 else:
@@ -294,7 +294,7 @@ class Editor():
         self.ui.notebook.callback()
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
-        root.changeTitle(self.appinfo["appname"]+" - Version and License")
+        root.changeTitle(self.appinfo["appname"]+" - "+self.txt["about"])
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
         version=root.note.add_tab(label="Version")
@@ -312,8 +312,8 @@ class Editor():
         root.changeSize('300x200')
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
-        editor=root.note.add_tab("Editor")
-        editor.open_as=editor.Input.CheckButton(label="Enable Open as", default=self.conf["open_as"], command=lambda: self.config.addConf("open_as", editor.open_as.value))
+        editor=root.note.add_tab(self.txt["marueditor"])
+        editor.open_as=editor.Input.CheckButton(label=self.txt["st_open_from"], default=self.conf["open_as"], command=lambda: self.config.addConf("open_as", editor.open_as.value))
         editor.open_as.pack()
         def setlang():
             self.config.addConf("lang", editor.lang.value)

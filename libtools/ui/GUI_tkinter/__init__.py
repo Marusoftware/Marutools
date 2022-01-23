@@ -39,7 +39,9 @@ class TKINTER():
             self._root.report_callback_exception=self.tkerror
             self.changeTitle(self.appinfo["appname"])
             if "theme" in self.conf:
-                self.changeStyle(self.conf["theme"])
+                self._root.style.theme_use(self.conf["theme"])
+                self.logger.info("Theme:"+self.conf["theme"])
+            self.style=self._root.style
         elif type=="frame":
             self.dnd=self.parent.dnd
             from tkinter.ttk import Frame, Labelframe
@@ -67,9 +69,6 @@ class TKINTER():
         self.Input=Input(self.root, parent=self)
     def changeTitle(self, title):
         self._root.title(title)
-    def changeStyle(self, name):
-        self._root.style.theme_use(name)
-        self.logger.info("Theme:"+self.conf["theme"])
     def changeIcon(self, icon_path):
         from PIL import Image, ImageTk
         icon=ImageTk.PhotoImage(Image.open(icon_path), master=self._root)

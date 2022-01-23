@@ -104,9 +104,9 @@ class Editor():
                 self.welcome_tab.frame.pack(fill="both", expand=True)
                 self.welcome_tab.frame.setup_dnd(dnd_process, "file")
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: mime and directory
-        def select_addon(exts, recom=None):
+        def select_addon(exts, file, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            root.title=root.Label(text=f"{self.txt['select_file_type']}\nFile:"+file)
+            root.title=root.Label(text=f"{self.txt['select_file_type']}\n{self.txt['file']}:{file}")
             root.title.pack()
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
@@ -137,7 +137,7 @@ class Editor():
                 return
         ext=os.path.splitext(file)[1].lstrip(".")
         if force_select:
-            selected=select_addon(self.addon.extdict, recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
+            selected=select_addon(self.addon.extdict, file=file, recom=(self.addon.extdict[ext] if ext in self.addon.extdict else None))
             if selected is None:
                 return
             addon, ext = selected
@@ -146,7 +146,7 @@ class Editor():
                 addon=self.addon.extdict[ext][0]
             else:
                 if as_diff_type:
-                    selected=select_addon(self.addon.extdict)
+                    selected=select_addon(self.addon.extdict, file=file)
                     if selected is None:
                         return
                     addon, ext = selected
@@ -253,7 +253,7 @@ class Editor():
             return
         if not self.opening[value].saved:
             if question == -1:
-                question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\nFile:{value}")
+                question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{value}")
             if question == True:
                 self.save()
             elif question != False:
@@ -265,7 +265,7 @@ class Editor():
         try:
             for i in self.opening:
                 if not self.opening[i].saved:
-                    question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\nFile:{i}")
+                    question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{i}")
                     if question is None:
                         break
                 else:

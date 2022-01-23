@@ -1,7 +1,7 @@
 import argparse, libtools, os, sys
 
 __version__="Marueditor b1.0.0"
-__revision__="2"
+__revision__="3"
 
 class DefaultArgv:
     log_level=0
@@ -48,11 +48,14 @@ class Editor():
     def Loadl10n(self, language=None):
         if language is None:
             language=self.conf["lang"]
-        req = ['welcome', 'marueditor', 'exit', 'close_all', 'close_tab', 'save', 'save_as', 'open_as', 'open',
-        'new', 'file', 'open_new', 'full_screen', 'help', 'window', 'setting', 'addon', 'file_addon', 'delete', 'marueditor_file',
-        'all', 'error', 'error_cant_open', 'select_file_type', 'next', 'check', 'save_check', 'were_sorry', 'new_main', 'back', 
-        'cancel', 'dir_name', 'choose_dir', 'file_name', 'new_sub1', 'new_sub2', 'new_check', 'wait', 'done', 'new_e1', 'new_e2', 
-        'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'st_open_from', 'st_dnd', 'new_check2', 'about']
+        req = ['file', 'new', 'open', 'open_as', 'save', 'save_as', 'close_tab', 'close_all', 'edit', 'window',
+        'full_screen', 'open_window', 'setting', 'help', 'about', 'welcome', 'welcome_tab',
+        'dnd_area', 'select_file_type', 'ok', 'cancel', 'error', 'error_cant_open',
+        'new_main', 'next', 'new_sub1', 'new_sub2', 'check', 'save_check', 'st_open_from',
+        'st_dnd', 'marueditor', 'exit', 'addon', 'file_addon', 'delete', 'all', 'were_sorry',
+        'back', 'dir_name', 'choose_dir', 'file_name', 'new_check', 'wait', 'done', 'new_e1',
+        'new_e2', 'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'new_check2',
+        'version', 'licence', 'marueditor_file']
         self.lang = libtools.Lang(self.appinfo, req)
         self.txt = self.lang.getText(language)
     def LoadLogger(self):

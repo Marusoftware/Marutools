@@ -30,8 +30,8 @@ class Editor():
     def mainloop(self):
         self.ui.mainloop()
     def LoadConfig(self):
-        import platform, locale
-        default_conf={"welcome":1, "lang":"ja_JP", "open_as":True}
+        import platform, locale, babel
+        default_conf={"welcome":1, "lang":babel.default_locale(), "open_as":True}
         if platform.system() == "Windows":
             default_conf.update(theme="xpnative")
         elif platform.system() == "Darwin":

@@ -86,19 +86,18 @@ class Lang():
         self.lang_list=[os.path.splitext(i)[0] for i in os.listdir(self.appinfo["lang"]) if os.path.splitext(i)[1]==".lang"]
         self.lang=None
     def getText(self, lang):
-        lang_path=os.path.join(self.appinfo["lang"],lang+".lang")
-        if os.path.exists(lang_path):
-            with open(lang_path,"r", encoding="utf8") as f:
-                txt = json.load(f)
-            for i in range(len(self.req)):
-                if self.req[i] in txt:
-                    tmp = 1
-                else:
-                    tmp = 0
-                    break
-            if not tmp:
-                raise KeyError("No Enough Key is in Language File.")
+        if os.path.join(self.appinfo["lang"],lang+".lang"):
+            lang_path=os.path.join(self.appinfo["lang"],lang+".lang")
+        elif os.path.join(self.appinfo["lang"],"".join(lang.split("_")[:-1])+".lang"):
+            lang_path=os.path.join(self.appinfo["lang"],"".join(lang.split("_")[:-1])+".lang")
         else:
-            raise FileNotFoundError("Language File is not found.(Path: "+os.path.abspath("./language/"+lang+".lang")+")")
-        self.lang=lang
-        return txt
+            raise FileNotFoundError(f"Language File is not found.(Lang:{lang})")
+        with open(lang_path,"r", encoding="utf8") as f:
+            txt = json.load(f)
+        for i in range(len(self.req)):
+            if not self.req[i] in txt:
+                break
+        else:
+            self.lang=lang
+            return txt
+        raise KeyError("No Enough Key is in Language File.")

@@ -2,3 +2,4 @@ tkfilebrowser
 ttkthemes
 Pillow
 chardet
+babel

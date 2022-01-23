@@ -51,19 +51,20 @@ class Config():
         self.appinfo.update(conf=self.conf_dir, log=os.path.join(self.conf_dir, "log"))
         self.readConf()
     def _syncData(self):
-        json.dump(self.conf, open(self.conf_path, "w"))
+        with open(self.conf_path, "w") as f:
+            json.dump(self.conf, f)
     def readConf(self):
         if os.path.exists(self.conf_path):
-            f=open(self.conf_path, "r")
-            try:
-                self.conf = json.load(f)
-            except:
-                f.close()
-                print("Conf file was broken. So Backup old and create new one.")
-                os.rename(self.conf_path, self.conf_path+".bak")
-                self.appinfo.update(first=True)
-                self.conf=self.default_conf
-                self._syncData()
+            with open(self.conf_path, "r") as f:
+                try:
+                    self.conf = json.load(f)
+                except:
+                    f.close()
+                    print("Conf file was broken. So Backup old and create new one.")
+                    os.rename(self.conf_path, self.conf_path+".bak")
+                    self.appinfo.update(first=True)
+                    self.conf=self.default_conf
+                    self._syncData()
         else:
             self.appinfo.update(first=True)
             self.conf=self.default_conf

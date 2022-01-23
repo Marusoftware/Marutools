@@ -1,7 +1,7 @@
 import argparse, libtools, os, sys
 
 __version__="Marueditor b1.0.0"
-__revision__="1"
+__revision__="2"
 
 class DefaultArgv:
     log_level=0
@@ -89,7 +89,7 @@ class Editor():
         self.ui.menu.help.add_item(type="button", label=self.txt["about"], command=self.version)
     def welcome(self):
         self.welcome_tab=self.ui.notebook.add_tab(label=self.txt["welcome"])
-        self.welcome_tab.label=self.welcome_tab.Label(text=self.txt["welcome_tab"])
+        self.welcome_tab.label=self.welcome_tab.Label(label=self.txt["welcome_tab"])
         self.welcome_tab.label.pack()
         self.welcome_tab.new=self.welcome_tab.Input.Button(label=self.txt["new"], command=self.new)
         self.welcome_tab.new.pack(fill="x", side="top")
@@ -106,7 +106,7 @@ class Editor():
     def open(self, file=None, as_diff_type=False, force_select=False):#TODO: mime and directory
         def select_addon(exts, file, recom=None):
             root=self.ui.makeSubWindow(dialog=True)
-            root.title=root.Label(text=f"{self.txt['select_file_type']}\n{self.txt['file']}:{file}")
+            root.title=root.Label(label=f"{self.txt['select_file_type']}\n{self.txt['file']}:{file}")
             root.title.pack()
             root.list=root.Input.List()
             root.list.pack(expand=True, fill="both")
@@ -179,7 +179,7 @@ class Editor():
             root.changeSize('300x300')
             body=root.Frame()
             body.pack(side="top", fill="x")
-            body.title=body.Label(text=self.txt["new_main"])
+            body.title=body.Label(label=self.txt["new_main"])
             body.title.pack()
             buttons=root.Frame()
             buttons.pack(side="bottom", fill="x")
@@ -298,9 +298,9 @@ class Editor():
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
         version=root.note.add_tab(label="Version")
-        version.title=version.Label(image="init.png")
+        version.title=version.Image(image="init.png")
         version.title.pack()
-        version.text=version.Label(text=f"{__version__} {__revision__} -2023 Marusoftware")
+        version.text=version.Label(label=f"{__version__} {__revision__} -2023 Marusoftware")
         version.text.pack()
         licence=root.note.add_tab(label="Licence")
         licence.text=licence.Input.Text(scroll=True, readonly=True)

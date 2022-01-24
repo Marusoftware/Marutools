@@ -18,7 +18,7 @@
   "welcome_tab": "Marueditorへようこそ!",
   "dnd_area": "ここにファイルをドロップして開けます。",
   "select_file_type": "ファイル形式を選択してください。",
-  "ok":"OK",
+  "ok": "おk",
   "cancel": "キャンセル",
   "error": "エラー",
   "error_cant_open": "このファイルを開くためのアドオンがコンピューター上に見つかりませんでした。",
@@ -33,7 +33,6 @@
   "marueditor": "Marueditor",
   "lang": "言語",
   "style": "スタイル",
-
   "exit": "終了",
   "addon": "アドオン",
   "file_addon": "ファイルアドオン",

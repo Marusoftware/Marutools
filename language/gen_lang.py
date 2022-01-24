@@ -6,6 +6,7 @@ cd=os.path.join(os.getcwd(),"language")
 
 import babel, googletrans, json, os, sys
 os.chdir(cd)
+if input(f'The lang file will be save at "{cd}". Is it OK? [y/n]')!="y": exit()
 translator=googletrans.Translator()
 
 src = json.load(open(src_lang[0]+".lang","r", encoding="utf8"))
@@ -36,11 +37,10 @@ def translate(lang, glang, langs=None):
             json.dump(temp, f, ensure_ascii=False, indent=2)
 
 for glang, slangs in same.items():
-    if len(slangs) == 1:
+    try:
         print(glang, end="", flush=True)
         translate(slangs[0], glang)
-        print("...done")
+    except:
+        print("...error!!")
     else:
-        print("same:"+glang, end="", flush=True)
-        translate("".join(slangs[0].split("_")[:-1]), glang, langs=slangs)
         print("...done")

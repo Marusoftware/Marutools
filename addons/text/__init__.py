@@ -2,14 +2,15 @@ import os
 
 class Edit():
     name="Text"
+    description="Text editor"
     file_types=["txt","py"]
-    append_ext=True
     def __init__(self, api):
         self.encoding="utf-8"
         self.lang="lang"
         self.api=api
         self.text=self.api.ui.Input.Text(scroll=True, command=self.on_modify)
         self.text.pack(fill="both", expand=True)
+        self.orig=""
         if os.path.exists(self.api.filepath):
             try:
                 from chardet import UniversalDetector
@@ -31,11 +32,14 @@ class Edit():
                 self.encoding=detector.result["encoding"]
                 self.lang=detector.result["language"]
             with open(api.filepath, "r", encoding=self.encoding) as f:
-                self.text.insert("end", f.read())
+                self.orig=f.read()
+                self.text.insert("end", self.orig)
             self.api.saved=True
         else:
             self.api.saved=False
     def on_modify(self):
+        if self.orig == self.text.get('1.0', 'end -1c'):
+            return
         self.api.saved=False
         self.api.logger.debug("modify")
     def save(self, file=None):

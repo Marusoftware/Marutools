@@ -31,42 +31,43 @@ class _Form(WidgetBase):
         self.value=""
         self.var.trace("w",self.callback)
         self.command=[command]
+        self.options=options
         if type=="password":
             options.update(show="●")
             self.widget=Entry(self.master, textvariable=self.var, **options)
         elif type=="text":
             self.widget=Entry(self.master, textvariable=self.var, **options)
         elif "file" in type:
-            def on_press(event=None):
-                if event is None:
-                    if "save" in self.type:
-                        file=self.parent.Dialog.askfile(save=True)
-                    elif "open" in self.type:
-                        file=self.parent.Dialog.askfile()
-                        if not os.path.exists(file):
-                            return
-                    elif "openmulti" in self.type:
-                        file=self.parent.Dialog.askfile(multi=True)
-                        if not os.path.exists(file):
-                            return
-                    else:
-                        file=self.parent.Dialog.askfile(multi=True)
-                        if not os.path.exists(file):
-                            return
-                else:
-                    file=event.data
-                self.widget.form.delete(0,"end")
-                self.widget.form.insert("end", file)
             self.widget=parent.Frame()
-            self.widget.setup_dnd(on_press, "file")
-            self.widget.form=Entry(self.widget.root, textvariable=self.var, **options)
+            self.widget.setup_dnd(self.on_press, "file")
+            self.widget.form=Entry(self.widget.root, textvariable=self.var)
             self.widget.form.pack(fill="x", side="left", expand=True)
             from tkinter.ttk import Button
-            self.widget.button=Button(self.widget.root, text="Select...", command=on_press)
+            self.widget.button=Button(self.widget.root, text="Select...", command=self.on_press)
             self.widget.button.pack(side="right")
     def callback(self, *args):
         self.value=self.var.get()
         if callable(self.command[0]): self.command[0]()
+    def on_press(self, event=None):
+        if event is None:
+            if "save" in self.type:
+                file=self.parent.Dialog.askfile(save=True, **self.options)
+            elif "open" in self.type:
+                file=self.parent.Dialog.askfile(**self.options)
+                if not os.path.exists(file):
+                    return
+            elif "openmulti" in self.type:
+                file=self.parent.Dialog.askfile(multi=True, **self.options)
+                if not os.path.exists(file):
+                    return
+            else:
+                file=self.parent.Dialog.askfile(multi=True, **self.options)
+                if not os.path.exists(file):
+                    return
+        else:
+            file=event.data
+        self.widget.form.delete(0,"end")
+        self.widget.form.insert("end", file)
     def set(self, value):
         self.var.set(value)
 class _Text(WidgetBase):

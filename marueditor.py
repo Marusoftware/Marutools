@@ -2,6 +2,8 @@ import argparse, libtools, os
 
 __version__="Marueditor b1.0.0"
 __revision__="3"
+__author__="Marusoftware"
+__license__="MIT"
 
 class DefaultArgv:
     log_level=0
@@ -202,7 +204,7 @@ class Editor():
                     break
                 if i == "file":
                     body.title.configure(text=self.txt["new_sub1"])
-                    body.file=body.Input.Form(type="filesave")
+                    body.file=body.Input.Form(type="filesave", filetypes=[(key, "."+" .".join(addon["filetypes"])) for key, addon in self.addon.loaded_addon_info.items()])
                     body.file.pack(fill="both", expand=True)
                 elif i == "filetype":
                     body.title.configure(text=self.txt["new_sub2"])
@@ -239,8 +241,6 @@ class Editor():
         file=options["file"]
         addon=options["addon"]
         ext=options["ext"]
-        if getattr(self.addon.loaded_addon[addon], "append_ext", True):
-            file+="."+ext
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
         self.ui.notebook.select_tab("end")
@@ -327,6 +327,10 @@ class Editor():
             style=editor.Input.Select(values=self.ui.style.theme_names(), inline=True, default=self.conf["theme"], command=lambda: (self.ui.style.theme_use(style.value),self.config.addConf("theme", style.value)), label=self.txt["style"]+":")
             style.pack()
 
+class EasyEditor():
+    def __init__(self):
+        pass
+
 """
 #help
 class hlp():
@@ -334,7 +338,8 @@ class hlp():
     def help():
         pass
     def update():
-        pass """
+        pass
+"""
 
 def run(argv=DefaultArgv):
     app=Editor(argv)

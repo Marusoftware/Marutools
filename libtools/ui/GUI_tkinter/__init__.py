@@ -90,7 +90,6 @@ class TKINTER():
         t.insert("end",str("\n".join(err))+"\n")
         t.configure(state="disabled")
         tkinter.Button(sorry, text="EXIT", command=sorry.destroy).pack()
-        #sorry.protocol("WM_DELETE_WINDOW",sorry.destroy)
     def changeSize(self, size):
         self._root.geometry(size)
     def main(self):

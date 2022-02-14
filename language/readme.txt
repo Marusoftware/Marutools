@@ -1,7 +1,7 @@
 ##########################################
 # Marusoftware Marutools Language Files  #
 #                                        # 
-#        2020 - Marusoftware             #
+#        2021 - Marusoftware             #
 ##########################################
 
 This directory include Language Files for
@@ -10,13 +10,104 @@ This is only for Marueditor.
 Do not copy these files.
 
 Now we serve these languages:
- ja-JP : Japanese
- en-US : English(US)
- af : Afrikaans
- zh* : Chinese(Hant and Hans)
+    fr,
+    zh_Hant,
+    hr,
+    cs,
+    lo,
+    fil,
+    si,
+    km,
+    my,
+    pl,
+    et,
+    bg,
+    sk,
+    ms,
+    nb,
+    lt,
+    mk,
+    pa,
+    haw,
+    ru,
+    kk,
+    gd,
+    hi,
+    el,
+    mi,
+    ur,
+    cy,
+    eu,
+    sr,
+    be,
+    is,
+    it,
+    ku,
+    lv,
+    uk,
+    id,
+    ga,
+    ar,
+    sd,
+    da,
+    ky,
+    su,
+    uz,
+    ha,
+    ro,
+    hu,
+    tr,
+    ja,
+    fi,
+    ca,
+    en,
+    sq,
+    vi,
+    sw,
+    eo,
+    ps,
+    az,
+    th,
+    ig,
+    yo,
+    so,
+    kn,
+    de,
+    he,
+    es,
+    lb,
+    sl,
+    te,
+    zh,
+    ug,
+    pt,
+    ne,
+    bn,
+    am,
+    mr,
+    fy,
+    sv,
+    ja_JP,
+    gu,
+    sn,
+    bs,
+    af,
+    ko,
+    ta,
+    yi,
+    fa,
+    zu,
+    ar_001,
+    mt,
+    nl,
+    mn,
+    tg,
+    jv,
+    ml
 
 And these languages were transrated by human:
- ja-JP : Japanese
+    ja-JP : Japanese,
+    it : Italy
 
 If you want another one, please contact here.
 Mail: marusoftware@outlook.jp

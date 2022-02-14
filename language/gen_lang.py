@@ -1,12 +1,11 @@
-src_lang = ["ja_JP","ja"]
+src_lang = ["it","it"]
 import os
 from langs import langs, same
-cd=os.path.join(os.getcwd(),"language")
+cd=os.getcwd()
 #cd = "/home/maruo/ドキュメント/program/Marutools/language"
 
 import babel, googletrans, json, os, sys
 os.chdir(cd)
-if input(f'The lang file will be save at "{cd}". Is it OK? [y/n]')!="y": exit()
 translator=googletrans.Translator()
 
 src = json.load(open(src_lang[0]+".lang","r", encoding="utf8"))
@@ -36,11 +35,13 @@ def translate(lang, glang, langs=None):
         with open(lang+".lang","w", encoding="utf8") as f:
             json.dump(temp, f, ensure_ascii=False, indent=2)
 
-for glang, slangs in same.items():
-    try:
-        print(glang, end="", flush=True)
-        translate(slangs[0], glang)
-    except:
-        print("...error!!")
-    else:
-        print("...done")
+if __name__ == "__main__":
+    if input(f'The lang file will be save at "{cd}". Is it OK? [y/n]')!="y": exit()
+    for glang, slangs in same.items():
+        try:
+            print(glang, end="", flush=True)
+            translate(slangs[0], glang)
+        except:
+            print("...error!!")
+        else:
+            print("...done")

@@ -86,9 +86,9 @@ class Lang():
         self.lang_list=[os.path.splitext(i)[0] for i in os.listdir(self.appinfo["lang"]) if os.path.splitext(i)[1]==".lang"]
         self.lang=None
     def getText(self, lang):
-        if os.path.join(self.appinfo["lang"],lang+".lang"):
+        if os.path.exists(os.path.join(self.appinfo["lang"],lang+".lang")):
             lang_path=os.path.join(self.appinfo["lang"],lang+".lang")
-        elif os.path.join(self.appinfo["lang"],"".join(lang.split("_")[:-1])+".lang"):
+        elif os.path.exists(os.path.join(self.appinfo["lang"],"".join(lang.split("_")[:-1])+".lang")):
             lang_path=os.path.join(self.appinfo["lang"],"".join(lang.split("_")[:-1])+".lang")
         else:
             raise FileNotFoundError(f"Language File is not found.(Lang:{lang})")

@@ -10,6 +10,9 @@ Welcome to Marutools's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   User guide <user>
+   Developer guide <dev>
+
 
 
 Indices and tables

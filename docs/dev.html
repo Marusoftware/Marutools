@@ -36,10 +36,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="user.html">User guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-started">Get started</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://marusoftware.net/documents/marutools.html">Marusoftware Homepage Document</a></li>
 </ul>
 
         </div>
@@ -68,6 +79,102 @@
              
   <section id="document-for-developer">
 <h1>Document for Developer<a class="headerlink" href="#document-for-developer" title="Permalink to this headline"></a></h1>
+<p>This is guide for developer.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>First, Marutools has addon system.
+You can make addon in very easy steps.</p>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
+<p>Here comes addon making tutorial.</p>
+<section id="get-started">
+<h3>Get started<a class="headerlink" href="#get-started" title="Permalink to this headline"></a></h3>
+<p>First, you have to decide that it is big addon or small addon.
+Big addon is consisted with folder(it’s same as python package).
+Small addon is consisted with only one python script.
+It can change later, but it may be hard.</p>
+<p>Now, Marutools contain only Marueditor.
+So, you can make addon only for editor.</p>
+<p>This is base code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span> <span class="nc">Edit</span><span class="p">():</span>
+<span class="linenos"> 2</span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="linenos"> 4</span>    <span class="n">file_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="linenos"> 5</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">=</span><span class="n">api</span>
+<span class="linenos"> 7</span>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="linenos"> 8</span>        <span class="k">pass</span>
+<span class="linenos"> 9</span>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">10</span>        <span class="k">pass</span>
+<span class="linenos">11</span>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="k">pass</span>
+</pre></div>
+</div>
+<p><a class="reference download internal" download="" href="_downloads/2230ac9cb3519c79d88b430edcf39896/addon_base.py"><code class="xref download docutils literal notranslate"><span class="pre">addon_base.py</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Edit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Edit</span></span><a class="headerlink" href="#Edit" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="Edit.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#Edit.name" title="Permalink to this definition"></a></dt>
+<dd><p>Addon name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Edit.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#Edit.description" title="Permalink to this definition"></a></dt>
+<dd><p>Addon description string.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Edit.file_types">
+<span class="sig-name descname"><span class="pre">file_types</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span> <span class="pre">of</span> <span class="pre">file_types</span></em><a class="headerlink" href="#Edit.file_types" title="Permalink to this definition"></a></dt>
+<dd><p>You can write like this: <code class="docutils literal notranslate"><span class="pre">[&quot;txt&quot;,&quot;py&quot;,</span> <span class="pre">....]</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.__init__">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Edit.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Calls on file open. <code class="docutils literal notranslate"><span class="pre">self</span></code> will share.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>api</strong> (<em>libtools.addon.AddonAPI</em>) – AddonAPI. You will use this to control UI, settings, and etc… <strong>Please keep this for later</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.save">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Edit.save" title="Permalink to this definition"></a></dt>
+<dd><p>Calls on file saving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em><em> or </em><em>None</em>) – When “save as…” is selected, here comes new file path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.new">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Edit.new" title="Permalink to this definition"></a></dt>
+<dd><p>Calls on new file created.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.close">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Edit.close" title="Permalink to this definition"></a></dt>
+<dd><p>Calls on file closing.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>On <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, api object will pass. api object has many api.
+Please see here.</p>
+<p>You can write just as python.
+Happy coding!!</p>
+</section>
+</section>
 </section>
 
 

@@ -1,0 +1,12 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Guides:
+
+   User guide <user>
+   Developer guide <dev>
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Links:
+   
+   Marusoftware Homepage Document <https://marusoftware.net/documents/marutools.html>

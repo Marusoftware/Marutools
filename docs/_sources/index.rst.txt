@@ -7,17 +7,14 @@ Welcome to Marutools's documentation!
 =====================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+   :caption: Guides:
 
    User guide <user>
    Developer guide <dev>
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 2
+   :caption: Links:
+   
+   Marusoftware Homepage Document <https://marusoftware.net/documents/marutools.html>

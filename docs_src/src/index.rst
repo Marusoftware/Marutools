@@ -15,6 +15,13 @@ Welcome to Marutools's documentation!
 
 .. toctree::
    :maxdepth: 2
+   :caption: References:
+
+   Addon API Reference <api>
+
+.. toctree::
+   :maxdepth: 2
    :caption: Links:
    
    Marusoftware Homepage Document <https://marusoftware.net/documents/marutools.html>
+

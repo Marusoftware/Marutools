@@ -45,7 +45,7 @@ This is base code:
         Addon description string.
     
     .. py:attribute:: file_types
-        :type: list of file_types
+        :type: list[str]
 
         You can write like this: ``["txt","py", ....]``
     
@@ -71,7 +71,7 @@ This is base code:
         Calls on file closing.
 
 On ``__init__``, api object will pass. api object has many api.
-Please see here.
+Please see :doc:`Addon API Reference</api>`.
 
 You can write just as python.
 Happy coding!!

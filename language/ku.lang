@@ -55,5 +55,7 @@
   "new_check2": "Pelek berê heye.\nMa hûn dixwazin sererast bikin û berdewam bikin?",
   "version": "Agahdariya guhertoyê",
   "licence": "îcaze",
-  "marueditor_file": "MARIEDITOR Pelê hevgirtî"
+  "marueditor_file": "MARIEDITOR Pelê hevgirtî",
+  "st_gtk": "GTK bikar bînin.(Ew baş xuya dike.)",
+  "appearance": "Beşa xebitandinê"
 }

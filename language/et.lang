@@ -55,5 +55,7 @@
   "new_check2": "Fail on juba olemas.\nKas soovite üle kirjutada ja jätkata?",
   "version": "versiooniinformatsioon",
   "licence": "litsents",
-  "marueditor_file": "Matuditori ühilduv fail"
+  "marueditor_file": "Matuditori ühilduv fail",
+  "st_gtk": "Kasutage GTK-d.(Tundub hea välja.)",
+  "appearance": "Operatsiooniosa"
 }

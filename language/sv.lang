@@ -55,5 +55,7 @@
   "new_check2": "En fil finns redan.\nVill du skriva över och fortsätt?",
   "version": "versionsinformation",
   "licence": "licens",
-  "marueditor_file": "Maruedor Compatible File"
+  "marueditor_file": "Maruedor Compatible File",
+  "st_gtk": "Använd GTK.(Det ser bra ut.)",
+  "appearance": "Driftsdel"
 }

@@ -55,5 +55,7 @@
   "new_check2": "አንድ ፋይል አስቀድሞ አለ.\nመፃፍ እና መቀጠል ይፈልጋሉ?",
   "version": "የስሪት መረጃ",
   "licence": "ፈቃድ",
-  "marueditor_file": "Ariedited ተኳሃኝ ፋይል"
+  "marueditor_file": "Ariedited ተኳሃኝ ፋይል",
+  "st_gtk": "GTK ን ይጠቀሙ.(ጥሩ ይመስላል.)",
+  "appearance": "ኦፕሬሽን ክፍል"
 }

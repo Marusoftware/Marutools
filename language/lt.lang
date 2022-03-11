@@ -55,5 +55,7 @@
   "new_check2": "Failas jau yra.\nAr norite perrašyti ir tęsti?",
   "version": "Informacija apie versiją",
   "licence": "Licencija",
-  "marueditor_file": "Marueruzatas suderinamas failas"
+  "marueditor_file": "Marueruzatas suderinamas failas",
+  "st_gtk": "Naudokite GTK.(Atrodo gerai.)",
+  "appearance": "Veikimo dalis"
 }

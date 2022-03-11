@@ -55,5 +55,7 @@
   "new_check2": "Loaʻa kahi faila.\nMakemakeʻoe e hoʻomau a hoʻomau?",
   "version": "Hōʻikeʻikepili",
   "licence": "Laikini laikini",
-  "marueditor_file": "ʻO ka faileditor kūpono"
+  "marueditor_file": "ʻO ka faileditor kūpono",
+  "st_gtk": "E hoʻohana i GTK.(He mea maikaʻi loa.)",
+  "appearance": "ʻO ka hana hana"
 }

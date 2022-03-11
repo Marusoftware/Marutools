@@ -55,5 +55,7 @@
   "new_check2": "En fil eksisterer allerede.\nVil du overskrive og fortsætte?",
   "version": "Versionsinformation",
   "licence": "licens",
-  "marueditor_file": "MarueDitor kompatibel fil"
+  "marueditor_file": "MarueDitor kompatibel fil",
+  "st_gtk": "Brug GTK.(Det ser godt ud.)",
+  "appearance": "Driftsparti"
 }

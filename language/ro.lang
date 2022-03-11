@@ -55,5 +55,7 @@
   "new_check2": "Un fișier există deja.\nDoriți să suprascrieți și să continuați?",
   "version": "Informații despre versiune",
   "licence": "licență",
-  "marueditor_file": "Fișier compatibil marueditor"
+  "marueditor_file": "Fișier compatibil marueditor",
+  "st_gtk": "Utilizați GTK.(Arata bine.)",
+  "appearance": "Partea de funcționare"
 }

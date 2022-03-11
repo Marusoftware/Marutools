@@ -55,5 +55,7 @@
   "new_check2": "Soubor již existuje.\nChcete přepsat a pokračovat?",
   "version": "Informace o verzi",
   "licence": "licence",
-  "marueditor_file": "Chovatelský soubor kompatibilní s markýrem"
+  "marueditor_file": "Chovatelský soubor kompatibilní s markýrem",
+  "st_gtk": "Použijte GTK.(Vypadá to dobře.)",
+  "appearance": "Provozní část"
 }

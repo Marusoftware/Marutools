@@ -55,5 +55,7 @@
   "new_check2": "Artıq bir fayl mövcuddur.\nYazmaq və davam etmək istəyirsən?",
   "version": "Versiya məlumatı",
   "licence": "lisenziya",
-  "marueditor_file": "MareueDore uyğun fayl"
+  "marueditor_file": "MareueDore uyğun fayl",
+  "st_gtk": "GTK istifadə edin.(Yaxşı görünür.)",
+  "appearance": "Əməliyyat hissəsi"
 }

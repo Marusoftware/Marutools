@@ -55,5 +55,7 @@
   "new_check2": "ဖိုင်တစ်ခုရှိပြီးသား။\nသင် overwrite နှင့်ဆက်လက်လုပ်ချင်ပါသလား?",
   "version": "ဗားရှင်းအချက်အလက်များ",
   "licence": "အခွင့်",
-  "marueditor_file": "Maruesitor သဟဇာတဖိုင်"
+  "marueditor_file": "Maruesitor သဟဇာတဖိုင်",
+  "st_gtk": "GTK ကိုသုံးပါ။(ကြည့်ကောင်းပါတယ်။)",
+  "appearance": "operating အစိတ်အပိုင်းတစ်ခု"
 }

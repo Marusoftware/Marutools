@@ -55,5 +55,7 @@
   "new_check2": "ファイルが既に存在します。\n上書きして続行しますか?",
   "version": "バージョン情報",
   "licence": "ライセンス",
-  "marueditor_file": "Marueditor 対応ファイル"
+  "marueditor_file": "Marueditor 対応ファイル",
+  "st_gtk": "GTKを使用する。(見た目がよくなります。)",
+  "appearance": "操作部分"
 }

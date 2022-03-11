@@ -55,5 +55,7 @@
   "new_check2": "Faira ratovepo.\nIwe unoda kunyora uye uenderere mberi here?",
   "version": "vhezheni ruzivo",
   "licence": "License",
-  "marueditor_file": "Marued mutiridzo inoenderana faira"
+  "marueditor_file": "Marued mutiridzo inoenderana faira",
+  "st_gtk": "Shandisa GTK.(Inotaridzika zvakanaka.)",
+  "appearance": "Chikamu chekushandisa"
 }

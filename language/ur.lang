@@ -55,5 +55,7 @@
   "new_check2": "ایک فائل پہلے ہی موجود ہے.\nکیا آپ کو اپ ڈیٹ کرنا چاہتے ہیں اور جاری رکھیں گے؟",
   "version": "ورژن کی معلومات",
   "licence": "لائسنس",
-  "marueditor_file": "Marueditor ہم آہنگ فائل"
+  "marueditor_file": "Marueditor ہم آہنگ فائل",
+  "st_gtk": "GTK کا استعمال کریں(یہ اچھا لگ رہا ہے.)",
+  "appearance": "آپریٹنگ حصہ"
 }

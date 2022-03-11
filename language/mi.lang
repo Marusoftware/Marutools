@@ -55,5 +55,7 @@
   "new_check2": "He konae kua noho kē.\nKei te hiahia koe ki te tarai me te haere tonu?",
   "version": "Panui Panui",
   "licence": "raihana",
-  "marueditor_file": "Rauemi Manetor Tomotor"
+  "marueditor_file": "Rauemi Manetor Tomotor",
+  "st_gtk": "Whakamahi gtk.(He pai te ahua.)",
+  "appearance": "Waahanga whakahaere"
 }

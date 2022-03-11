@@ -55,5 +55,7 @@
   "new_check2": "Fitxategi bat dagoeneko badago.\nGainidatzi eta jarraitu nahi duzu?",
   "version": "Bertsioari buruzko informazioa",
   "licence": "baimendu",
-  "marueditor_file": "MarkeDitor fitxategi bateragarria"
+  "marueditor_file": "MarkeDitor fitxategi bateragarria",
+  "st_gtk": "Erabili GTK.(Itxura ona du.)",
+  "appearance": "Eragiketa zatia"
 }

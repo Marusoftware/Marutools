@@ -55,5 +55,7 @@
   "new_check2": "Fayil ya riga ya wanzu.\nShin kana son goge ka ci gaba?",
   "version": "Bayanin",
   "licence": "lasin",
-  "marueditor_file": "Fayil mai jituwa"
+  "marueditor_file": "Fayil mai jituwa",
+  "st_gtk": "Yi amfani da gtk.(Yana da kyau.)",
+  "appearance": "Sashi na aiki"
 }

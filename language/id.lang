@@ -55,5 +55,7 @@
   "new_check2": "File sudah ada.\nApakah Anda ingin menimpa dan melanjutkan?",
   "version": "Informasi versi",
   "licence": "lisensi",
-  "marueditor_file": "File Kompatibel Marueditor"
+  "marueditor_file": "File Kompatibel Marueditor",
+  "st_gtk": "Gunakan GTK.(Itu terlihat bagus.)",
+  "appearance": "Bagian operasi"
 }

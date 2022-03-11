@@ -55,5 +55,7 @@
   "new_check2": "Fayl horey u jirtay.\nMa rabtaa inaad qorto oo sii waddo?",
   "version": "Macluumaadka nooca",
   "licence": "shati siin",
-  "marueditor_file": "MARKA MARKA ISTICMAALKA"
+  "marueditor_file": "MARKA MARKA ISTICMAALKA",
+  "st_gtk": "Adeegso GTK.(Waxay u muuqataa mid wanaagsan.)",
+  "appearance": "Qeybta Howlgalka"
 }

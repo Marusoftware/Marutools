@@ -55,5 +55,7 @@
   "new_check2": "Fails jau pastāv.\nVai vēlaties pārrakstīt un turpināt?",
   "version": "versija informācija",
   "licence": "licence",
-  "marueditor_file": "Marueditor saderīgs fails"
+  "marueditor_file": "Marueditor saderīgs fails",
+  "st_gtk": "Izmantojiet GTK.(Tas izskatās labi.)",
+  "appearance": "Darbības daļa"
 }

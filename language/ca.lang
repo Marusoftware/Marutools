@@ -55,5 +55,7 @@
   "new_check2": "Ja existeix un fitxer.\nVoleu sobreescriure i continuar?",
   "version": "Informació de la versió",
   "licence": "llicenciar",
-  "marueditor_file": "Arxiu compatible amb Marieditor"
+  "marueditor_file": "Arxiu compatible amb Marieditor",
+  "st_gtk": "Utilitzeu GTK.(Té bona pinta.)",
+  "appearance": "Part operatiu"
 }

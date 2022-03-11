@@ -55,5 +55,7 @@
   "new_check2": "El archivo ya existe.\n¿Quieres sobrescribirlo y continuar?",
   "version": "Información de la versión de software",
   "licence": "Licencia",
-  "marueditor_file": "Archivo compatible"
+  "marueditor_file": "Archivo compatible",
+  "st_gtk": "Usa GTK.(Se ve bien.)",
+  "appearance": "Parte operativa"
 }

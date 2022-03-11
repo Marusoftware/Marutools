@@ -55,5 +55,7 @@
   "new_check2": "ගොනුවක් දැනටමත් පවතී.\nඔබට නැවත ලිවීමට හා ඉදිරියට යාමට අවශ්යද?",
   "version": "අනුවාද තොරතුරු",
   "licence": "බලපත්රය",
-  "marueditor_file": "Mayeditor අනුකූල ගොනුව"
+  "marueditor_file": "Mayeditor අනුකූල ගොනුව",
+  "st_gtk": "GTK භාවිතා කරන්න.(එය හොඳ පෙනුමක්.)",
+  "appearance": "මෙහෙයුම් කොටස"
 }

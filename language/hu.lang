@@ -55,5 +55,7 @@
   "new_check2": "A fájl már létezik.\nSzeretné felülírni és folytatni?",
   "version": "verzió információ",
   "licence": "engedély",
-  "marueditor_file": "Maraduitor kompatibilis fájl"
+  "marueditor_file": "Maraduitor kompatibilis fájl",
+  "st_gtk": "Használja a GTK-t.(Jól néz ki.)",
+  "appearance": "Hadműveleti rész"
 }

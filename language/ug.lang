@@ -55,5 +55,7 @@
   "new_check2": "ھۆججەت مەۋجۇت.\nقاپلاشنى خالامسىز?",
   "version": "نەشرى ئۇچۇرى",
   "licence": "ئىجازەتنامە",
-  "marueditor_file": "Maunen Cort ماس كېلىدىغان ھۆججەت"
+  "marueditor_file": "Maunen Cort ماس كېلىدىغان ھۆججەت",
+  "st_gtk": "GTK نى ئىشلىتىڭ.(قارىماققا ياخشىدەك قىلىدۇ.)",
+  "appearance": "مەشغۇلات قىسمەن"
 }

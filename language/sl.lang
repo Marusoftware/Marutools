@@ -55,5 +55,7 @@
   "new_check2": "Datoteka že obstaja.\nŽelite prepisati in nadaljevati?",
   "version": "Informacije o različici",
   "licence": "licenca",
-  "marueditor_file": "Maruedator združljiva datoteka"
+  "marueditor_file": "Maruedator združljiva datoteka",
+  "st_gtk": "Uporabite GTK.(Izgleda dobro.)",
+  "appearance": "Delovni del"
 }

@@ -55,5 +55,7 @@
   "new_check2": "Tha faidhle ann mu thràth.\nA bheil thu airson sùil a chumail air agus leantainn air adhart?",
   "version": "Fiosrachadh dreach",
   "licence": "Cead",
-  "marueditor_file": "Faidhle co-fhreagarrach"
+  "marueditor_file": "Faidhle co-fhreagarrach",
+  "st_gtk": "Cleachd gtk.(Tha e a 'coimhead math.)",
+  "appearance": "Pàirt obrachaidh"
 }

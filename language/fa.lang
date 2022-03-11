@@ -55,5 +55,7 @@
   "new_check2": "یک فایل در حال حاضر وجود دارد.\nآیا می خواهید بازنویسی کنید و ادامه دهید؟",
   "version": "اطلاعات نسخه",
   "licence": "مجوز",
-  "marueditor_file": "Marianditor فایل سازگار است"
+  "marueditor_file": "Marianditor فایل سازگار است",
+  "st_gtk": "از GTK استفاده کنید(خوب بنظر می رسد.)",
+  "appearance": "بخش عملیاتی"
 }

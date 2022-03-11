@@ -55,5 +55,7 @@
   "new_check2": "Tiedosto on jo olemassa.\nHaluatko korvata ja jatkaa?",
   "version": "Version tiedot",
   "licence": "lisenssi",
-  "marueditor_file": "MAREDITOR-yhteensopiva tiedosto"
+  "marueditor_file": "MAREDITOR-yhteensopiva tiedosto",
+  "st_gtk": "Käytä GTK: ta.(Se näyttää hyvältä.)",
+  "appearance": "Toimintaosa"
 }

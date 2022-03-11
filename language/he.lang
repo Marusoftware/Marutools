@@ -55,5 +55,7 @@
   "new_check2": "קובץ כבר קיים.\nהאם אתה רוצה להחליף ולהמשיך?",
   "version": "מידע על הגרסה",
   "licence": "רישיון",
-  "marueditor_file": "Marrureitor תואם קובץ"
+  "marueditor_file": "Marrureitor תואם קובץ",
+  "st_gtk": "השתמש ב- GTK.(זה נראה טוב.)",
+  "appearance": "תפעול חלק"
 }

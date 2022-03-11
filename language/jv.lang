@@ -55,5 +55,7 @@
   "new_check2": "File wis ana.\nApa sampeyan pengin overwrite lan terus?",
   "version": "Informasi versi",
   "licence": "Lisensi",
-  "marueditor_file": "File sing kompatibel margu"
+  "marueditor_file": "File sing kompatibel margu",
+  "st_gtk": "Gunakake gtk.(Katon apik.)",
+  "appearance": "Bagean operasi"
 }

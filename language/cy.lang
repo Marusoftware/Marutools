@@ -55,5 +55,7 @@
   "new_check2": "Mae ffeil eisoes yn bodoli.\nYdych chi eisiau trosysgrifennu a pharhau?",
   "version": "gwybodaeth fersiwn",
   "licence": "drwyddedent",
-  "marueditor_file": "Ffeil gydnaws Markeaditor"
+  "marueditor_file": "Ffeil gydnaws Markeaditor",
+  "st_gtk": "Defnyddiwch GTK.(Mae'n edrych yn dda.)",
+  "appearance": "Gweithredu Rhan"
 }

@@ -55,5 +55,7 @@
   "new_check2": "Fayl allaqachon mavjud.\nSiz qayta yozishni va davom etishni xohlaysizmi?",
   "version": "Versiya haqida ma'lumot",
   "licence": "litsenziya",
-  "marueditor_file": "Suddan olingan mos fayl"
+  "marueditor_file": "Suddan olingan mos fayl",
+  "st_gtk": "GTK-dan foydalaning.(Yaxshi ko'rinadi.)",
+  "appearance": "Operatsion qism"
 }

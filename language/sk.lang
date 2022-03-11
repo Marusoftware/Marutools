@@ -55,5 +55,7 @@
   "new_check2": "Súbor už existuje.\nChcete prepísať a pokračovať?",
   "version": "Informácie o verzii",
   "licence": "licencia",
-  "marueditor_file": "Marueditor kompatibilný súbor"
+  "marueditor_file": "Marueditor kompatibilný súbor",
+  "st_gtk": "Použite GTK.(Vyzerá to dobre.)",
+  "appearance": "Prevádzková časť"
 }

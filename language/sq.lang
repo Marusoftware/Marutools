@@ -55,5 +55,7 @@
   "new_check2": "Një skedar tashmë ekziston.\nA doni të mbishkruani dhe të vazhdoni?",
   "version": "Informacioni i versionit",
   "licence": "liçensë",
-  "marueditor_file": "Dosja e pajtueshme e Maruaditedor"
+  "marueditor_file": "Dosja e pajtueshme e Maruaditedor",
+  "st_gtk": "Përdorni GTK.(Duket mire.)",
+  "appearance": "Pjesa operative"
 }

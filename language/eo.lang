@@ -55,5 +55,7 @@
   "new_check2": "Dosiero jam ekzistas.\nĈu vi volas anstataŭigi kaj daŭrigi?",
   "version": "Versio Informo",
   "licence": "permesilo",
-  "marueditor_file": "Marueditor kongrua dosiero"
+  "marueditor_file": "Marueditor kongrua dosiero",
+  "st_gtk": "Uzu Gtk.(Ĝi aspektas bone.)",
+  "appearance": "Funkciada parto"
 }

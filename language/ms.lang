@@ -55,5 +55,7 @@
   "new_check2": "Fail sudah ada.\nAdakah anda mahu menimpa dan meneruskan?",
   "version": "Maklumat versi",
   "licence": "lesen",
-  "marueditor_file": "Fail yang serasi Marueditor"
+  "marueditor_file": "Fail yang serasi Marueditor",
+  "st_gtk": "Gunakan GTK.(Ia kelihatan baik.)",
+  "appearance": "Bahagian operasi"
 }

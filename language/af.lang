@@ -55,5 +55,7 @@
   "new_check2": "'N Lêer bestaan ​​reeds.\nWil jy oorskryf en voortgaan?",
   "version": "Weergawe-inligting",
   "licence": "lisensieer",
-  "marueditor_file": "Marueditor Compatible Lêer"
+  "marueditor_file": "Marueditor Compatible Lêer",
+  "st_gtk": "Gebruik GTK.(Dit lyk goed.)",
+  "appearance": "Bedryfsdeel"
 }

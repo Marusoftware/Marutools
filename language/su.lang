@@ -55,5 +55,7 @@
   "new_check2": "File parantos aya.\nNaha anjeun hoyong nimpa sareng neraskeun?",
   "version": "In waé inpormasi",
   "licence": "lisénsi",
-  "marueditor_file": "File anu cocog"
+  "marueditor_file": "File anu cocog",
+  "st_gtk": "Anggo gtk.(Éta katingalina saé.)",
+  "appearance": "Bagian operasi"
 }

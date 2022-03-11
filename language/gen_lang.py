@@ -1,8 +1,7 @@
-src_lang = ["ja","ja_JP"]
+src_lang = ["ja_JP","ja"]
 import os
 from langs import langs, same
 cd=os.getcwd()
-#cd = "/home/maruo/ドキュメント/program/Marutools/language"
 
 import googletrans, json, os
 os.chdir(cd)

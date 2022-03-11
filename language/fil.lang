@@ -55,5 +55,7 @@
   "new_check2": "Umiiral ang isang file.\nGusto mo bang i-overwrite at magpatuloy?",
   "version": "Impormasyon sa Bersyon",
   "licence": "lisensya",
-  "marueditor_file": "MARUDITOR compatible file."
+  "marueditor_file": "MARUDITOR compatible file.",
+  "st_gtk": "Gamitin ang GTK.(Mukhang maganda.)",
+  "appearance": "Operating bahagi"
 }

@@ -55,5 +55,7 @@
   "new_check2": "Un fichier existe déjà.\nVoulez-vous écraser et continuer?",
   "version": "information sur la version",
   "licence": "Licence",
-  "marueditor_file": "Fichier compatible Marecueditor"
+  "marueditor_file": "Fichier compatible Marecueditor",
+  "st_gtk": "Utiliser gtk.(Ça à l'air bon.)",
+  "appearance": "Partie de fonctionnement"
 }

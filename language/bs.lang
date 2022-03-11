@@ -55,5 +55,7 @@
   "new_check2": "Datoteka već postoji.\nŽelite li prebrisati i nastaviti?",
   "version": "Informacije o verziji",
   "licence": "licenca",
-  "marueditor_file": "Kompatiitel File Aradeitor"
+  "marueditor_file": "Kompatiitel File Aradeitor",
+  "st_gtk": "Koristite GTK.(Izgleda dobro.)",
+  "appearance": "Operativni dio"
 }

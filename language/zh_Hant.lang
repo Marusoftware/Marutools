@@ -55,5 +55,7 @@
   "new_check2": "文件已存在。\n你想覆蓋並繼續嗎？",
   "version": "版本信息",
   "licence": "執照",
-  "marueditor_file": "發散人兼容文件"
+  "marueditor_file": "發散人兼容文件",
+  "st_gtk": "使用gtk。（這看起來不錯的樣子。）",
+  "appearance": "經營部分"
 }

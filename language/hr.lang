@@ -55,5 +55,7 @@
   "new_check2": "Datoteka već postoji.\nŽelite li prepisati i nastaviti?",
   "version": "Informacije o verziji",
   "licence": "licenca",
-  "marueditor_file": "Maroideitor kompatibilna datoteka"
+  "marueditor_file": "Maroideitor kompatibilna datoteka",
+  "st_gtk": "Koristite GTK.(Izgleda dobro.)",
+  "appearance": "Radni dio"
 }

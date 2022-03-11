@@ -55,5 +55,7 @@
   "new_check2": "Bir dosya zaten var.\nÜzerine yazmak ve devam etmek ister misiniz?",
   "version": "versiyon bilgisi",
   "licence": "lisans",
-  "marueditor_file": "Marueditor uyumlu dosya"
+  "marueditor_file": "Marueditor uyumlu dosya",
+  "st_gtk": "GTK kullanın.(Güzel görünüyor.)",
+  "appearance": "Çalışma parçası"
 }

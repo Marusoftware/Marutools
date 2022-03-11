@@ -55,5 +55,7 @@
   "new_check2": "Ifayela elivele likhona.\nNgabe ufuna ukubhala ngaphezulu futhi uqhubeke?",
   "version": "Imininingwane yenguqulo",
   "licence": "ilayisense",
-  "marueditor_file": "Ifayela elihambisanayo lomshado"
+  "marueditor_file": "Ifayela elihambisanayo lomshado",
+  "st_gtk": "Sebenzisa i-GTK.(Kubukeka kukuhle.)",
+  "appearance": "Ingxenye yokusebenza"
 }

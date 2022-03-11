@@ -55,5 +55,7 @@
   "new_check2": "Eng Datei gëtt et scho.\nWëllt Dir iwwerschreiwe a weidergoen?",
   "version": "Versiouns Informatiounen",
   "licence": "Lizenz",
-  "marueditor_file": "Mehredoritor Compatibel Datei"
+  "marueditor_file": "Mehredoritor Compatibel Datei",
+  "st_gtk": "Benotzt GTK.(Et gesäit gutt aus.)",
+  "appearance": "Deelféiernisser"
 }

@@ -55,5 +55,7 @@
   "new_check2": "Fajl diġà jeżisti.\nTrid tissostitwixxi u tkompli?",
   "version": "Informazzjoni dwar il-verżjoni",
   "licence": "Liċenzja",
-  "marueditor_file": "Fajl Kompatibbli Mariedatur"
+  "marueditor_file": "Fajl Kompatibbli Mariedatur",
+  "st_gtk": "Uża GTK.(Jidher tajjeb.)",
+  "appearance": "Topera Parti"
 }

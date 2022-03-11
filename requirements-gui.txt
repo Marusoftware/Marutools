@@ -1,0 +1,6 @@
+tkfilebrowser
+ttkthemes
+Pillow
+chardet
+babel
+gttk

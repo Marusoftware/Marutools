@@ -8,7 +8,6 @@ class TKINTER():
         self.logger=logger
         self.config=config
         self.type=type
-        self.conf=config.conf
         self.appinfo=config.appinfo
         self.backend="tkinter"
         self.children=[]
@@ -29,19 +28,46 @@ class TKINTER():
                 self.dnd = False
             else:
                 self.dnd = True
-            #ttkthemes
-            try:
-                from ttkthemes import ThemedStyle as Style
-                self._root.style = Style()
-            except:
-                from tkinter.ttk import Style
-                self._root.style = Style()
             self._root.report_callback_exception=self.tkerror
             self.changeTitle(self.appinfo["appname"])
-            if "theme" in self.conf:
-                self._root.style.theme_use(self.conf["theme"])
-                self.logger.info("Theme:"+self.conf["theme"])
-            self.style=self._root.style
+            if self.config["gtk"]:
+                #gttk
+                try:
+                    from gttk import GTTK
+                    self._root.gtk=GTTK(self._root)
+                    from tkinter.ttk import Style
+                    self._root.style = Style()
+                    self._root.style.theme_use("gttk")
+                    if not self.config["theme"]:
+                        self.config["theme"]="Yaru"#!! FIX ME !!
+                    self._root.gtk.set_gtk_theme(self.config["theme"])
+                except:
+                    self.config["gtk"]=False
+                    self.logger.info("Can't start with GTK. Use default.")
+                else:
+                    self.logger.info("GTK is enabled.")
+                    self.logger.info("Theme:"+self.config["theme"])
+            else:
+                if not self.config["theme"]:
+                    if self.appinfo["os"] == "Windows":
+                        self.config["theme"]="xpnative"
+                    elif self.appinfo["os"] == "Darwin":
+                        self.config["theme"]="aqua"
+                    else:
+                        self.config["theme"]="default"
+                #ttkthemes
+                try:
+                    from ttkthemes import ThemedStyle as Style
+                    self._root.style = Style()
+                except:
+                    from tkinter.ttk import Style
+                    self._root.style = Style()
+                if self.config["theme"] in self._root.style.theme_names():
+                    self._root.style.theme_use(self.config["theme"])
+                    self.logger.info("Theme:"+self.config["theme"])
+                else:
+                    self.logger.info("Theme is not found. So, use default.")
+                self.style=self._root.style
         elif type=="frame":
             self.dnd=self.parent.dnd
             from tkinter.ttk import Frame, Labelframe
@@ -90,8 +116,16 @@ class TKINTER():
         t.insert("end",str("\n".join(err))+"\n")
         t.configure(state="disabled")
         tkinter.Button(sorry, text="EXIT", command=sorry.destroy).pack()
+        sorry.focus_set()
+        sorry.grab_set()
     def changeSize(self, size):
         self._root.geometry(size)
+    def uisetting(self, frame, txt):
+        gtk=frame.Input.CheckButton(label=txt["st_gtk"], default=self.config["gtk"], command=lambda: self.config.update(gtk=gtk.value))
+        gtk.pack()
+        if not self.config["gtk"]:
+            theme=frame.Input.Select(values=self._root.style.theme_names(), inline=True, default=self.config["theme"], command=lambda: (self._root.style.theme_use(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
+            theme.pack()
     def main(self):
         try:
             from tkinter.scrolledtext import ScrolledText

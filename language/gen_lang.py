@@ -1,10 +1,10 @@
-src_lang = ["it","it"]
+src_lang = ["ja","ja_JP"]
 import os
 from langs import langs, same
 cd=os.getcwd()
 #cd = "/home/maruo/ドキュメント/program/Marutools/language"
 
-import babel, googletrans, json, os, sys
+import googletrans, json, os
 os.chdir(cd)
 translator=googletrans.Translator()
 

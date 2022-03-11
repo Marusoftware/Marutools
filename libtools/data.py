@@ -1,4 +1,4 @@
-import os, getpass, json, locale, platform, sys
+import os, json, platform, sys
 __all__ = ["Config"]
 
 class Config():
@@ -49,11 +49,11 @@ class Config():
         self.conf_dir = os.path.dirname(self.conf_path)
         os.makedirs(self.conf_dir,exist_ok=True)
         self.appinfo.update(conf=self.conf_dir, log=os.path.join(self.conf_dir, "log"))
-        self.readConf()
-    def _syncData(self):
+        self.read()
+    def flush(self):
         with open(self.conf_path, "w") as f:
             json.dump(self.conf, f)
-    def readConf(self):
+    def read(self):
         if os.path.exists(self.conf_path):
             with open(self.conf_path, "r") as f:
                 try:
@@ -64,20 +64,30 @@ class Config():
                     os.rename(self.conf_path, self.conf_path+".bak")
                     self.appinfo.update(first=True)
                     self.conf=self.default_conf
-                    self._syncData()
+                    self.flush()
         else:
             self.appinfo.update(first=True)
             self.conf=self.default_conf
-            self._syncData()
+            self.flush()
         for index in self.default_conf:
             if not index in self.conf:
                 self.conf[index]=self.default_conf[index]
-    def addConf(self, key, value):
-        self.conf.update([(key,value)])
-        self._syncData()
-    def delConf(self, key):
+    def update(self, *args, **options):
+        self.conf.update(*args, **options)
+        self.flush()
+    def __contains__(self, key):
+        return key in self.conf
+    def __getitem__(self, key):
+        if not key in self.conf:
+            return False
+        else: 
+            return self.conf[key]
+    def __setitem__(self, key, value):
+        self.conf[key]=value
+        self.flush()
+    def __delitem__(self, key):
         self.conf.pop(key)
-        self._syncData()
+        self.flush()
 
 class Lang():
     def __init__(self, appinfo, requirement_text):

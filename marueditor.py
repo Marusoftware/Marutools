@@ -1,12 +1,12 @@
 import argparse, libtools, os
 
 __version__="Marueditor b1.0.0"
-__revision__="3"
+__revision__="4"
 __author__="Marusoftware"
 __license__="MIT"
 
 class DefaultArgv:
-    log_level=0
+    log_level=20
     filepath=None
 
 class Editor():
@@ -33,23 +33,16 @@ class Editor():
         self.ui.mainloop()
     def LoadConfig(self):
         import platform, locale
-        default_conf={"welcome":1, "lang":None, "open_as":True}
-        if platform.system() == "Windows":
-            default_conf.update(theme="xpnative")
-        elif platform.system() == "Darwin":
-            default_conf.update(theme="aqua")
-        else:
-            default_conf.update(theme="default")
+        default_conf={"welcome":1, "lang":None, "open_as":True, "gtk":True, "theme":None}
         if None in locale.getlocale():
             default_conf.update([("lang",locale.getlocale()[0]),("encode",locale.getlocale()[1])])
         else:
             default_conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
         self.config=libtools.Config("Marueditor", default_conf=default_conf)
         self.appinfo=self.config.appinfo
-        self.conf=self.config.conf
     def Loadl10n(self, language=None):
         if language is None:
-            language=self.conf["lang"]
+            language=self.config["lang"]
         req = ['file', 'new', 'open', 'open_as', 'save', 'save_as', 'close_tab', 'close_all', 'edit', 'window',
         'full_screen', 'open_window', 'setting', 'help', 'about', 'welcome', 'welcome_tab',
         'dnd_area', 'select_file_type', 'ok', 'cancel', 'error', 'error_cant_open',
@@ -57,13 +50,13 @@ class Editor():
         'st_dnd', 'marueditor', 'exit', 'addon', 'file_addon', 'delete', 'all', 'were_sorry',
         'back', 'dir_name', 'choose_dir', 'file_name', 'new_check', 'wait', 'done', 'new_e1',
         'new_e2', 'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'new_check2',
-        'version', 'licence', 'marueditor_file']
+        'version', 'licence', 'marueditor_file', "appearance", "st_gtk"]
         self.lang = libtools.Lang(self.appinfo, req)
         self.txt = self.lang.getText(language)
     def LoadLogger(self):
         #logging
-        if "log_dir" in self.conf:
-            self.appinfo["log"] = self.conf["log_dir"]
+        if "log_dir" in self.config:
+            self.appinfo["log"] = self.config["log_dir"]
         log_dir = self.appinfo["log"]
         self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level, name="")
     def CreateMenu(self):
@@ -79,7 +72,7 @@ class Editor():
         self.ui.menu.file=self.ui.menu.add_category(self.txt["file"])#File
         self.ui.menu.file.add_item(type="button", label=self.txt["new"], command=self.new)
         self.ui.menu.file.add_item(type="button", label=self.txt["open"], command=self.open)
-        if self.conf["open_as"]:
+        if self.config["open_as"]:
             self.ui.menu.file.add_item(type="button", label=self.txt["open_as"], command=lambda: self.open(force_select=True))
         self.ui.menu.file.add_item(type="button", label=self.txt["save"], command=self.save)
         self.ui.menu.file.add_item(type="button", label=self.txt["save_as"], command=lambda: self.save(as_other=True))
@@ -316,16 +309,14 @@ class Editor():
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
         editor=root.note.add_tab(self.txt["marueditor"])
-        editor.open_as=editor.Input.CheckButton(label=self.txt["st_open_from"], default=self.conf["open_as"], command=lambda: self.config.addConf("open_as", editor.open_as.value))
+        editor.open_as=editor.Input.CheckButton(label=self.txt["st_open_from"], default=self.config["open_as"], command=lambda: self.config.update(open_as=editor.open_as.value))
         editor.open_as.pack()
         def setlang():
-            self.config.addConf("lang", editor.lang.value)
+            self.config["lang"]=editor.lang.value
             self.Loadl10n(language=editor.lang.value)
         editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang, label=self.txt["lang"]+":")
         editor.lang.pack()
-        if self.ui.backend=="tkinter":
-            style=editor.Input.Select(values=self.ui.style.theme_names(), inline=True, default=self.conf["theme"], command=lambda: (self.ui.style.theme_use(style.value),self.config.addConf("theme", style.value)), label=self.txt["style"]+":")
-            style.pack()
+        self.ui.uisetting(root.note.add_tab(self.txt["appearance"]), self.txt)
 
 class EasyEditor():
     def __init__(self):
@@ -356,7 +347,7 @@ if __name__ == "__main__":
     argv_parser = argparse.ArgumentParser("marueditor", description="Marueditor. The best editor.")
     argv_parser.add_argument("--shell", dest="shell", help="Start in shell mode.", action="store_true")
     argv_parser.add_argument("--debug", dest="debug", help="Start in debug mode.", action="store_true")
-    argv_parser.add_argument("-log_level", action="store", type=int, dest="log_level", default=0 ,help="set Log level.(0-50)")
-    argv_parser.add_argument("filepath", action="store", type=str, default=None ,help="Open file path.", nargs='?')
+    argv_parser.add_argument("-log_level", action="store", type=int, dest="log_level", default=DefaultArgv.log_level ,help="set Log level.(0-50)")
+    argv_parser.add_argument("filepath", action="store", type=str, default=DefaultArgv.filepath ,help="Open file path.", nargs='?')
     argv = argv_parser.parse_args()
     run(argv)

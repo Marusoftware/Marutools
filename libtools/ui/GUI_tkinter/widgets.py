@@ -11,13 +11,14 @@ class CustomNotebook(ttk.Notebook):
 
     __initialized = False
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, master, *args, **kwargs):
+        self.master=master
         if not self.__initialized:
             self.__initialize_custom_style()
             self.__inititialized = True
 
         kwargs["style"] = "WithClose.TNotebook"
-        ttk.Notebook.__init__(self, *args, **kwargs)
+        ttk.Notebook.__init__(self, master, *args, **kwargs)
         self._active = None
 
         self.bind("<ButtonPress-1>", self.on_close_press, True)
@@ -49,20 +50,20 @@ class CustomNotebook(ttk.Notebook):
         self._active = None
 
     def __initialize_custom_style(self):
-        style = ttk.Style()
+        style = ttk.Style(master=self.master)
         self.style=style
         if not "WithClose.TNotebook.close" in style.element_names():
             self.images = (
-                tk.PhotoImage("img_close", data='''
+                tk.PhotoImage("img_close", master=self.master, data='''
                     R0lGODlhCAAIAMIBAAAAADs7O4+Pj9nZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
                     d2l0aCBHSU1QACH5BAEKAAQALAAAAAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU
                     5kEJADs=
                     '''),
-                tk.PhotoImage("img_closeactive", data='''
+                tk.PhotoImage("img_closeactive", master=self.master, data='''
                     R0lGODlhCAAIAMIEAAAAAP/SAP/bNNnZ2cbGxsbGxsbGxsbGxiH5BAEKAAQALAAA
                     AAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU5kEJADs=
                     '''),
-                tk.PhotoImage("img_closepressed", data='''
+                tk.PhotoImage("img_closepressed", master=self.master, data='''
                     R0lGODlhCAAIAMIEAAAAAOUqKv9mZtnZ2Ts7Ozs7Ozs7Ozs7OyH+EUNyZWF0ZWQg
                     d2l0aCBHSU1QACH5BAEKAAQALAAAAAAIAAgAAAMVGDBEA0qNJyGw7AmxmuaZhWEU
                     5kEJADs=

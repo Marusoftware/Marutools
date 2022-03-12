@@ -36,7 +36,7 @@ class TKINTER():
                     from gttk import GTTK
                     self._root.gtk=GTTK(self._root)
                     from tkinter.ttk import Style
-                    self._root.style = Style()
+                    self._root.style = Style(master=self._root)
                     self._root.style.theme_use("gttk")
                     if not self.config["theme"]:
                         self.config["theme"]="Yaru"#!! FIX ME !!
@@ -58,10 +58,10 @@ class TKINTER():
                 #ttkthemes
                 try:
                     from ttkthemes import ThemedStyle as Style
-                    self._root.style = Style()
+                    self._root.style = Style(master=self._root)
                 except:
                     from tkinter.ttk import Style
-                    self._root.style = Style()
+                    self._root.style = Style(master=self._root)
                 if self.config["theme"] in self._root.style.theme_names():
                     self._root.style.theme_use(self.config["theme"])
                     self.logger.info("Theme:"+self.config["theme"])

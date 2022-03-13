@@ -50,7 +50,7 @@ class Editor():
         'st_dnd', 'marueditor', 'exit', 'addon', 'file_addon', 'delete', 'all', 'were_sorry',
         'back', 'dir_name', 'choose_dir', 'file_name', 'new_check', 'wait', 'done', 'new_e1',
         'new_e2', 'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'new_check2',
-        'version', 'licence', 'marueditor_file', "appearance", "st_gtk"]
+        'version', 'licence', 'marueditor_file', "appearance"]
         self.lang = libtools.Lang(self.appinfo, req)
         self.txt = self.lang.getText(language)
     def LoadLogger(self):

@@ -30,44 +30,33 @@ class TKINTER():
                 self.dnd = True
             self._root.report_callback_exception=self.tkerror
             self.changeTitle(self.appinfo["appname"])
-            if self.config["gtk"]:
-                #gttk
-                try:
-                    from gttk import GTTK
-                    self._root.gtk=GTTK(self._root)
-                    from tkinter.ttk import Style
-                    self._root.style = Style(master=self._root)
-                    self._root.style.theme_use("gttk")
-                    if not self.config["theme"]:
-                        self.config["theme"]="Yaru"#!! FIX ME !!
-                    self._root.gtk.set_gtk_theme(self.config["theme"])
-                except:
-                    self.config["gtk"]=False
-                    self.logger.info("Can't start with GTK. Use default.")
-                else:
-                    self.logger.info("GTK is enabled.")
-                    self.logger.info("Theme:"+self.config["theme"])
+            #gttk
+            try:
+                from gttk import GTTK
+                self._root.gtk=GTTK(self._root)
+                from tkinter.ttk import Style
+            except:
+                self.logger.info("GTK is disabled.")
+                self._root.gtk=None
             else:
-                if not self.config["theme"]:
-                    if self.appinfo["os"] == "Windows":
-                        self.config["theme"]="xpnative"
-                    elif self.appinfo["os"] == "Darwin":
-                        self.config["theme"]="aqua"
-                    else:
-                        self.config["theme"]="default"
-                #ttkthemes
-                try:
-                    from ttkthemes import ThemedStyle as Style
-                    self._root.style = Style(master=self._root)
-                except:
-                    from tkinter.ttk import Style
-                    self._root.style = Style(master=self._root)
-                if self.config["theme"] in self._root.style.theme_names():
-                    self._root.style.theme_use(self.config["theme"])
-                    self.logger.info("Theme:"+self.config["theme"])
+                self.logger.info("GTK is enabled.")
+            #ttkthemes
+            try:
+                from ttkthemes import ThemedStyle as Style
+                self._root.style = Style(master=self._root)
+            except:
+                from tkinter.ttk import Style
+                self._root.style = Style(master=self._root)
+            if self.config["theme"] in self._root.style.theme_names():
+                self._changeTheme(self.config["theme"])
+            else:
+                if self._root.style.current_theme == "gttk":
+                    self.config["theme"]=self._root.style.current_theme
                 else:
-                    self.logger.info("Theme is not found. So, use default.")
-                self.style=self._root.style
+                    self.config["theme"]=self._root.gtk.get_current_theme()
+                self.logger.info("Theme is not found. So, use default.")
+            self.logger.info("Theme:"+self.config["theme"])
+            self.style=self._root.style
         elif type=="frame":
             self.dnd=self.parent.dnd
             from tkinter.ttk import Frame, Labelframe
@@ -93,6 +82,14 @@ class TKINTER():
         self.Dialog=Dialog(self._root)
         from .input import Input
         self.Input=Input(self.root, parent=self)
+    def _changeTheme(self, theme):
+        if theme is None: return
+        if theme in self._root.style.theme_names():
+            self._root.style.theme_use(theme)
+        elif not self._root.gtk is None:
+            if theme in self._root.gtk.get_themes_available():
+                self._root.style.theme_use("gttk")
+                self._root.gtk.set_gtk_theme(theme)
     def changeTitle(self, title):
         self._root.title(title)
     def changeIcon(self, icon_path):
@@ -121,10 +118,12 @@ class TKINTER():
     def changeSize(self, size):
         self._root.geometry(size)
     def uisetting(self, frame, txt):
-        gtk=frame.Input.CheckButton(label=txt["st_gtk"], default=self.config["gtk"], command=lambda: self.config.update(gtk=gtk.value))
-        gtk.pack()
-        if not self.config["gtk"]:
-            theme=frame.Input.Select(values=self._root.style.theme_names(), inline=True, default=self.config["theme"], command=lambda: (self._root.style.theme_use(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
+            themes:list=self._root.style.theme_names()
+            if "gttk" in themes:
+                themes.remove("gttk")
+            if not self._root.gtk is None:
+                themes.extend(self._root.gtk.get_themes_available())
+            theme=frame.Input.Select(values=themes, inline=True, default=self.config["theme"], command=lambda: (self._changeTheme(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
             theme.pack()
     def main(self):
         try:

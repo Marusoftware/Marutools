@@ -56,6 +56,5 @@
   "version": "information sur la version",
   "licence": "Licence",
   "marueditor_file": "Fichier compatible Marecueditor",
-  "st_gtk": "Utiliser gtk.(Ça à l'air bon.)",
   "appearance": "Partie de fonctionnement"
 }

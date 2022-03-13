@@ -56,6 +56,5 @@
   "version": "ข้อมูลรุ่น",
   "licence": "ใบอนุญาต",
   "marueditor_file": "ไฟล์ที่เข้ากันได้กับ Marueditor",
-  "st_gtk": "ใช้ GTK(มันดูดี.)",
   "appearance": "ส่วนปฏิบัติการ"
 }

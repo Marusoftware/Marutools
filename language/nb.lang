@@ -56,6 +56,5 @@
   "version": "Versjonsinformasjon",
   "licence": "tillatelse",
   "marueditor_file": "Marueditor kompatibel fil",
-  "st_gtk": "Bruk GTK.(Det ser bra ut.)",
   "appearance": "Driftsdel"
 }

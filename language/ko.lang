@@ -56,6 +56,5 @@
   "version": "버전 정보",
   "licence": "특허",
   "marueditor_file": "Marueditor 호환 파일",
-  "st_gtk": "GTK를 사용하십시오.(좋아 보인다.)",
   "appearance": "조작 부품"
 }

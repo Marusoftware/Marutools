@@ -148,12 +148,12 @@ class _Select(WidgetBase):
         self.widget=Frame(self.master, **options)
         if label != "":
             self.label=Label(self.widget, text=label)
-            self.label.pack(side="left", fill="y")
+            self.label.pack(side="left")
         if inline:
             from tkinter.ttk import OptionMenu
             self.children=OptionMenu(master=self.widget, variable=self.var, command=self.callback, **options)
             self.children.set_menu(default, *values)
-            self.children.pack(side="right", fill="both")
+            self.children.pack(side="left", fill="x")
         else:
             self.children={}
             for value in values:
@@ -167,7 +167,7 @@ class _Select(WidgetBase):
             if not label is None:
                 options.update(text=label, value=label)
             self.children.append(Radiobutton(self.widget, variable=self.var, command=self.callback, **options))
-            self.children[-1].pack(side="right", fill="both")
+            self.children[-1].pack(side="left", fill="x")
     def del_item(self, label):
         if self.inline:
             self.children.pop(label)

@@ -310,13 +310,15 @@ class Editor():
         root.note.pack(fill="both", expand=True)
         editor=root.note.add_tab(self.txt["marueditor"])
         editor.open_as=editor.Input.CheckButton(label=self.txt["st_open_from"], default=self.config["open_as"], command=lambda: self.config.update(open_as=editor.open_as.value))
-        editor.open_as.pack()
+        editor.open_as.pack(fill="x")
         def setlang():
             self.config["lang"]=editor.lang.value
             self.Loadl10n(language=editor.lang.value)
         editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang, label=self.txt["lang"]+":")
-        editor.lang.pack()
+        editor.lang.pack(fill="x")
         self.ui.uisetting(root.note.add_tab(self.txt["appearance"]), self.txt)
+        addon=root.note.add_tab(self.txt["addon"])
+        addon
 
 class EasyEditor():
     def __init__(self):

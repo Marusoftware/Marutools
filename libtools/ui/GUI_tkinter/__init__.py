@@ -69,8 +69,9 @@ class TKINTER():
             self._root=Toplevel(master=self.parent._root)
             self.dnd=self.parent.dnd
             if type=="dialog":
-                self._root.focus_set()
                 self._root.grab_set()
+                self._root.focus_set()
+                self.parent._root.attributes("-topmost", False)
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
         if type!="frame":
             import tkinter.ttk as ttk
@@ -124,7 +125,7 @@ class TKINTER():
             if not self._root.gtk is None:
                 themes.extend(self._root.gtk.get_themes_available())
             theme=frame.Input.Select(values=themes, inline=True, default=self.config["theme"], command=lambda: (self._changeTheme(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
-            theme.pack()
+            theme.pack(fill="x")
     def main(self):
         try:
             from tkinter.scrolledtext import ScrolledText

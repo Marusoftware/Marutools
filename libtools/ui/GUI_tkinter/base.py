@@ -4,7 +4,13 @@ class Label(WidgetBase):
     def __init__(self, master, image=None, **options):
         super().__init__(master=master)
         from tkinter.ttk import Label
-        self.widget=Label(self.master, **options)
+        self.widget=Label(self.master, wraplength=master.winfo_width() ,**options)
+        self.master.bind("<Configure>", self.update_width)
+        self.width=0
+    def update_width(self, event):
+        if self.width!=event.width:
+            self.width=event.width
+            self.widget.configure(wraplength=self.width)
 
 class Image(WidgetBase):
     def __init__(self, master, image=None, **options):

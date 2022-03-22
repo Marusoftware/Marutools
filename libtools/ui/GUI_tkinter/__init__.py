@@ -37,6 +37,7 @@ class TKINTER():
                 from tkinter.ttk import Style
             except:
                 self.logger.info("GTK is disabled.")
+                self.logger.exception("gttk: ")
                 self._root.gtk=None
             else:
                 self.logger.info("GTK is enabled.")
@@ -47,15 +48,12 @@ class TKINTER():
             except:
                 from tkinter.ttk import Style
                 self._root.style = Style(master=self._root)
-            if self.config["theme"] in self._root.style.theme_names():
-                self._changeTheme(self.config["theme"])
-            else:
-                if self._root.style.current_theme == "gttk":
-                    self.config["theme"]=self._root.style.current_theme
+            if not self._changeTheme(self.config["theme"]):
+                if self._root.style.theme_use() != "gttk":
+                    self.config["theme"]=self._root.style.theme_use()
                 else:
                     self.config["theme"]=self._root.gtk.get_current_theme()
                 self.logger.info("Theme is not found. So, use default.")
-            self.logger.info("Theme:"+self.config["theme"])
             self.style=self._root.style
         elif type=="frame":
             self.dnd=self.parent.dnd
@@ -69,8 +67,9 @@ class TKINTER():
             self._root=Toplevel(master=self.parent._root)
             self.dnd=self.parent.dnd
             if type=="dialog":
-                self._root.grab_set()
+                self._root.wait_visibility()
                 self._root.focus_set()
+                self._root.grab_set()
                 self.parent._root.attributes("-topmost", False)
         self.aqua=(self.appinfo["os"] == "Darwin" and self._root.tk.call('tk', 'windowingsystem') == "aqua")
         if type!="frame":
@@ -83,14 +82,20 @@ class TKINTER():
         self.Dialog=Dialog(self._root)
         from .input import Input
         self.Input=Input(self.root, parent=self)
-    def _changeTheme(self, theme):
-        if theme is None: return
+    def _changeTheme(self, theme=None):
+        if theme is None: return False
         if theme in self._root.style.theme_names():
             self._root.style.theme_use(theme)
         elif not self._root.gtk is None:
             if theme in self._root.gtk.get_themes_available():
                 self._root.style.theme_use("gttk")
                 self._root.gtk.set_gtk_theme(theme)
+            else:
+                return False
+        else:
+            return False
+        self.logger.info("Theme:"+theme)
+        return True
     def changeTitle(self, title):
         self._root.title(title)
     def changeIcon(self, icon_path):
@@ -105,6 +110,7 @@ class TKINTER():
     def tkerror(self, *args):
         import tkinter, traceback
         err = traceback.format_exception(*args)
+        self.logger.error("tkinter: "+str(err))
         sorry = tkinter.Toplevel()
         sorry.title("Marueditor - Error")
         tkinter.Label(sorry,text="We're sorry.\n\nError is happen.").pack()
@@ -119,13 +125,13 @@ class TKINTER():
     def changeSize(self, size):
         self._root.geometry(size)
     def uisetting(self, frame, txt):
-            themes:list=self._root.style.theme_names()
-            if "gttk" in themes:
-                themes.remove("gttk")
-            if not self._root.gtk is None:
-                themes.extend(self._root.gtk.get_themes_available())
-            theme=frame.Input.Select(values=themes, inline=True, default=self.config["theme"], command=lambda: (self._changeTheme(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
-            theme.pack(fill="x")
+        themes=list(self._root.style.theme_names())
+        if "gttk" in themes:
+            themes.remove("gttk")
+        if not self._root.gtk is None:
+            themes.extend(self._root.gtk.get_themes_available())
+        theme=frame.Input.Select(values=themes, inline=True, default=self.config["theme"], command=lambda: (self._changeTheme(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
+        theme.pack(fill="x")
     def main(self):
         try:
             from tkinter.scrolledtext import ScrolledText

@@ -19,7 +19,7 @@
 
 project = 'Marutools'
 copyright = '2022, Marusoftware'
-author = 'Marusoftware'
+author = 'Marusoftware <marusoftware@outlook.jp>'
 
 # The full version, including alpha/beta/rc tags
 release = 'b1.0.0'

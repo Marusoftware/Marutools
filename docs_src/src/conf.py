@@ -34,7 +34,6 @@ release = 'b1.0.0'
 import sphinx_rtd_theme
 extensions = [
     "sphinx_rtd_theme",
-    "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "sphinx_multiversion"
 ]

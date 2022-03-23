@@ -130,11 +130,143 @@
 
 <section id="ui">
 <h2>UI<a class="headerlink" href="#ui" title="Permalink to this headline"></a></h2>
-<p>Now writing…..</p>
+<p>UI controling class</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="UI">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UI</span></span><a class="headerlink" href="#UI" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="UI.parent">
+<span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#UI.parent" title="Permalink to this definition"></a></dt>
+<dd><p>Parent UI object. If not having, it is <cite>None</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#UI.type" title="Permalink to this definition"></a></dt>
+<dd><div class="line-block">
+<div class="line">UI object type. UI object is showing Frame widget or window.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">main</span></code>: Main window</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">frame</span></code>: Frame widget</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dialog</span></code>: Dialog widget(like Warning window…)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sub</span></code>: Sub window</div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.backend">
+<span class="sig-name descname"><span class="pre">backend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#UI.backend" title="Permalink to this definition"></a></dt>
+<dd><div class="line-block">
+<div class="line">Backend name.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tkinter</span></code>:tkinter GUI library</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.changeTitle">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">changeTitle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeTitle" title="Permalink to this definition"></a></dt>
+<dd><p>Change window title.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Title to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.changeIcon">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">changeIcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeIcon" title="Permalink to this definition"></a></dt>
+<dd><p>Change window icon(it’s on title bar and task bar).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Icon file path to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fullscreen(tf=None):</span></span></dt>
+<dd><p>Change window to fullscreen.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – True to fullscreen. False to fullscreen. default(None) to nomal size.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">changeSize(size):</span></span></dt>
+<dd><p>Change window size.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <code class="docutils literal notranslate"><span class="pre">{width}x{height}+{x}+{y}</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">uisetting(frame,</span> <span class="pre">txt):</span></span></dt>
+<dd><p>The widget for UI setting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>libtools.Frame</em>) – Frame to show settings.</p></li>
+<li><p><strong>txt</strong> (<em>Lang</em>) – l10n text in dict like object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.setcallback">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setcallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.setcallback" title="Permalink to this definition"></a></dt>
+<dd><p>Set callback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <div class="line-block">
+<div class="line">Callback name.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">close</span></code>: Fire on close window.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_help</span></code>: Click help menu button on Macos</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_settngs</span></code>:Click settings menu button on Macos</div>
+</div>
+</p></li>
+<li><p><strong>callback</strong> (<em>callable</em>) – Callback function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.makeSubwindow">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">makeSubwindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dialog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.makeSubwindow" title="Permalink to this definition"></a></dt>
+<dd><p>Make Subwindow</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dialog</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Dialog mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 <section id="logger">

@@ -132,11 +132,6 @@ class TKINTER():
             themes.extend(self._root.gtk.get_themes_available())
         theme=frame.Input.Select(values=themes, inline=True, default=self.config["theme"], command=lambda: (self._changeTheme(theme.value),self.config.update(theme=theme.value)), label=txt["style"]+":")
         theme.pack(fill="x")
-    def main(self):
-        try:
-            from tkinter.scrolledtext import ScrolledText
-        except:
-            from .scrolledtext import ScrolledText
     def setcallback(self, name, callback):
         if name=="close":
             self._root.protocol("WM_DELETE_WINDOW", callback)

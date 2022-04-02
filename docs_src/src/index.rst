@@ -24,4 +24,3 @@ Welcome to Marutools's documentation!
    :caption: Links:
    
    Marusoftware Homepage Document <https://marusoftware.net/documents/marutools.html>
-

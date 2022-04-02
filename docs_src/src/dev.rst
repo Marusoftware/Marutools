@@ -32,41 +32,41 @@ This is base code:
 
 :download:`addon_base.py <_static/addon_base.py>`
 
-.. py:class:: Edit
+.. class:: Edit
 
-    .. py:attribute:: name
+    .. attribute:: name
         :type: str
         
         Addon name.
     
-    .. py:attribute:: description
+    .. attribute:: description
         :type: str
 
         Addon description string.
     
-    .. py:attribute:: file_types
+    .. attribute:: file_types
         :type: list[str]
 
         You can write like this: ``["txt","py", ....]``
     
-    .. py:classmethod:: __init__(api)
+    .. method:: __init__(api)
 
         Calls on file open. ``self`` will share.
 
         :param libtools.addon.AddonAPI api: AddonAPI. You will use this to control UI, settings, and etc... **Please keep this for later**
 
-    .. py:classmethod:: save(file=None)
+    .. method:: save(file=None)
 
         Calls on file saving.
 
         :param file: When "save as..." is selected, here comes new file path.
         :type file: str or None
     
-    .. py:classmethod:: new()
+    .. method:: new()
 
         Calls on new file created.
     
-    .. py:classmethod:: close()
+    .. method:: close()
 
         Calls on file closing.
 

@@ -2,41 +2,43 @@ Addon API Reference
 ===================
 Addon API has some useful API.
 
-.. py:class:: AddonAPI
+.. class:: AddonAPI
 
-    .. py:attribute:: name
+    :canonical: libtools.addon.AddonAPI
+
+    .. attribute:: name
         :type: str
         
         Addon Name
 
-    .. py:attribute:: logger
+    .. attribute:: logger
         :type: Logger
         :canonical: libtools.core.Logger
 
         Logger object for addon
 
-    .. py:attribute:: appinfo
+    .. attribute:: appinfo
         :type: dict
 
         Marutools runtime infomation
     
-    .. py:attribute:: ext
+    .. attribute:: ext
         :type: str
 
         Open file extention
     
-    .. py:attribute:: ui
+    .. attribute:: ui
         :type: UI
         :canonical: libtools.addon.UI
 
         UI controler
     
-    .. py:attribute:: app 
+    .. attribute:: app 
         :type: Core
 
         Marutools Core
     
-    .. py:attribute:: saved
+    .. attribute:: saved
         :type: bool
 
         Flag for is saved file.
@@ -45,15 +47,15 @@ Addon API has some useful API.
 UI
 ==
 
-UI controling class
+UI controling classes
 
 .. py:class:: UI
 
-    .. py:attribute:: parent
+    .. attribute:: parent
 
         Parent UI object. If not having, it is `None`.
     
-    .. py:attribute:: type
+    .. attribute:: type
         :type: str
 
         | UI object type. UI object is showing Frame widget or window.
@@ -62,13 +64,13 @@ UI controling class
         | ``dialog``: Dialog widget(like Warning window...)
         | ``sub``: Sub window
     
-    .. py:attribute:: backend
+    .. attribute:: backend
         :type: str
 
         | Backend name.
         | ``tkinter``:tkinter GUI library
     
-    .. py:classmethod:: changeTitle(title)
+    .. method:: changeTitle(title)
 
         Change window title.
 
@@ -77,7 +79,7 @@ UI controling class
 
         :param str title: Title to set.
 
-    .. py:classmethod:: changeIcon(icon_path)
+    .. method:: changeIcon(icon_path)
 
         Change window icon(it's on title bar and task bar).
 
@@ -86,7 +88,7 @@ UI controling class
         
         :param str title: Icon file path to set.
 
-    .. py:classmethod:: fullscreen(tf=None):
+    .. method:: fullscreen(tf=None)
 
         Change window to fullscreen.
 
@@ -95,7 +97,7 @@ UI controling class
 
         :param bool tf: True to fullscreen. False to fullscreen. default(None) to nomal size.
     
-    .. py:classmethod:: changeSize(size):
+    .. method:: changeSize(size):
 
         Change window size.
 
@@ -104,28 +106,206 @@ UI controling class
 
         :param str size: ``{width}x{height}+{x}+{y}``
     
-    .. py:classmethod:: uisetting(frame, txt):
+    .. method:: uisetting(frame, txt)
 
         The widget for UI setting.
 
         :param libtools.Frame frame: Frame to show settings.
         :param Lang txt: l10n text in dict like object
 
-    .. py:classmethod:: setcallback(name, callback)
+    .. method:: setcallback(name, callback)
 
         Set callback.
 
         :param str name: | Callback name.
                          | ``close``: Fire on close window.
                          | ``macos_help``: Click help menu button on Macos
-                         | ``macos_settngs``:Click settings menu button on Macos
+                         | ``macos_settings``:Click settings menu button on Macos
         :param callable callback: Callback function.
 
-    .. py:classmethod:: makeSubwindow(dialog=False, **options)
+    .. method:: makeSubwindow(dialog=False, **options)
 
         Make Subwindow
 
         :param bool dialog: Dialog mode.
+    
+    .. method:: close()
+
+        Close window/frame.
+    
+    .. method:: wait()
+
+        Wait until close window.
+
+        .. warning::
+            This works successfully only when UI object type is ``main`` or ``sub``
+    
+    .. method:: exist()
+
+        Return whether the window/frame is open.
+
+        :return: whether the window/frame is open.
+        :rtype: bool
+
+    .. method:: mainloop()
+
+        Window Mainloop.
+
+        .. warning::
+            This works successfully only when UI object type is ``main``.
+            And also, must NOT BE run twice or above.
+
+    .. method:: Frame()
+        
+        Frame widget.
+
+        :return: Frame widget object
+        :rtype: UI
+    
+    .. method:: Label(label=None)
+
+        Label widget.
+
+        :param str label: Label text
+        :return: Label widget object
+        :rtype: WidgetBase
+    
+    .. method:: Image(image=None)
+        
+        Image widget.
+
+        :return: Image widget object
+        :rtype: WidgetBase
+    
+    .. method:: Menu()
+
+        Menu widget.
+
+        :return: Menu widget object
+        :rtype: Menu
+    
+    .. method:: Notebook()
+
+        Notebook widget.
+
+        :return: Notebook widget object
+        :rtype: Notebook
+    
+    .. attribute:: Dialog
+        :type: Dialog
+    
+    .. attribute:: Input
+        :type: Input
+
+.. class:: Dialog
+    
+    .. method:: askfile(multi=False, save=False)
+
+        Ask filepath Dialog.
+
+        :param bool multi: Multi selection enable/disable
+        :param bool save: Save filepath(``True``) or Open filepath(``False``)
+        :return: Filepath
+        :rtype: str or None
+    
+    .. method:: askdir()
+
+        Ask directory(folder) path Dialog.
+
+        :return: Directory path
+        :rtype: str
+     
+    .. method:: error()
+        
+        Show error Dialog.
+
+    .. method:: info()
+
+        Show infomation Dialog.
+    
+    .. method:: warn()
+
+        Show warning Dialog.
+
+    .. method:: question(type, title, message)
+
+        Asking Dialog.
+
+        :param str type: | Ask type.
+                         | ``okcancel``: select "ok"(return ``True``) or "cancel"(return ``False``)
+                         | ``retrycancel``: select "retry"(``True``) or "cancel"(``False``)
+                         | ``yesno``: select "yes"(``True``) or "no"(``False``)
+                         | ``yesnocancel``: select "yes"(``True``) or "no"(``False``) or "cancel"(``None``)
+                         | ``text``: Input text. If cancel, return ``None``
+        :param str title: Dialog title
+        :param str message: Dialog message
+        :return: Selected (or Inputed) value.
+        :rtype: bool or str or None
+
+.. class:: Input
+
+    .. method:: Button(label="", command=None)
+
+        Button widget.
+
+        :param str label: Button label.
+        :param callable command: Button on-clicking callback
+        :return: Button widget object
+        :rtype: Button
+
+    .. method:: List
+
+        List widget.
+
+        :return: List widget object
+        :rtype: List
+    
+    .. method:: Form(type="text", command=None)
+
+        Text inputting widget.(just one line)
+
+        :param str type: | Form type.
+                         | ``text``: Normal plain text input.
+                         | ``password``: Password input.
+                         | ``filesave``: Save file asking.
+                         | ``fileopen``: Open file asking.
+                         | ``fileopenmulti``: Open file asking (multiple).
+                         | ``filesavemulti``: Save file asking (multiple).
+        :param callable command: Form on-changing callback
+        :return: Form widget object.
+        :rtype: Form
+
+    .. method:: Text(scroll=True, command=None)
+
+        Text inputting widget.(multi line)
+
+        :param bool scroll: Scrollbar
+        :param callable command: Text on-changing callback
+        :param bool readonly: Readonly
+        :return: Text widget object
+        :rtype: Text
+    
+    .. method:: CheckButton(label=None, command=None, default=False)
+
+        Check button widget.
+
+        :param str label: Button label.
+        :param callable command: CheckButton on-clicking callback
+        :param bool default: Default value.
+        :return: CheckButton widget object
+        :rtype: CheckButton
+    
+    .. method:: Select(default="", command=None, values=[], inline=False, label="")
+
+        Select widget.
+
+        :param str default: Default value
+        :param callable command: on-selecting callback
+        :param List[str] values: Values to select
+        :param bool inline: Inline mode
+        :param str label: Select label(on left)
+        :return: Select widget object
+        :rtype: Select
 
 ======
 Logger

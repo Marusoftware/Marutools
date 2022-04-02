@@ -83,8 +83,9 @@ class Config():
         else: 
             return self.conf[key]
     def __setitem__(self, key, value):
-        self.conf[key]=value
-        self.flush()
+        if self.conf[key]!=value:
+            self.conf[key]=value
+            self.flush()
     def __delitem__(self, key):
         self.conf.pop(key)
         self.flush()

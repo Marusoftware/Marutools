@@ -305,6 +305,7 @@ class Editor():
             licence.text.insert("end", f.read())
     def setting(self):
         root=self.ui.makeSubWindow(dialog=True)
+        root.changeTitle(self.appinfo["appname"]+" - "+self.txt["marueditor"])
         root.changeSize('300x200')
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
@@ -318,7 +319,10 @@ class Editor():
         editor.lang.pack(fill="x")
         self.ui.uisetting(root.note.add_tab(self.txt["appearance"]), self.txt)
         addon=root.note.add_tab(self.txt["addon"])
-        addon
+        addon.list=addon.Input.List()
+        addon.list.pack(fill="both")
+        for name, info in self.addon.loaded_addon_info.items():
+            addon.list.add_item()
 
 class EasyEditor():
     def __init__(self):

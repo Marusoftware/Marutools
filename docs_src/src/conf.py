@@ -24,6 +24,7 @@ author = 'Marusoftware <marusoftware@outlook.jp>'
 # The full version, including alpha/beta/rc tags
 release = 'b1.0.0'
 
+primary_domain="py"
 
 # -- General configuration ---------------------------------------------------
 

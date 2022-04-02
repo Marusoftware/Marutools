@@ -110,7 +110,7 @@ class TKINTER():
     def tkerror(self, *args):
         import tkinter, traceback
         err = traceback.format_exception(*args)
-        self.logger.error("tkinter: "+str(err))
+        self.logger.error("tkinter: "+"\n".join(err))
         sorry = tkinter.Toplevel()
         sorry.title("Marueditor - Error")
         tkinter.Label(sorry,text="We're sorry.\n\nError is happen.").pack()
@@ -156,11 +156,9 @@ class TKINTER():
         child=_Frame(logger=self.logger, parent=self, config=self.config, **options)
         self.children.append(child)
         return child
-    def Label(self, label=None, **options):
+    def Label(self, label="", **options):
         from .base import Label
-        if not label is None:
-            options.update(text=label)
-        return Label(self.root, **options)
+        return Label(self.root, label=label, **options)
     def Image(self, image=None, **options):
         from .base import Image
         if not image is None:

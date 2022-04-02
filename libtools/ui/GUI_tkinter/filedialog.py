@@ -1,58 +1,43 @@
 import platform
-import tkinter.filedialog as _fd1
-try:
-    import tkfilebrowser as _fd2
-except:
-    mode=0
-else:
-    mode=1
-
-#default setting
+import tkinter.filedialog as fd
+custom=False
 if platform.system() == "Linux":
-    mode = 1
-else:
-    mode = 0
-
-#tools
-#def load_fd2():
-    
-def chg_mode():
-    global mode
-    if mode:
-        mode = 0
+    try:
+        import tkfilebrowser as fd
+    except:
+        custom=False
     else:
-        mode = 1
+        custom=True
 
 #dialogs
-def askdirectory(fd=None, **argv):
-    if fd == None: fd = mode
-    if fd:
-        return _fd2.askopendirname(**argv)
+def askdirectory(title="Open...", initialdir=None, **argv):
+    if not initialdir is None:
+        argv["initialdir"]=initialdir
+    if custom:
+        return fd.askopendirname(title=title, **argv)
     else:
-        return _fd1.askdirectory(**argv)
+        return fd.askdirectory(title=title, **argv)
 
-def askopenfilename(fd=None, **argv):
-    if fd == None: fd = mode
+def askopenfilename(**argv):
     if platform.system() == "Darwin":
-        #load_fd2()
-        return _fd2.askopenfilename(**argv)
-    if fd:
-        return _fd2.askopenfilename(**argv)
+        import tkfilebrowser as fd2
+        return fd2.askopenfilename(**argv)
+    if custom:
+        return fd.askopenfilename(**argv)
     else:
-        return _fd1.askopenfilename(**argv)
+        return fd.askopenfilename(**argv)
+
 def askopenfilenames(fd=None, **argv):
-    if fd == None: fd = mode
     if platform.system() == "Darwin":
-        #load_fd2()
-        return _fd2.askopenfilenames(**argv)
-    if fd:
-        return _fd2.askopenfilenames(**argv)
+        import tkfilebrowser as fd2
+        return fd2.askopenfilenames(**argv)
+    if custom:
+        return fd.askopenfilenames(**argv)
     else:
-        return _fd1.askopenfilenames(**argv)
-def asksaveasfilename(fd=None, **argv):
-    if fd == None: fd = mode
-    if fd:
-        return _fd2.asksaveasfilename(**argv)
+        return fd.askopenfilenames(**argv)
+
+def asksaveasfilename(**argv):
+    if custom:
+        return fd.asksaveasfilename(**argv)
     else:
-        return _fd1.asksaveasfilename(**argv)
-        
+        return fd.asksaveasfilename(**argv) 

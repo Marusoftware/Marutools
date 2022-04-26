@@ -49,7 +49,12 @@ UI
 
 UI controling classes
 
-.. py:class:: UI
+.. note::
+    These are only Widget creation function.
+    Widget creation function returns Widget object.
+    To control Widget, you have to use function in Widget object.
+
+.. class:: UI
 
     .. attribute:: parent
 
@@ -97,7 +102,7 @@ UI controling classes
 
         :param bool tf: True to fullscreen. False to fullscreen. default(None) to nomal size.
     
-    .. method:: changeSize(size):
+    .. method:: changeSize(size)
 
         Change window size.
 

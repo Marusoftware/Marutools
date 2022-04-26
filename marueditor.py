@@ -316,13 +316,17 @@ class Editor():
             self.config["lang"]=editor.lang.value
             self.Loadl10n(language=editor.lang.value)
         editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang, label=self.txt["lang"]+":")
-        editor.lang.pack(fill="x")
+        editor.lang.pack(fill="both")
         self.ui.uisetting(root.note.add_tab(self.txt["appearance"]), self.txt)
         addon=root.note.add_tab(self.txt["addon"])
-        addon.list=addon.Input.List()
+        addon.addbt=addon.Input.Button(label="Install Addon")
+        addon.addbt.pack()
+        addon.list=addon.Input.List(columns=["ftype"], header=True)
         addon.list.pack(fill="both")
+        addon.list.set_header("#0", "Addon name")
+        addon.list.set_header("ftype", "Editable File type")
         for name, info in self.addon.loaded_addon_info.items():
-            addon.list.add_item()
+            addon.list.add_item(label=name, values=[info["filetypes"]])
 
 class EasyEditor():
     def __init__(self):

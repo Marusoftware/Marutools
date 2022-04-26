@@ -99,14 +99,20 @@ class _Text(WidgetBase):
     def redo(self):
         self.widget.edit_redo()
 class _List(WidgetBase):
-    def __init__(self, master, **options):
+    def __init__(self, master, columns=[], header=False, scroll=True, **options):
         super().__init__(master)
         from tkinter.ttk import Treeview
-        self.widget=Treeview(self.master, show="tree", **options)
+        show=["tree"]
+        if header: show.append("headings")
+        if scroll:
+            from .widgets import ScrolledTreeview
+            self.widget=ScrolledTreeview(self.master, show=show, columns=columns, **options)
+        else:    
+            self.widget=Treeview(self.master, show=show, columns=columns, **options)
         self.widget.bind("<<TreeviewSelect>>", self.callback)
         self.value=()
     def set_header(self, column, text):
-        self.widget.heading("#"+str(column), text=text)
+        self.widget.heading(column, text=text)
     def add_item(self, parent="", index=0, id=None, label="", values=None, **options):
         if not id is None:
             options.update(iid=id)

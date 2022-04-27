@@ -6,6 +6,16 @@ Addon API has some useful API.
 
     :canonical: libtools.addon.AddonAPI
 
+    .. attribute:: api_ver
+        :type: int
+
+        Addon API Version
+    
+    .. attribute:: api_ver_minor
+        :type: int
+
+        Addon API Minor Version
+
     .. attribute:: name
         :type: str
         

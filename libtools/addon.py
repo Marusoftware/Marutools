@@ -66,6 +66,8 @@ class AddonAPI(object):
         self.ui=ui
         self.app=app
         self.saved=True
+        self.api_ver=0
+        self.api_ver_minor=0
     def __setattr__(self, __name, __value):
         super().__setattr__(__name, __value)
         if __name == "saved":

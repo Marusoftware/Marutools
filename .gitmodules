@@ -1,0 +1,3 @@
+[submodule "libmarusoftware"]
+	path = libmarusoftware
+	url = https://github.com/Marusoftware/libmarusoftware.git

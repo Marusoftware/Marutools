@@ -2,10 +2,23 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
   <span class="rst-current-version" data-toggle="rst-current-version">
     <span class="fa fa-book"> Other Versions</span>
-    v: {{ current_version.name }}
+    v: {{ current_version.name }} l: {{ language }}
     <span class="fa fa-caret-down"></span>
   </span>
   <div class="rst-other-versions">
+    <dl>
+      <dt>Langs</dt>
+      {%- for lang in langs %}
+        {%- if language==default_lang %}
+          <dd><a href="../{{ lang }}/index.html">{{ lang }}</a></dd>
+        {%- elif language!=lang %}
+          <dd><a href="../../{{ lang }}/index.html">{{ lang }}</a></dd>
+        {%- endif %}
+      {%- endfor %}
+      {%- if language!=default_lang %}
+        <dd><a href="../../index.html">{{ default_lang }}</a></dd>
+      {%- endif %}
+    </dl>
     {%- if versions.tags %}
     <dl>
       <dt>Tags</dt>

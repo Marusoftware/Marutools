@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document for Developer &mdash; Marutools b1.0.0 ドキュメント</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="Addon API Reference" href="api.html" />
+    <link rel="prev" title="Document for User" href="user.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Marutools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-started">Get started</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Addon API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://marusoftware.net/documents/marutools.html">Marusoftware Homepage Document</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Marutools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Document for Developer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dev.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="document-for-developer">
+<h1>Document for Developer<a class="headerlink" href="#document-for-developer" title="このヘッドラインへのパーマリンク"></a></h1>
+<p>This is guide for developer.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="このヘッドラインへのパーマリンク"></a></h2>
+<p>First, Marutools has addon system.
+You can make addon in very easy steps.</p>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="このヘッドラインへのパーマリンク"></a></h2>
+<p>Here comes addon making tutorial.</p>
+<section id="get-started">
+<h3>Get started<a class="headerlink" href="#get-started" title="このヘッドラインへのパーマリンク"></a></h3>
+<p>First, you have to decide that it is big addon or small addon.
+Big addon is consisted with folder(it's same as python package).
+Small addon is consisted with only one python script.
+It can change later, but it may be hard.</p>
+<p>Now, Marutools contain only Marueditor.
+So, you can make addon only for editor.</p>
+<p>This is base code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span> <span class="nc">Edit</span><span class="p">():</span>
+<span class="linenos"> 2</span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="linenos"> 4</span>    <span class="n">file_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="linenos"> 5</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">=</span><span class="n">api</span>
+<span class="linenos"> 7</span>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="linenos"> 8</span>        <span class="k">pass</span>
+<span class="linenos"> 9</span>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">10</span>        <span class="k">pass</span>
+<span class="linenos">11</span>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="k">pass</span>
+</pre></div>
+</div>
+<p><a class="reference download internal" download="" href="_downloads/2230ac9cb3519c79d88b430edcf39896/addon_base.py"><code class="xref download docutils literal notranslate"><span class="pre">addon_base.py</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Edit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Edit</span></span><a class="headerlink" href="#Edit" title="この定義へのパーマリンク"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="Edit.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#Edit.name" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Addon name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Edit.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#Edit.description" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Addon description string.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Edit.file_types">
+<span class="sig-name descname"><span class="pre">file_types</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#Edit.file_types" title="この定義へのパーマリンク"></a></dt>
+<dd><p>You can write like this: <code class="docutils literal notranslate"><span class="pre">[&quot;txt&quot;,&quot;py&quot;,</span> <span class="pre">....]</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Edit.__init__" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Calls on file open. <code class="docutils literal notranslate"><span class="pre">self</span></code> will share.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>api</strong> (<em>libtools.addon.AddonAPI</em>) -- AddonAPI. You will use this to control UI, settings, and etc... <strong>Please keep this for later</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Edit.save" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Calls on file saving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>None</em>) -- When &quot;save as...&quot; is selected, here comes new file path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.new">
+<span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Edit.new" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Calls on new file created.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Edit.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Edit.close" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Calls on file closing.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>On <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, api object will pass. api object has many api.
+Please see <a class="reference internal" href="api.html"><span class="doc">Addon API Reference</span></a>.</p>
+<p>You can write just as python.
+Happy coding!!</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user.html" class="btn btn-neutral float-left" title="Document for User" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Addon API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Marusoftware.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: master l: ja
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Langs</dt>
+        <dd><a href="../../index.html">en</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="dev.html">master</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

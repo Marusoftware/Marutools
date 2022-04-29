@@ -25,12 +25,19 @@ if errorlevel 9009 (
 	exit /b 1
 )
 
-:html
-%SPHINXBUILD% -b html %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
-goto end
-
-%SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
-goto end
+if %1 == html (
+	echo html
+	%SPHINXBUILD% -b html %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+	goto end
+) else if %1 == gettext (
+	echo gettext
+	%SPHINXBUILD% -M gettext %SOURCEDIR% %SOURCEDIR% %SPHINXOPTS% %O%
+	goto end
+) else (
+	echo else
+	%SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+	goto end
+)
 
 :help
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%

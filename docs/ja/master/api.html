@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Addon API Reference &mdash; Marutools b1.0.0 ドキュメント</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="Document for Developer" href="dev.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Marutools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Addon API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ui">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logger">Logger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://marusoftware.net/documents/marutools.html">Marusoftware Homepage Document</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Marutools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Addon API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="addon-api-reference">
+<h1>Addon API Reference<a class="headerlink" href="#addon-api-reference" title="このヘッドラインへのパーマリンク"></a></h1>
+<p>Addon API has some useful API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="AddonAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AddonAPI</span></span><a class="headerlink" href="#AddonAPI" title="この定義へのパーマリンク"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Canonical</dt>
+<dd class="field-odd"><p>libtools.addon.AddonAPI</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.api_ver">
+<span class="sig-name descname"><span class="pre">api_ver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#AddonAPI.api_ver" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Addon API Version</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.api_ver_minor">
+<span class="sig-name descname"><span class="pre">api_ver_minor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#AddonAPI.api_ver_minor" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Addon API Minor Version</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#AddonAPI.name" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Addon Name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#Logger" title="Logger"><span class="pre">Logger</span></a></em><a class="headerlink" href="#AddonAPI.logger" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Logger object for addon</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.appinfo">
+<span class="sig-name descname"><span class="pre">appinfo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><span class="pre">dict</span></a></em><a class="headerlink" href="#AddonAPI.appinfo" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Marutools runtime infomation</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.ext">
+<span class="sig-name descname"><span class="pre">ext</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#AddonAPI.ext" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Open file extention</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.ui">
+<span class="sig-name descname"><span class="pre">ui</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#UI" title="UI"><span class="pre">UI</span></a></em><a class="headerlink" href="#AddonAPI.ui" title="この定義へのパーマリンク"></a></dt>
+<dd><p>UI controler</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.app">
+<span class="sig-name descname"><span class="pre">app</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Core</span></em><a class="headerlink" href="#AddonAPI.app" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Marutools Core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AddonAPI.saved">
+<span class="sig-name descname"><span class="pre">saved</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></em><a class="headerlink" href="#AddonAPI.saved" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Flag for is saved file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="ui">
+<h2>UI<a class="headerlink" href="#ui" title="このヘッドラインへのパーマリンク"></a></h2>
+<p>UI controling classes</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>These are only Widget creation function.
+Widget creation function returns Widget object.
+To control Widget, you have to use function in Widget object.</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="UI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UI</span></span><a class="headerlink" href="#UI" title="この定義へのパーマリンク"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="UI.parent">
+<span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#UI.parent" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Parent UI object. If not having, it is <cite>None</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#UI.type" title="この定義へのパーマリンク"></a></dt>
+<dd><div class="line-block">
+<div class="line">UI object type. UI object is showing Frame widget or window.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">main</span></code>: Main window</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">frame</span></code>: Frame widget</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dialog</span></code>: Dialog widget(like Warning window...)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sub</span></code>: Sub window</div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.backend">
+<span class="sig-name descname"><span class="pre">backend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#UI.backend" title="この定義へのパーマリンク"></a></dt>
+<dd><div class="line-block">
+<div class="line">Backend name.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tkinter</span></code>:tkinter GUI library</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.changeTitle">
+<span class="sig-name descname"><span class="pre">changeTitle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeTitle" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Change window title.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Title to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.changeIcon">
+<span class="sig-name descname"><span class="pre">changeIcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeIcon" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Change window icon(it's on title bar and task bar).</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Icon file path to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.fullscreen">
+<span class="sig-name descname"><span class="pre">fullscreen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.fullscreen" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Change window to fullscreen.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>tf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- True to fullscreen. False to fullscreen. default(None) to nomal size.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.changeSize">
+<span class="sig-name descname"><span class="pre">changeSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeSize" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Change window size.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <code class="docutils literal notranslate"><span class="pre">{width}x{height}+{x}+{y}</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.uisetting">
+<span class="sig-name descname"><span class="pre">uisetting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.uisetting" title="この定義へのパーマリンク"></a></dt>
+<dd><p>The widget for UI setting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>libtools.Frame</em>) -- Frame to show settings.</p></li>
+<li><p><strong>txt</strong> (<em>Lang</em>) -- l10n text in dict like object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.setcallback">
+<span class="sig-name descname"><span class="pre">setcallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.setcallback" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Set callback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <div class="line-block">
+<div class="line">Callback name.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">close</span></code>: Fire on close window.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_help</span></code>: Click help menu button on Macos</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_settings</span></code>:Click settings menu button on Macos</div>
+</div>
+</p></li>
+<li><p><strong>callback</strong> (<em>callable</em>) -- Callback function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.makeSubwindow">
+<span class="sig-name descname"><span class="pre">makeSubwindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dialog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.makeSubwindow" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Make Subwindow</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>dialog</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Dialog mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.close" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Close window/frame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.wait" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Wait until close window.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.exist">
+<span class="sig-name descname"><span class="pre">exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.exist" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Return whether the window/frame is open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>whether the window/frame is open.</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.mainloop">
+<span class="sig-name descname"><span class="pre">mainloop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.mainloop" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Window Mainloop.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code>.
+And also, must NOT BE run twice or above.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Frame">
+<span class="sig-name descname"><span class="pre">Frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Frame" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Frame widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>Frame widget object</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p><a class="reference internal" href="#UI" title="UI">UI</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Label">
+<span class="sig-name descname"><span class="pre">Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.Label" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Label widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Label text</p>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Label widget object</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p>WidgetBase</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Image">
+<span class="sig-name descname"><span class="pre">Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.Image" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Image widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>Image widget object</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p>WidgetBase</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Menu">
+<span class="sig-name descname"><span class="pre">Menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Menu" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Menu widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>Menu widget object</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p>Menu</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Notebook">
+<span class="sig-name descname"><span class="pre">Notebook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Notebook" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Notebook widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>Notebook widget object</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p>Notebook</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.Dialog">
+<span class="sig-name descname"><span class="pre">Dialog</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#Dialog" title="Dialog"><span class="pre">Dialog</span></a></em><a class="headerlink" href="#UI.Dialog" title="この定義へのパーマリンク"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.Input">
+<span class="sig-name descname"><span class="pre">Input</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#Input" title="Input"><span class="pre">Input</span></a></em><a class="headerlink" href="#UI.Input" title="この定義へのパーマリンク"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Dialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Dialog</span></span><a class="headerlink" href="#Dialog" title="この定義へのパーマリンク"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="Dialog.askfile">
+<span class="sig-name descname"><span class="pre">askfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.askfile" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Ask filepath Dialog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>multi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Multi selection enable/disable</p></li>
+<li><p><strong>save</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Save filepath(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or Open filepath(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Filepath</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Dialog.askdir">
+<span class="sig-name descname"><span class="pre">askdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.askdir" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Ask directory(folder) path Dialog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>Directory path</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Dialog.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.error" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Show error Dialog.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Dialog.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.info" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Show infomation Dialog.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Dialog.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.warn" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Show warning Dialog.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Dialog.question">
+<span class="sig-name descname"><span class="pre">question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.question" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Asking Dialog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <div class="line-block">
+<div class="line">Ask type.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">okcancel</span></code>: select &quot;ok&quot;(return <code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;cancel&quot;(return <code class="docutils literal notranslate"><span class="pre">False</span></code>)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">retrycancel</span></code>: select &quot;retry&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">yesno</span></code>: select &quot;yes&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;no&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">yesnocancel</span></code>: select &quot;yes&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;no&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>) or &quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">None</span></code>)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">text</span></code>: Input text. If cancel, return <code class="docutils literal notranslate"><span class="pre">None</span></code></div>
+</div>
+</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Dialog title</p></li>
+<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Dialog message</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Selected (or Inputed) value.</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Input">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Input</span></span><a class="headerlink" href="#Input" title="この定義へのパーマリンク"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="Input.Button">
+<span class="sig-name descname"><span class="pre">Button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Button" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Button widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Button label.</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- Button on-clicking callback</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Button widget object</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p>Button</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Input.List">
+<span class="sig-name descname"><span class="pre">List</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Input.List" title="この定義へのパーマリンク"></a></dt>
+<dd><p>List widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値</dt>
+<dd class="field-odd"><p>List widget object</p>
+</dd>
+<dt class="field-even">戻り値の型</dt>
+<dd class="field-even"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Input.Form">
+<span class="sig-name descname"><span class="pre">Form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'text'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Form" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Text inputting widget.(just one line)</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <div class="line-block">
+<div class="line">Form type.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">text</span></code>: Normal plain text input.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">password</span></code>: Password input.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">filesave</span></code>: Save file asking.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fileopen</span></code>: Open file asking.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fileopenmulti</span></code>: Open file asking (multiple).</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">filesavemulti</span></code>: Save file asking (multiple).</div>
+</div>
+</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- Form on-changing callback</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Form widget object.</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p>Form</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Input.Text">
+<span class="sig-name descname"><span class="pre">Text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scroll</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Text" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Text inputting widget.(multi line)</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scroll</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Scrollbar</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- Text on-changing callback</p></li>
+<li><p><strong>readonly</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Readonly</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Text widget object</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p>Text</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Input.CheckButton">
+<span class="sig-name descname"><span class="pre">CheckButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.CheckButton" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Check button widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Button label.</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- CheckButton on-clicking callback</p></li>
+<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Default value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>CheckButton widget object</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p>CheckButton</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Input.Select">
+<span class="sig-name descname"><span class="pre">Select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Select" title="この定義へのパーマリンク"></a></dt>
+<dd><p>Select widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Default value</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- on-selecting callback</p></li>
+<li><p><strong>values</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) -- Values to select</p></li>
+<li><p><strong>inline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Inline mode</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Select label(on left)</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値</dt>
+<dd class="field-even"><p>Select widget object</p>
+</dd>
+<dt class="field-odd">戻り値の型</dt>
+<dd class="field-odd"><p>Select</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="logger">
+<h2>Logger<a class="headerlink" href="#logger" title="このヘッドラインへのパーマリンク"></a></h2>
+<p>Now writing.....</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Logger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Logger</span></span><a class="headerlink" href="#Logger" title="この定義へのパーマリンク"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dev.html" class="btn btn-neutral float-left" title="Document for Developer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Marusoftware.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: master l: ja
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Langs</dt>
+        <dd><a href="../../index.html">en</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="api.html">master</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

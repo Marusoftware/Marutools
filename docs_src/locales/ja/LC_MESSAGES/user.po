@@ -1,0 +1,57 @@
+# Marutools document translation file.
+# Copyright (C) 2022, Marusoftware
+# This file is distributed under the same license as the Marutools package.
+# Maruo.S, Marusoftware <raspi-maru2004@outlook.jp>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Marutools \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-29 21:03+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Maruo.S, Marusoftware <raspi-maru2004@outlook.jp>\n"
+"Language-Team: Marusoftware <marusoftware@outlook.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../user.rst:2
+msgid "Document for User"
+msgstr ""
+
+#: ../user.rst:6
+msgid "Introduction"
+msgstr ""
+
+#: ../user.rst:7
+msgid ""
+"Marutools is the collection of addonable tools. And also, it made fastly,"
+" lightly, and freely."
+msgstr ""
+
+#: ../user.rst:11
+msgid "Now, this contain these tools:"
+msgstr ""
+
+#: ../user.rst:11
+msgid "Marueditor - Edit many files."
+msgstr ""
+
+#: ../user.rst:15
+msgid "Addon"
+msgstr ""
+
+#: ../user.rst:16
+msgid ""
+"As I say in introduction, Marutools has addon feature. You can use addons"
+" by put files on \"addons\" folder."
+msgstr ""
+
+#: ../user.rst:19
+msgid ""
+"Now, we are making addon manager. So, please install by yourself... We "
+"are sorry for that."
+msgstr ""
+

@@ -1,0 +1,110 @@
+# Marutools document translation file.
+# Copyright (C) 2022, Marusoftware
+# This file is distributed under the same license as the Marutools package.
+# Maruo.S, Marusoftware <raspi-maru2004@outlook.jp>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Marutools \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-29 21:03+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Maruo.S, Marusoftware <raspi-maru2004@outlook.jp>\n"
+"Language-Team: Marusoftware <marusoftware@outlook.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../dev.rst:2
+msgid "Document for Developer"
+msgstr ""
+
+#: ../dev.rst:3
+msgid "This is guide for developer."
+msgstr ""
+
+#: ../dev.rst:7
+msgid "Introduction"
+msgstr ""
+
+#: ../dev.rst:8
+msgid "First, Marutools has addon system. You can make addon in very easy steps."
+msgstr ""
+
+#: ../dev.rst:13
+msgid "Tutorial"
+msgstr ""
+
+#: ../dev.rst:14
+msgid "Here comes addon making tutorial."
+msgstr ""
+
+#: ../dev.rst:17
+msgid "Get started"
+msgstr ""
+
+#: ../dev.rst:18
+msgid "First, you have to decide that it is big addon or small addon. Big addon is consisted with folder(it's same as python package). Small addon is consisted with only one python script. It can change later, but it may be hard."
+msgstr ""
+
+#: ../dev.rst:23
+msgid "Now, Marutools contain only Marueditor. So, you can make addon only for editor."
+msgstr ""
+
+#: ../dev.rst:26
+msgid "This is base code:"
+msgstr ""
+
+#: ../dev.rst:33
+msgid ":download:`addon_base.py <_static/addon_base.py>`"
+msgstr ""
+
+#: ../dev.rst:40
+msgid "Addon name."
+msgstr ""
+
+#: ../dev.rst:45
+msgid "Addon description string."
+msgstr ""
+
+#: ../dev.rst:50
+msgid "You can write like this: ``[\"txt\",\"py\", ....]``"
+msgstr ""
+
+#: ../dev.rst:54
+msgid "Calls on file open. ``self`` will share."
+msgstr ""
+
+#: ../dev.rst:0
+#: ../dev.rst:0
+msgid "Parameters"
+msgstr ""
+
+#: ../dev.rst:56
+msgid "AddonAPI. You will use this to control UI, settings, and etc... **Please keep this for later**"
+msgstr ""
+
+#: ../dev.rst:60
+msgid "Calls on file saving."
+msgstr ""
+
+#: ../dev.rst:62
+msgid "When \"save as...\" is selected, here comes new file path."
+msgstr ""
+
+#: ../dev.rst:67
+msgid "Calls on new file created."
+msgstr ""
+
+#: ../dev.rst:71
+msgid "Calls on file closing."
+msgstr ""
+
+#: ../dev.rst:73
+msgid "On ``__init__``, api object will pass. api object has many api. Please see :doc:`Addon API Reference</api>`."
+msgstr ""
+
+#: ../dev.rst:76
+msgid "You can write just as python. Happy coding!!"
+msgstr ""

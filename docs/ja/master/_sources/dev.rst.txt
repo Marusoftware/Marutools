@@ -71,7 +71,7 @@ This is base code:
         Calls on file closing.
 
 On ``__init__``, api object will pass. api object has many api.
-Please see :doc:`Addon API Reference</api>`.
+Please see :doc:`api`.
 
 You can write just as python.
 Happy coding!!

@@ -1,4 +1,4 @@
-import argparse, libmarusoftware, os
+import argparse, libmarusoftware, libtools, os
 
 __version__="Marueditor b1.0.0"
 __revision__="4"
@@ -20,7 +20,7 @@ class Editor():
         if not appinfo is None:
             self.appinfo.update(**appinfo)
         libmarusoftware.core.adjustEnv(self.logger.getChild("AdjustEnv"), self.appinfo)
-        self.addon=libmarusoftware.Addon(self.logger.getChild("Addon"), self.appinfo)
+        self.addon=libtools.Addon(self.logger.getChild("Addon"), self.appinfo)
         self.addon.loadAll(self.appinfo["addons"],"editor")
         self.logger.info("start")
         self.ui=libmarusoftware.UI.UI(self.config, self.logger.getChild("UI"))

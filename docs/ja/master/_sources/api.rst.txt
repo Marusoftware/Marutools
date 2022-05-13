@@ -4,7 +4,7 @@ Addon API has some useful API.
 
 .. class:: AddonAPI
 
-    :canonical: libtools.addon.AddonAPI
+    :canonical: libmarusoftware.addon.AddonAPI
 
     .. attribute:: api_ver
         :type: int
@@ -23,7 +23,7 @@ Addon API has some useful API.
 
     .. attribute:: logger
         :type: Logger
-        :canonical: libtools.core.Logger
+        :canonical: libmarusoftware.core.Logger
 
         Logger object for addon
 
@@ -39,7 +39,7 @@ Addon API has some useful API.
     
     .. attribute:: ui
         :type: UI
-        :canonical: libtools.addon.UI
+        :canonical: libmarusoftware.addon.UI
 
         UI controler
     
@@ -125,7 +125,7 @@ UI controling classes
 
         The widget for UI setting.
 
-        :param libtools.Frame frame: Frame to show settings.
+        :param libmarusoftware.Frame frame: Frame to show settings.
         :param Lang txt: l10n text in dict like object
 
     .. method:: setcallback(name, callback)

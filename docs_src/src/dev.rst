@@ -53,7 +53,7 @@ This is base code:
 
         Calls on file open. ``self`` will share.
 
-        :param libtools.addon.AddonAPI api: AddonAPI. You will use this to control UI, settings, and etc... **Please keep this for later**
+        :param libmarusoftware.addon.AddonAPI api: AddonAPI. You will use this to control UI, settings, and etc... **Please keep this for later**
 
     .. method:: save(file=None)
 

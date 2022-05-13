@@ -29,7 +29,7 @@ msgid "canonical"
 msgstr ""
 
 #: ../api.rst:7
-msgid "libtools.addon.AddonAPI"
+msgid "libmarusoftware.addon.AddonAPI"
 msgstr ""
 
 #: ../api.rst:12

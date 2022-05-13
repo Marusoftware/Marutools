@@ -9,4 +9,4 @@ exclude=["scipy"]
 import platform
 if platform.system() == "Linux":
     require.append("tkfilebrowser")
-include_files=["share/","libtools/","share_os/","language/","image/","addons/", "LICENCE"]
+include_files=["share/","libmarusoftware/","share_os/","language/","image/","addons/", "LICENCE"]

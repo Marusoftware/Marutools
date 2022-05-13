@@ -1,4 +1,4 @@
-import argparse, libtools, os
+import argparse, libmarusoftware, os
 
 __version__="Marueditor b1.0.0"
 __revision__="4"
@@ -19,11 +19,11 @@ class Editor():
         self.LoadLogger()
         if not appinfo is None:
             self.appinfo.update(**appinfo)
-        libtools.core.adjustEnv(self.logger.getChild("AdjustEnv"), self.appinfo)
-        self.addon=libtools.Addon(self.logger.getChild("Addon"), self.appinfo)
+        libmarusoftware.core.adjustEnv(self.logger.getChild("AdjustEnv"), self.appinfo)
+        self.addon=libmarusoftware.Addon(self.logger.getChild("Addon"), self.appinfo)
         self.addon.loadAll(self.appinfo["addons"],"editor")
         self.logger.info("start")
-        self.ui=libtools.UI.UI(self.config, self.logger.getChild("UI"))
+        self.ui=libmarusoftware.UI.UI(self.config, self.logger.getChild("UI"))
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
@@ -38,7 +38,7 @@ class Editor():
             default_conf.update([("lang",locale.getlocale()[0]),("encode",locale.getlocale()[1])])
         else:
             default_conf.update([("lang",locale.getdefaultlocale()[0]),("encode",locale.getdefaultlocale()[1])])
-        self.config=libtools.Config("Marueditor", default_conf=default_conf)
+        self.config=libmarusoftware.Config("Marueditor", default_conf=default_conf)
         self.appinfo=self.config.appinfo
     def Loadl10n(self, language=None):
         if language is None:
@@ -51,14 +51,14 @@ class Editor():
         'back', 'dir_name', 'choose_dir', 'file_name', 'new_check', 'wait', 'done', 'new_e1',
         'new_e2', 'new_e3', 'done_msg', 'new_e1_msg', 'chk_upd', 'style', 'lang', 'new_check2',
         'version', 'licence', 'marueditor_file', "appearance"]
-        self.lang = libtools.Lang(self.appinfo, req)
+        self.lang = libmarusoftware.Lang(self.appinfo, req)
         self.txt = self.lang.getText(language)
     def LoadLogger(self):
         #logging
         if "log_dir" in self.config:
             self.appinfo["log"] = self.config["log_dir"]
         log_dir = self.appinfo["log"]
-        self.logger=libtools.core.Logger(log_dir=log_dir, log_level=self.argv.log_level, name="")
+        self.logger=libmarusoftware.core.Logger(log_dir=log_dir, log_level=self.argv.log_level, name="")
     def CreateMenu(self):
         self.ui.menu=self.ui.Menu(type="bar")
         self.ui.menu.apple=self.ui.menu.add_category("apple", name="apple")#Macos apple menu

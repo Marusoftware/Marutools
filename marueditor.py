@@ -22,7 +22,7 @@ class Editor():
         libmarusoftware.core.adjustEnv(self.logger.getChild("AdjustEnv"), self.appinfo)
         self.addon=libtools.Addon(self.logger.getChild("Addon"), self.appinfo)
         self.addon.loadAll(self.appinfo["addons"],"editor")
-        self.logger.info("start")
+        self.logger.info("Starting...")
         self.ui=libmarusoftware.UI.UI(self.config, self.logger.getChild("UI"))
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
@@ -249,33 +249,34 @@ class Editor():
         if not hasattr(tab, "addon"):
             self.ui.notebook.del_tab(tab)
         else:
-        if not tab.addon.saved:
-            if question == -1:
-                question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{tab.addon.filepath}")
+            self.logger.info(f"Closing file '{tab.addon.filepath}'")
+            if not tab.addon.saved:
+                if question == -1:
+                    question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{tab.addon.filepath}")
                     self.ui.notebook.del_tab(tab)
-            if question == True:
+                if question == True:
                     self.save(tab)
                     self.ui.notebook.del_tab(tab)
-            elif question != False:
+                elif question != False:
                     pass
             else:
-        self.ui.notebook.del_tab(tab)
+                self.ui.notebook.del_tab(tab)
             tab.addon.addon.close()
         if autodelete and len(self.ui.notebook.list_tab())==0:
             self.ui.close()
     def exit(self):
         self.logger.info("Exiting...")
         for tab in self.ui.notebook.list_tab().copy():
-                self.close(tab)
+            self.close(tab)
     def update_state(self, addon):
         for tab in self.ui.notebook.list_tab():
             if hasattr(tab, "addon"):
-            if tab.addon is addon:
-                if addon.saved:
+                if tab.addon is addon:
+                    if addon.saved:
                         tab.label=os.path.basename(addon.filepath)
-                else:
+                    else:
                         tab.label="*"+os.path.basename(addon.filepath)
-                break
+                    break
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
         root.changeTitle(self.appinfo["appname"]+" - "+self.txt["about"])

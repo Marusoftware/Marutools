@@ -13,6 +13,7 @@ class Addon():
     def uninstall(self):
         pass
     def load(self, addon_file, addon_type):
+        self.logger.debug(f"Start loading '{addon_file}' as {addon_type}.")
         try:
             module=import_module(os.path.splitext(os.path.basename(addon_file))[0], os.path.dirname(addon_file).replace(os.path.sep, "."))
         except:
@@ -44,13 +45,15 @@ class Addon():
     def unload(self):
         pass
     def loadAll(self, load_dirs, addon_type, ignorelist=[]):
+        self.logger.info("Start addon loading.")
         sys.path.extend(load_dirs)
         for load_dir in load_dirs:
+            self.logger.debug(f"Load from '{load_dir}' .")
             for addon_file in os.listdir(load_dir):
                 addon_path=os.path.join(load_dir, addon_file)
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
-        self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
+        self.logger.info(f'{", ".join(list(self.loaded_addon.keys()))} was loaded.')
     def getAddon(self, addon, filepath, ext, ui, app, callback):
         api=AddonAPI(addon, self.appinfo, filepath, ext, ui, app, callback)
         addon_ctx=self.loaded_addon[addon](api)

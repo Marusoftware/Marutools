@@ -27,7 +27,7 @@ class Editor():
         self.ui.changeIcon(os.path.join(self.appinfo["image"],"marueditor.png"))
         self.ui.setcallback("close", self.exit)
         self.ui.changeSize('500x500')
-        self.ui.notebook=self.ui.Notebook(close=True, command=self.close, onzero=self.exit)
+        self.ui.notebook=self.ui.Notebook(close=True, command=self.close)
         self.ui.notebook.pack(fill="both", expand=True)
     def mainloop(self):
         self.ui.mainloop()
@@ -86,7 +86,7 @@ class Editor():
         self.ui.menu.help=self.ui.menu.add_category(self.txt["help"], name="help")#Help
         self.ui.menu.help.add_item(type="button", label=self.txt["about"], command=self.version)
     def welcome(self):
-        self.welcome_tab=self.ui.notebook.add_tab(label=self.txt["welcome"])
+        self.welcome_tab=self.ui.notebook.add_tab(label=self.txt["welcome"]).frame
         self.welcome_tab.label=self.welcome_tab.Label(label=self.txt["welcome_tab"])
         self.welcome_tab.label.pack()
         self.welcome_tab.new=self.welcome_tab.Input.Button(label=self.txt["new"], command=self.new)
@@ -153,20 +153,22 @@ class Editor():
                     return
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
-        self.ui.notebook.select_tab("end")
-        ctx=self.addon.getAddon(addon, file, ext, tab, self)
-        self.opening[label]=ctx
+        self.ui.notebook.select_tab(tab)
+        ctx=self.addon.getAddon(addon, file, ext, tab.frame, self, self.update_state)
+        tab.addon=ctx
         ctx.saved=False
-    def save(self, as_other=False):
-        if not self.ui.notebook.value in self.opening:
+    def save(self, tab=None, as_other=False):
+        if tab is  None:
+            tab=self.ui.notebook.value
+        if not hasattr(tab, "addon"):
             return
         if as_other:
             file=self.ui.Dialog.askfile()
             if not os.path.exists(file):
                 return
-            self.opening[self.ui.notebook.value].addon.save(file)
+            tab.addon.addon.save(file)
         else:
-            self.opening[self.ui.notebook.value].addon.save()
+            tab.addon.addon.save()
     def new(self, **options):
         def dialog():
             def close():
@@ -236,69 +238,55 @@ class Editor():
         ext=options["ext"]
         label=f'{os.path.basename(file)} {f"[{ext}]" if os.path.splitext(file)[1]!="."+ext else ""}'
         tab=self.ui.notebook.add_tab(label=label)
-        self.ui.notebook.select_tab("end")
-        ctx=self.addon.getAddon(addon, file, ext, tab, self)
-        self.opening[label]=ctx
+        self.ui.notebook.select_tab(tab)
+        ctx=self.addon.getAddon(addon, file, ext, tab.frame, self, self.update_state)
+        tab.addon=ctx
         ctx.saved=False
         ctx.addon.new()
-    def close(self, value=None, question=-1):
-        if value is None:
-            value=self.ui.notebook.value
-        if not value in self.opening:
-            self.ui.notebook.del_tab("current")
-            return
-        if not self.opening[value].saved:
+    def close(self, tab=None, question=-1, autodelete=True):
+        if tab is None:
+            tab=self.ui.notebook.value
+        if not hasattr(tab, "addon"):
+            self.ui.notebook.del_tab(tab)
+        else:
+        if not tab.addon.saved:
             if question == -1:
-                question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{value}")
+                question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{tab.addon.filepath}")
+                    self.ui.notebook.del_tab(tab)
             if question == True:
-                self.save()
+                    self.save(tab)
+                    self.ui.notebook.del_tab(tab)
             elif question != False:
-                return
-        self.opening[value].addon.close()
-        self.opening.pop(value)
-        self.ui.notebook.del_tab("current")
-    def exit(self):
-        try:
-            for i in self.opening:
-                if not self.opening[i].saved:
-                    question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{i}")
-                    if question is None:
-                        break
-                else:
-                    question=None
-                self.close(i, question)
+                    pass
             else:
-                self.ui.close()
-        except RuntimeError:
-            self.exit()
-    def update_state(self):
-        index=self.ui.notebook.value
-        if not index in self.opening:
-            return
-        before=self.opening[index]
-        old_index=index
-        if before.saved and "*" in index:
-            self.opening.pop(index)
-            index=index.lstrip("*")
-            self.ui.notebook.config_tab(old_index, text=index)
-            self.opening[index]=before
-        elif not before.saved and not "*" in index:
-            self.opening.pop(index)
-            index="*"+index
-            self.ui.notebook.config_tab(old_index, text=index)
-            self.opening[index]=before
-        self.ui.notebook.callback()
+        self.ui.notebook.del_tab(tab)
+            tab.addon.addon.close()
+        if autodelete and len(self.ui.notebook.list_tab())==0:
+            self.ui.close()
+    def exit(self):
+        self.logger.info("Exiting...")
+        for tab in self.ui.notebook.list_tab().copy():
+                self.close(tab)
+    def update_state(self, addon):
+        for tab in self.ui.notebook.list_tab():
+            if hasattr(tab, "addon"):
+            if tab.addon is addon:
+                if addon.saved:
+                        tab.label=os.path.basename(addon.filepath)
+                else:
+                        tab.label="*"+os.path.basename(addon.filepath)
+                break
     def version(self):
         root=self.ui.makeSubWindow(dialog=True)
         root.changeTitle(self.appinfo["appname"]+" - "+self.txt["about"])
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
-        version=root.note.add_tab(label="Version")
+        version=root.note.add_tab(label="Version").frame
         version.title=version.Image(image="init.png")
         version.title.pack()
         version.text=version.Label(label=f"{__version__} {__revision__} -2023 Marusoftware")
         version.text.pack()
-        licence=root.note.add_tab(label="Licence")
+        licence=root.note.add_tab(label="Licence").frame
         licence.text=licence.Input.Text(scroll=True, readonly=True)
         licence.text.pack(fill="both", expand=True)
         with open(os.path.join(self.appinfo["cd"], "LICENCE")) as f:
@@ -309,7 +297,7 @@ class Editor():
         root.changeSize('300x200')
         root.note=root.Notebook()
         root.note.pack(fill="both", expand=True)
-        editor=root.note.add_tab(self.txt["marueditor"])
+        editor=root.note.add_tab(self.txt["marueditor"]).frame
         editor.open_as=editor.Input.CheckButton(label=self.txt["st_open_from"], default=self.config["open_as"], command=lambda: self.config.update(open_as=editor.open_as.value))
         editor.open_as.pack(fill="x")
         def setlang():
@@ -317,8 +305,8 @@ class Editor():
             self.Loadl10n(language=editor.lang.value)
         editor.lang=editor.Input.Select(values=self.lang.lang_list, inline=True, default=self.lang.lang, command=setlang, label=self.txt["lang"]+":")
         editor.lang.pack(fill="both")
-        self.ui.uisetting(root.note.add_tab(self.txt["appearance"]), self.txt)
-        addon=root.note.add_tab(self.txt["addon"])
+        self.ui.uisetting(root.note.add_tab(self.txt["appearance"]).frame, self.txt)
+        addon=root.note.add_tab(self.txt["addon"]).frame
         addon.addbt=addon.Input.Button(label="Install Addon")
         addon.addbt.pack()
         addon.list=addon.Input.List(columns=["ftype"], header=True)

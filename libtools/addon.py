@@ -51,13 +51,14 @@ class Addon():
                 if not addon_path in ignorelist:
                     self.load(addon_file=addon_path, addon_type=addon_type)
         self.logger.info(f'{list(self.loaded_addon.keys())} was loaded.')
-    def getAddon(self, addon, filepath, ext, ui, app):
-        api=AddonAPI(addon, self.appinfo, filepath, ext, ui, app)
+    def getAddon(self, addon, filepath, ext, ui, app, callback):
+        api=AddonAPI(addon, self.appinfo, filepath, ext, ui, app, callback)
         addon_ctx=self.loaded_addon[addon](api)
         api.addon=addon_ctx
         return api
+
 class AddonAPI(object):
-    def __init__(self, name, appinfo, filepath, ext, ui, app):
+    def __init__(self, name, appinfo, filepath, ext, ui, app, callback):
         self.name=name
         self.logger=libmarusoftware.core.Logger(name=name, log_dir=appinfo["log"])
         self.appinfo=appinfo
@@ -65,12 +66,17 @@ class AddonAPI(object):
         self.ext=ext
         self.ui=ui
         self.app=app
-        self.saved=True
+        self._saved=True
+        self._callback=[callback]
         self.api_ver=0
         self.api_ver_minor=0
-    def __setattr__(self, __name, __value):
-        super().__setattr__(__name, __value)
-        if __name == "saved":
-            self.app.update_state()
+    @property
+    def saved(self):
+        return self._saved
+    @saved.setter
+    def saved(self, value):
+        if self._saved == value:
+            self._saved=value
+            self._callback[0](self)
     def getConfig(self, module="main", default_conf={}):
         self.config=libmarusoftware.Config(appname=self.name, module=module, default_conf=default_conf, addon=self.appinfo)

@@ -19,63 +19,63 @@ msgstr ""
 
 #: ../api.rst:2
 msgid "Addon API Reference"
-msgstr ""
+msgstr "アドオンAPIのリファレンス"
 
 #: ../api.rst:3
 msgid "Addon API has some useful API."
-msgstr ""
+msgstr "アドオンAPIは複数あり、どれも便利なものです。"
 
 #: ../api.rst
 msgid "canonical"
-msgstr ""
+msgstr "標準機能"
 
 #: ../api.rst:7
 msgid "libmarusoftware.addon.AddonAPI"
-msgstr ""
+msgstr "libmarusoftware.addon.AddonAPI"
 
 #: ../api.rst:12
 msgid "Addon API Version"
-msgstr ""
+msgstr "アドオンAPIのバージョン"
 
 #: ../api.rst:17
 msgid "Addon API Minor Version"
-msgstr ""
+msgstr "アドオンAPIのマイナーバージョン"
 
 #: ../api.rst:22
 msgid "Addon Name"
-msgstr ""
+msgstr "アドオン Name"
 
 #: ../api.rst:28
 msgid "Logger object for addon"
-msgstr ""
+msgstr "アドオン用ロガーオブジェクト"
 
 #: ../api.rst:33
 msgid "Marutools runtime infomation"
-msgstr ""
+msgstr "Marutoolsの駆動時間情報"
 
 #: ../api.rst:38
 msgid "Open file extention"
-msgstr ""
+msgstr "ファイルを開く"
 
 #: ../api.rst:44
 msgid "UI controler"
-msgstr ""
+msgstr "UIコントローラー"
 
 #: ../api.rst:49
 msgid "Marutools Core"
-msgstr ""
+msgstr "Marutoolsコア"
 
 #: ../api.rst:54
 msgid "Flag for is saved file."
-msgstr ""
+msgstr "フラグ:ファイルの保存"
 
 #: ../api.rst:58
 msgid "UI"
-msgstr ""
+msgstr "UI"
 
 #: ../api.rst:60
 msgid "UI controling classes"
-msgstr ""
+msgstr "UIコントローラークラス"
 
 #: ../api.rst:63
 msgid ""
@@ -83,66 +83,68 @@ msgid ""
 " Widget object. To control Widget, you have to use function in Widget "
 "object."
 msgstr ""
+"関数を作るウェジットのみあります。ウェジットは関数の返り値を作成します。"
+"ウェジットオブジェクト。ウェジットを使うために、ウェジットの中に使わなければならない関数を入れてください。"
 
 #: ../api.rst:71
 msgid "Parent UI object. If not having, it is `None`."
-msgstr ""
+msgstr "親UIオブジェクト。ない場合は「None」"
 
 #: ../api.rst:76
 msgid "UI object type. UI object is showing Frame widget or window."
-msgstr ""
+msgstr "UIオブジェクトの型。UIオブジェクトはウィジットのフレームかウィンドウを表示"
 
 #: ../api.rst:77
 msgid "``main``: Main window"
-msgstr ""
+msgstr "メインウィンドウ"
 
 #: ../api.rst:78
 msgid "``frame``: Frame widget"
-msgstr ""
+msgstr "「フレーム」:フレームウェジット"
 
 #: ../api.rst:79
 msgid "``dialog``: Dialog widget(like Warning window...)"
-msgstr ""
+msgstr "「ダイアログ」:ダイアログウェジット(ウィンドウの警告と同じ可能性)"
 
 #: ../api.rst:80
 msgid "``sub``: Sub window"
-msgstr ""
+msgstr "「sub」:サブウィンドウ"
 
 #: ../api.rst:85
 msgid "Backend name."
-msgstr ""
+msgstr "「バックエンドの名前」"
 
 #: ../api.rst:86
 msgid "``tkinter``:tkinter GUI library"
-msgstr ""
+msgstr "「tkinter」:tkinter(GUIライブラリー)"
 
 #: ../api.rst:90
 msgid "Change window title."
-msgstr ""
+msgstr "ウィンドウのタイトル変更"
 
 #: ../api.rst:93 ../api.rst:102 ../api.rst:111 ../api.rst:120 ../api.rst:156
 msgid "This works successfully only when UI object type is ``main`` or ``sub``"
-msgstr ""
+msgstr "UIオブジェクトの型が「main」か「sub」の時のみ、正常終了"
 
 #: ../api.rst
 msgid "Parameters"
-msgstr ""
+msgstr "パラメーター"
 
 #: ../api.rst:95
 msgid "Title to set."
-msgstr ""
+msgstr "タイトルの設定"
 
 #: ../api.rst:99
 msgid "Change window icon(it's on title bar and task bar)."
-msgstr ""
+msgstr "ウィンドウのアイコン(タイトルとタスクバーの)を変更"
 
 #: ../api.rst:104
 msgid "Icon file path to set."
-msgstr ""
+msgstr "アイコンのファイルパスを設定"
 
 #: ../api.rst:108
 msgid "Change window to fullscreen."
-msgstr ""
+msgstr "ウィンドウをフルスクリーンに"
 
 #: ../api.rst:113
 msgid "True to fullscreen. False to fullscreen. default(None) to nomal size."
@@ -150,19 +152,19 @@ msgstr ""
 
 #: ../api.rst:117
 msgid "Change window size."
-msgstr ""
+msgstr "ウィンドウのサイズを変更"
 
 #: ../api.rst:122
 msgid "``{width}x{height}+{x}+{y}``"
-msgstr ""
+msgstr "``{横}x{縦}+{x}+{y}``"
 
 #: ../api.rst:126
 msgid "The widget for UI setting."
-msgstr ""
+msgstr "UIの設定のウェジット"
 
 #: ../api.rst:128
 msgid "Frame to show settings."
-msgstr ""
+msgstr "フレームの設定表示"
 
 #: ../api.rst:129
 msgid "l10n text in dict like object"
@@ -170,7 +172,7 @@ msgstr ""
 
 #: ../api.rst:133
 msgid "Set callback."
-msgstr ""
+msgstr "コールバックの設定"
 
 #: ../api.rst:135
 msgid ""
@@ -178,152 +180,156 @@ msgid ""
 "Click help menu button on Macos | ``macos_settings``:Click settings menu "
 "button on Macos"
 msgstr ""
-
+"| コールバック名 | 「close」: ウィンドウのファイルを閉じる。 | 「macos_help」: "
+"Macosのヘルプメニューボタンを押す。 | 「macos_settings」:設定メニューを押す。 "
+"Macos上のボタン"
 #: ../api.rst
 msgid "Callback name."
-msgstr ""
+msgstr "コールバック名"
 
 #: ../api.rst
 msgid "``close``: Fire on close window."
-msgstr ""
+msgstr "「close」:ファイルを閉じる"
 
 #: ../api.rst
 msgid "``macos_help``: Click help menu button on Macos"
-msgstr ""
+msgstr "「macos_help」:Macosのヘルプを押してください"
 
 #: ../api.rst
 msgid "``macos_settings``:Click settings menu button on Macos"
-msgstr ""
+msgstr "「macos_settings」:Macosの設定を押してください"
 
 #: ../api.rst:139
 msgid "Callback function."
-msgstr ""
+msgstr "コールバック関数"
 
 #: ../api.rst:143
 msgid "Make Subwindow"
-msgstr ""
+msgstr "サブウィンドウを作成"
 
 #: ../api.rst:145
 msgid "Dialog mode."
-msgstr ""
+msgstr "ダイアログモード"
 
 #: ../api.rst:149
 msgid "Close window/frame."
-msgstr ""
+msgstr "ウィンドウ・フレームを閉じる"
 
 #: ../api.rst:153
 msgid "Wait until close window."
-msgstr ""
+msgstr "ウィンドウを閉じるのを待機"
 
 #: ../api.rst:160
 msgid "Return whether the window/frame is open."
-msgstr ""
+msgstr "ウィンドウ・フレームを開く返り値かどうか"
 
 #: ../api.rst
 msgid "Returns"
-msgstr ""
+msgstr "返り値"
 
 #: ../api.rst:162
 msgid "whether the window/frame is open."
-msgstr ""
+msgstr "ウィンドウ・フレームを開くかどうか"
 
 #: ../api.rst
 msgid "Return type"
-msgstr ""
+msgstr "型を返す"
 
 #: ../api.rst:167
 msgid "Window Mainloop."
-msgstr ""
+msgstr "メインループウィンドウ"
 
 #: ../api.rst:170
 msgid ""
 "This works successfully only when UI object type is ``main``. And also, "
 "must NOT BE run twice or above."
 msgstr ""
+"UIオブジェクトの型が「main」の時のみ、成功します。また、 "
+"二つ同時や重ねて実行することはできません。"
 
 #: ../api.rst:175
 msgid "Frame widget."
-msgstr ""
+msgstr "ウェジットのフレーム"
 
 #: ../api.rst:177
 msgid "Frame widget object"
-msgstr ""
+msgstr "フレームのウェジットオブジェクト"
 
 #: ../api.rst:182
 msgid "Label widget."
-msgstr ""
+msgstr "ウェジットのラベル"
 
 #: ../api.rst:184
 msgid "Label text"
-msgstr ""
+msgstr "ラベルテキスト"
 
 #: ../api.rst:185
 msgid "Label widget object"
-msgstr ""
+msgstr "ラベルのウェジットオブジェクト"
 
 #: ../api.rst:190
 msgid "Image widget."
-msgstr ""
+msgstr "ウェジットの画像"
 
 #: ../api.rst:192
 msgid "Image widget object"
-msgstr ""
+msgstr "画像のウェジットオブジェクト"
 
 #: ../api.rst:197
 msgid "Menu widget."
-msgstr ""
+msgstr "メニューのウェジット"
 
 #: ../api.rst:199
 msgid "Menu widget object"
-msgstr ""
+msgstr "メニューのウェジットオブジェクト"
 
 #: ../api.rst:204
 msgid "Notebook widget."
-msgstr ""
+msgstr "タブ切り替えのウェジット"
 
 #: ../api.rst:206
 msgid "Notebook widget object"
-msgstr ""
+msgstr "タブ切り替えウェジットのオブジェクト"
 
 #: ../api.rst:219
 msgid "Ask filepath Dialog."
-msgstr ""
+msgstr "ファイルパスダイアログを確認"
 
 #: ../api.rst:221
 msgid "Multi selection enable/disable"
-msgstr ""
+msgstr "複数選択可能・不可能"
 
 #: ../api.rst:222
 msgid "Save filepath(``True``) or Open filepath(``False``)"
-msgstr ""
+msgstr "ファイルパスを保存(「true」)するかファイルパスを開く(「False」)"
 
 #: ../api.rst:223
 msgid "Filepath"
-msgstr ""
+msgstr "ファイルパス"
 
 #: ../api.rst:228
 msgid "Ask directory(folder) path Dialog."
-msgstr ""
+msgstr "ディレクトリ(フォルダ)パスダイアログの確認"
 
 #: ../api.rst:230
 msgid "Directory path"
-msgstr ""
+msgstr "ディレクトリのパス"
 
 #: ../api.rst:235
 msgid "Show error Dialog."
-msgstr ""
+msgstr "エラーダイアログの表示"
 
 #: ../api.rst:239
 msgid "Show infomation Dialog."
-msgstr ""
+msgstr "詳細のダイアログを表示"
 
 #: ../api.rst:243
 msgid "Show warning Dialog."
-msgstr ""
+msgstr "警告ダイアログの表示"
 
 #: ../api.rst:247
 msgid "Asking Dialog."
-msgstr ""
+msgstr "確認のダイアログ"
 
 #: ../api.rst:249
 msgid ""
@@ -337,7 +343,7 @@ msgstr ""
 
 #: ../api.rst
 msgid "Ask type."
-msgstr ""
+msgstr "型の確認"
 
 #: ../api.rst
 msgid ""
@@ -347,11 +353,11 @@ msgstr ""
 
 #: ../api.rst
 msgid "``retrycancel``: select \"retry\"(``True``) or \"cancel\"(``False``)"
-msgstr ""
+msgstr "「retrycancel」:\"retry\"(「True」) か \"cancel\"(「False」)を選択"
 
 #: ../api.rst
 msgid "``yesno``: select \"yes\"(``True``) or \"no\"(``False``)"
-msgstr ""
+msgstr "「yesno」: \"yes\"(「True」) か \"no\"(「False」)を選択"
 
 #: ../api.rst
 msgid ""
@@ -361,47 +367,47 @@ msgstr ""
 
 #: ../api.rst
 msgid "``text``: Input text. If cancel, return ``None``"
-msgstr ""
+msgstr "「text」: テキストの入力。 いらない場合は、返り値を「None」に"
 
 #: ../api.rst:255
 msgid "Dialog title"
-msgstr ""
+msgstr "ダイアログのタイトル"
 
 #: ../api.rst:256
 msgid "Dialog message"
-msgstr ""
+msgstr "ダイアログのメッセージ"
 
 #: ../api.rst:257
 msgid "Selected (or Inputed) value."
-msgstr ""
+msgstr "値の選択(入力)"
 
 #: ../api.rst:264
 msgid "Button widget."
-msgstr ""
+msgstr "ウェジットのボタン"
 
 #: ../api.rst:266 ../api.rst:307
 msgid "Button label."
-msgstr ""
+msgstr "ラベルのボタン"
 
 #: ../api.rst:267
 msgid "Button on-clicking callback"
-msgstr ""
+msgstr "コールバックをオンにするボタン"
 
 #: ../api.rst:268
 msgid "Button widget object"
-msgstr ""
+msgstr "ウェジットオブジェクトのボタン"
 
 #: ../api.rst:273
 msgid "List widget."
-msgstr ""
+msgstr "一覧のウェジット"
 
 #: ../api.rst:275
 msgid "List widget object"
-msgstr ""
+msgstr "一覧のウェジットオブジェクト"
 
 #: ../api.rst:280
 msgid "Text inputting widget.(just one line)"
-msgstr ""
+msgstr "テキストに入力するウェジット(一行以内で)"
 
 #: ../api.rst:282
 msgid ""
@@ -413,95 +419,95 @@ msgstr ""
 
 #: ../api.rst
 msgid "Form type."
-msgstr ""
+msgstr "フォームの型"
 
 #: ../api.rst
 msgid "``text``: Normal plain text input."
-msgstr ""
+msgstr "「text」: 通常のプレーンテキストの入力"
 
 #: ../api.rst
 msgid "``password``: Password input."
-msgstr ""
+msgstr "「password」: パスワードの入力."
 
 #: ../api.rst
 msgid "``filesave``: Save file asking."
-msgstr ""
+msgstr "「filesave」: ファイルを保存するか確認"
 
 #: ../api.rst
 msgid "``fileopen``: Open file asking."
-msgstr ""
+msgstr "「fileopen」: ファイルを開くか確認"
 
 #: ../api.rst
 msgid "``fileopenmulti``: Open file asking (multiple)."
-msgstr ""
+msgstr "「fileopenmulti」: ファイルを開くか確認 (複数選択可)。"
 
 #: ../api.rst
 msgid "``filesavemulti``: Save file asking (multiple)."
-msgstr ""
+msgstr "「filesavemulti」: ファイルを保存するか確認 (複数選択可)。"
 
 #: ../api.rst:289
 msgid "Form on-changing callback"
-msgstr ""
+msgstr "コールバック変更のフォーム"
 
 #: ../api.rst:290
 msgid "Form widget object."
-msgstr ""
+msgstr "フォームのウェジットオブジェクト"
 
 #: ../api.rst:295
 msgid "Text inputting widget.(multi line)"
-msgstr ""
+msgstr "テキスト入力のウェジット(複数行)。"
 
 #: ../api.rst:297
 msgid "Scrollbar"
-msgstr ""
+msgstr "スクロールバー"
 
 #: ../api.rst:298
 msgid "Text on-changing callback"
-msgstr ""
+msgstr "コールバック変更のテキスト"
 
 #: ../api.rst:299
 msgid "Readonly"
-msgstr ""
+msgstr "読み取り専用"
 
 #: ../api.rst:300
 msgid "Text widget object"
-msgstr ""
+msgstr "テキストのウェジットオブジェクト"
 
 #: ../api.rst:305
 msgid "Check button widget."
-msgstr ""
+msgstr "ウェジットボタンの確認"
 
 #: ../api.rst:308
 msgid "CheckButton on-clicking callback"
-msgstr ""
+msgstr "コールバッククリックの確認ボタン"
 
 #: ../api.rst:309
 msgid "Default value."
-msgstr ""
+msgstr "初期値"
 
 #: ../api.rst:310
 msgid "CheckButton widget object"
-msgstr ""
+msgstr "ウェジットオブジェクトの確認ボタン"
 
 #: ../api.rst:315
 msgid "Select widget."
-msgstr ""
+msgstr "ウェジットの選択"
 
 #: ../api.rst:317
 msgid "Default value"
-msgstr ""
+msgstr "初期値"
 
 #: ../api.rst:318
 msgid "on-selecting callback"
-msgstr ""
+msgstr "コールバックの選択"
 
 #: ../api.rst:319
 msgid "Values to select"
-msgstr ""
+msgstr "値の選択"
 
 #: ../api.rst:320
 msgid "Inline mode"
-msgstr ""
+msgstr "インラインモード"
 
 #: ../api.rst:321
 msgid "Select label(on left)"
@@ -509,13 +515,13 @@ msgstr ""
 
 #: ../api.rst:322
 msgid "Select widget object"
-msgstr ""
+msgstr "ウェジットオブジェクトの選択"
 
 #: ../api.rst:327
 msgid "Logger"
-msgstr ""
+msgstr "ロガー"
 
 #: ../api.rst:329
 msgid "Now writing....."
-msgstr ""
+msgstr "書き込み中…"
 

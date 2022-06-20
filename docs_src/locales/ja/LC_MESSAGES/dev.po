@@ -19,31 +19,31 @@ msgstr ""
 
 #: ../dev.rst:2
 msgid "Document for Developer"
-msgstr ""
+msgstr "開発者用ドキュメント"
 
 #: ../dev.rst:3
 msgid "This is guide for developer."
-msgstr ""
+msgstr "開発者用ガイド"
 
 #: ../dev.rst:7
 msgid "Introduction"
-msgstr ""
+msgstr "イントロ"
 
 #: ../dev.rst:8
 msgid "First, Marutools has addon system. You can make addon in very easy steps."
-msgstr ""
+msgstr "まず、Marutoolsにはアドオンシステムがあり、これらは簡単に使えます"
 
 #: ../dev.rst:13
 msgid "Tutorial"
-msgstr ""
+msgstr "チュートリアル"
 
 #: ../dev.rst:14
 msgid "Here comes addon making tutorial."
-msgstr ""
+msgstr "アドオン追加のチュートリアルはココ"
 
 #: ../dev.rst:17
 msgid "Get started"
-msgstr ""
+msgstr "はじめよう"
 
 #: ../dev.rst:18
 msgid ""
@@ -52,62 +52,69 @@ msgid ""
 "consisted with only one python script. It can change later, but it may be"
 " hard."
 msgstr ""
+"まず、大きなアドオンか小さなアドオンのどちらを使うか選びます。 大きなアドオンは "
+"フォルダーに含まれています(Pythonパッケージと同じ)。 小さいアドオンは "
+"Pythonスクリプトのみが含まれています。 後で変更することもできますが、少々"
+" 大変な作業になってしまうので注意してください。"
 
 #: ../dev.rst:23
 msgid ""
 "Now, Marutools contain only Marueditor. So, you can make addon only for "
 "editor."
 msgstr ""
+"現在、MarutoolsにはMarueditorのみが入っています。そのため、編集アドオンのみ使用することができます。"
 
 #: ../dev.rst:26
 msgid "This is base code:"
-msgstr ""
+msgstr "これが基本のコードです:"
 
 #: ../dev.rst:33
 msgid ":download:`addon_base.py <_static/addon_base.py>`"
-msgstr ""
+msgstr "ダウンロード:「addon_base.py <_static/addon_base.py>」"
 
 #: ../dev.rst:40
 msgid "Addon name."
-msgstr ""
+msgstr "アドオン名"
 
 #: ../dev.rst:45
 msgid "Addon description string."
-msgstr ""
+msgstr "アドオンの記述文字列"
 
 #: ../dev.rst:50
 msgid "You can write like this: ``[\"txt\",\"py\", ....]``"
-msgstr ""
+msgstr "「[\"txt\",\"py\", ....]」のように書けます。"
 
 #: ../dev.rst:54
 msgid "Calls on file open. ``self`` will share."
-msgstr ""
+msgstr "ファイルの展開を呼び出す。「self」 で共有できます"
 
 #: ../dev.rst
 msgid "Parameters"
-msgstr ""
+msgstr "パラメータ"
 
 #: ../dev.rst:56
 msgid ""
 "AddonAPI. You will use this to control UI, settings, and etc... **Please "
 "keep this for later**"
 msgstr ""
+"アドオンAPI。これを使用することで、UIや設定などを操作することができます。 **Please "
+"keep this for later**"
 
 #: ../dev.rst:60
 msgid "Calls on file saving."
-msgstr ""
+msgstr "ファイルの保存を呼び出す"
 
 #: ../dev.rst:62
 msgid "When \"save as...\" is selected, here comes new file path."
-msgstr ""
+msgstr "\"save as...\" を選んだ時、ここにはファイルの新しいパスが来ます。"
 
 #: ../dev.rst:67
 msgid "Calls on new file created."
-msgstr ""
+msgstr "新規ファイルの作成を呼び出す"
 
 #: ../dev.rst:71
 msgid "Calls on file closing."
-msgstr ""
+msgstr "ファイルを閉じるを呼び出す"
 
 #: ../dev.rst:73
 msgid ""
@@ -117,5 +124,5 @@ msgstr ""
 
 #: ../dev.rst:76
 msgid "You can write just as python. Happy coding!!"
-msgstr ""
+msgstr "Pythonと同じように描くことができます。良いコーディングを！！"
 

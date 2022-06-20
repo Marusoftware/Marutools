@@ -104,7 +104,7 @@ msgstr "``frame``:フレームウェジット"
 
 #: ../api.rst:79
 msgid "``dialog``: Dialog widget(like Warning window...)"
-msgstr "``dialog``:ダイアログウェジット(ウィンドウの警告と同じ可能性)"
+msgstr "``dialog``:ダイアログウェジット(警告ウィンドウのようなもの)"
 
 #: ../api.rst:80
 msgid "``sub``: Sub window"
@@ -148,7 +148,7 @@ msgstr "ウィンドウをフルスクリーンに展開する"
 
 #: ../api.rst:113
 msgid "True to fullscreen. False to fullscreen. default(None) to nomal size."
-msgstr ""
+msgstr "Trueならフルスクリーンに、Falseなら通常のスクリーンに、何も指定しなかった場合は、通常のスクリーンサイズになります。"
 
 #: ../api.rst:117
 msgid "Change window size."
@@ -168,11 +168,11 @@ msgstr "フレームの設定表示"
 
 #: ../api.rst:129
 msgid "l10n text in dict like object"
-msgstr ""
+msgstr "翻訳されたテキストを格納するdictに似たオブジェクト"
 
 #: ../api.rst:133
 msgid "Set callback."
-msgstr "コールバックの設定"
+msgstr "コールバックを設定する"
 
 #: ../api.rst:135
 msgid ""
@@ -180,24 +180,22 @@ msgid ""
 "Click help menu button on Macos | ``macos_settings``:Click settings menu "
 "button on Macos"
 msgstr ""
-"| コールバック名 | 「close」: ウィンドウのファイルを閉じる。 | 「macos_help」: "
-"Macosのヘルプメニューボタンを押す。 | 「macos_settings」:設定メニューを押す。 "
-"Macos上のボタン"
+
 #: ../api.rst
 msgid "Callback name."
 msgstr "コールバック名"
 
 #: ../api.rst
 msgid "``close``: Fire on close window."
-msgstr "「close」:ファイルを閉じる"
+msgstr "``close``:ウィンドウが閉じられたとき"
 
 #: ../api.rst
 msgid "``macos_help``: Click help menu button on Macos"
-msgstr "「macos_help」:Macosのヘルプを押してください"
+msgstr "``macos_help``:Macosでヘルプメニューボタンが押されたとき"
 
 #: ../api.rst
 msgid "``macos_settings``:Click settings menu button on Macos"
-msgstr "「macos_settings」:Macosの設定を押してください"
+msgstr "``macos_settings``:Macosで設定ボタンが押されたとき。"
 
 #: ../api.rst:139
 msgid "Callback function."
@@ -213,15 +211,15 @@ msgstr "ダイアログモード"
 
 #: ../api.rst:149
 msgid "Close window/frame."
-msgstr "ウィンドウ・フレームを閉じる"
+msgstr "ウィンドウまたはフレームを閉じる"
 
 #: ../api.rst:153
 msgid "Wait until close window."
-msgstr "ウィンドウを閉じるのを待機"
+msgstr "ウィンドウが閉じられるまで待機"
 
 #: ../api.rst:160
 msgid "Return whether the window/frame is open."
-msgstr "ウィンドウ・フレームを開く返り値かどうか"
+msgstr "ウィンドウ・フレームを開かれているかどうかを返します。"
 
 #: ../api.rst
 msgid "Returns"
@@ -229,35 +227,35 @@ msgstr "返り値"
 
 #: ../api.rst:162
 msgid "whether the window/frame is open."
-msgstr "ウィンドウ・フレームを開くかどうか"
+msgstr "ウィンドウ・フレームが開かれているかどうか"
 
 #: ../api.rst
 msgid "Return type"
-msgstr "型を返す"
+msgstr "返り値の型"
 
 #: ../api.rst:167
 msgid "Window Mainloop."
-msgstr "メインループウィンドウ"
+msgstr "ウィンドウのメインループ"
 
 #: ../api.rst:170
 msgid ""
 "This works successfully only when UI object type is ``main``. And also, "
 "must NOT BE run twice or above."
 msgstr ""
-"UIオブジェクトの型が「main」の時のみ、成功します。また、 "
-"二つ同時や重ねて実行することはできません。"
+"UIオブジェクトの型が「main」の時のみ、正常に動作します。 また、"
+"二回以上同時に実行することはできません。"
 
 #: ../api.rst:175
 msgid "Frame widget."
-msgstr "ウェジットのフレーム"
+msgstr "フレームウィジェット"
 
 #: ../api.rst:177
 msgid "Frame widget object"
-msgstr "フレームのウェジットオブジェクト"
+msgstr "フレームウェジットのオブジェクト"
 
 #: ../api.rst:182
 msgid "Label widget."
-msgstr "ウェジットのラベル"
+msgstr "ラベルウィジェット"
 
 #: ../api.rst:184
 msgid "Label text"
@@ -265,27 +263,27 @@ msgstr "ラベルテキスト"
 
 #: ../api.rst:185
 msgid "Label widget object"
-msgstr "ラベルのウェジットオブジェクト"
+msgstr "ラベルウェジットのオブジェクト"
 
 #: ../api.rst:190
 msgid "Image widget."
-msgstr "ウェジットの画像"
+msgstr "画像ウィジェット"
 
 #: ../api.rst:192
 msgid "Image widget object"
-msgstr "画像のウェジットオブジェクト"
+msgstr "画像ウェジットのオブジェクト"
 
 #: ../api.rst:197
 msgid "Menu widget."
-msgstr "メニューのウェジット"
+msgstr "メニューウェジット"
 
 #: ../api.rst:199
 msgid "Menu widget object"
-msgstr "メニューのウェジットオブジェクト"
+msgstr "メニューウェジットのオブジェクト"
 
 #: ../api.rst:204
 msgid "Notebook widget."
-msgstr "タブ切り替えのウェジット"
+msgstr "タブ切り替えウェジット"
 
 #: ../api.rst:206
 msgid "Notebook widget object"
@@ -293,15 +291,15 @@ msgstr "タブ切り替えウェジットのオブジェクト"
 
 #: ../api.rst:219
 msgid "Ask filepath Dialog."
-msgstr "ファイルパスダイアログを確認"
+msgstr "ファイルパスを尋ねるダイアログ"
 
 #: ../api.rst:221
 msgid "Multi selection enable/disable"
-msgstr "複数選択可能・不可能"
+msgstr "複数選択の可否"
 
 #: ../api.rst:222
 msgid "Save filepath(``True``) or Open filepath(``False``)"
-msgstr "ファイルパスを保存(「true」)するかファイルパスを開く(「False」)"
+msgstr "保存するファイルのパス(``true``)か開くファイルのパス(``False``)"
 
 #: ../api.rst:223
 msgid "Filepath"
@@ -309,7 +307,7 @@ msgstr "ファイルパス"
 
 #: ../api.rst:228
 msgid "Ask directory(folder) path Dialog."
-msgstr "ディレクトリ(フォルダ)パスダイアログの確認"
+msgstr "ディレクトリ(フォルダ)を尋ねるダイアログ"
 
 #: ../api.rst:230
 msgid "Directory path"
@@ -317,11 +315,11 @@ msgstr "ディレクトリのパス"
 
 #: ../api.rst:235
 msgid "Show error Dialog."
-msgstr "エラーダイアログの表示"
+msgstr "エラーダイアログを表示"
 
 #: ../api.rst:239
 msgid "Show infomation Dialog."
-msgstr "詳細のダイアログを表示"
+msgstr "情報ダイアログを表示"
 
 #: ../api.rst:243
 msgid "Show warning Dialog."
@@ -329,7 +327,7 @@ msgstr "警告ダイアログの表示"
 
 #: ../api.rst:247
 msgid "Asking Dialog."
-msgstr "確認のダイアログ"
+msgstr "確認ダイアログ"
 
 #: ../api.rst:249
 msgid ""
@@ -343,31 +341,31 @@ msgstr ""
 
 #: ../api.rst
 msgid "Ask type."
-msgstr "型の確認"
+msgstr "質問の種類"
 
 #: ../api.rst
 msgid ""
 "``okcancel``: select \"ok\"(return ``True``) or \"cancel\"(return "
 "``False``)"
-msgstr ""
+msgstr "``okcancel``: \"ok\"(``True``を返す)と\"cancel\"(``False``を返す)から選ぶ"
 
 #: ../api.rst
 msgid "``retrycancel``: select \"retry\"(``True``) or \"cancel\"(``False``)"
-msgstr "「retrycancel」:\"retry\"(「True」) か \"cancel\"(「False」)を選択"
+msgstr "``retrycancel``: \"retry\"(``True``)と\"cancel\"(``False``) から選ぶ"
 
 #: ../api.rst
 msgid "``yesno``: select \"yes\"(``True``) or \"no\"(``False``)"
-msgstr "「yesno」: \"yes\"(「True」) か \"no\"(「False」)を選択"
+msgstr "``yesno``: \"yes\"(``True``)と\"no\"(``False``)から選ぶ"
 
 #: ../api.rst
 msgid ""
 "``yesnocancel``: select \"yes\"(``True``) or \"no\"(``False``) or "
 "\"cancel\"(``None``)"
-msgstr ""
+msgstr "``yesnocancel``: \"yes\"(``True``)と\"no\"(``False``)と\"cancel\"(``None``)から選ぶ"
 
 #: ../api.rst
 msgid "``text``: Input text. If cancel, return ``None``"
-msgstr "「text」: テキストの入力。 いらない場合は、返り値を「None」に"
+msgstr "``text``: テキスト入力。 もし、キャンセルされたときは、``None``を返す。"
 
 #: ../api.rst:255
 msgid "Dialog title"
@@ -379,35 +377,35 @@ msgstr "ダイアログのメッセージ"
 
 #: ../api.rst:257
 msgid "Selected (or Inputed) value."
-msgstr "値の選択(入力)"
+msgstr "選択(または入力)された値"
 
 #: ../api.rst:264
 msgid "Button widget."
-msgstr "ウェジットのボタン"
+msgstr "ボタンウィジェット"
 
 #: ../api.rst:266 ../api.rst:307
 msgid "Button label."
-msgstr "ラベルのボタン"
+msgstr "ボタンのラベル"
 
 #: ../api.rst:267
 msgid "Button on-clicking callback"
-msgstr "コールバックをオンにするボタン"
+msgstr "ボタンが押されたときのコールバック"
 
 #: ../api.rst:268
 msgid "Button widget object"
-msgstr "ウェジットオブジェクトのボタン"
+msgstr "ボタンウィジェットのオブジェクト"
 
 #: ../api.rst:273
 msgid "List widget."
-msgstr "一覧のウェジット"
+msgstr "表ウィジェット"
 
 #: ../api.rst:275
 msgid "List widget object"
-msgstr "一覧のウェジットオブジェクト"
+msgstr "表ウェジットのオブジェクト"
 
 #: ../api.rst:280
 msgid "Text inputting widget.(just one line)"
-msgstr "テキストに入力するウェジット(一行以内で)"
+msgstr "一行テキスト入力ウィジェット"
 
 #: ../api.rst:282
 msgid ""
@@ -419,43 +417,43 @@ msgstr ""
 
 #: ../api.rst
 msgid "Form type."
-msgstr "フォームの型"
+msgstr "フォームの種類"
 
 #: ../api.rst
 msgid "``text``: Normal plain text input."
-msgstr "「text」: 通常のプレーンテキストの入力"
+msgstr "``text``: 通常のプレーンテキストの入力"
 
 #: ../api.rst
 msgid "``password``: Password input."
-msgstr "「password」: パスワードの入力."
+msgstr "``password``: パスワードの入力."
 
 #: ../api.rst
 msgid "``filesave``: Save file asking."
-msgstr "「filesave」: ファイルを保存するか確認"
+msgstr "``filesave``: 保存するファイルを尋ねる"
 
 #: ../api.rst
 msgid "``fileopen``: Open file asking."
-msgstr "「fileopen」: ファイルを開くか確認"
+msgstr "``fileopen``: 開くファイルを尋ねる"
 
 #: ../api.rst
 msgid "``fileopenmulti``: Open file asking (multiple)."
-msgstr "「fileopenmulti」: ファイルを開くか確認 (複数選択可)。"
+msgstr "``fileopenmulti``: 開くファイルを尋ねる (複数選択可)。"
 
 #: ../api.rst
 msgid "``filesavemulti``: Save file asking (multiple)."
-msgstr "「filesavemulti」: ファイルを保存するか確認 (複数選択可)。"
+msgstr "``filesavemulti``: 保存するファイルを尋ねる (複数選択可)。"
 
 #: ../api.rst:289
 msgid "Form on-changing callback"
-msgstr "コールバック変更のフォーム"
+msgstr "フォーム変更時コールバック"
 
 #: ../api.rst:290
 msgid "Form widget object."
-msgstr "フォームのウェジットオブジェクト"
+msgstr "フォームウェジットのオブジェクト"
 
 #: ../api.rst:295
 msgid "Text inputting widget.(multi line)"
-msgstr "テキスト入力のウェジット(複数行)。"
+msgstr "テキスト入力ウェジット(複数行)。"
 
 #: ../api.rst:297
 msgid "Scrollbar"
@@ -463,7 +461,7 @@ msgstr "スクロールバー"
 
 #: ../api.rst:298
 msgid "Text on-changing callback"
-msgstr "コールバック変更のテキスト"
+msgstr "テキスト変更時コールバック"
 
 #: ../api.rst:299
 msgid "Readonly"
@@ -471,15 +469,15 @@ msgstr "読み取り専用"
 
 #: ../api.rst:300
 msgid "Text widget object"
-msgstr "テキストのウェジットオブジェクト"
+msgstr "テキストウェジットのオブジェクト(複数行入力)"
 
 #: ../api.rst:305
 msgid "Check button widget."
-msgstr "ウェジットボタンの確認"
+msgstr "チェックボタンウィジェット"
 
 #: ../api.rst:308
 msgid "CheckButton on-clicking callback"
-msgstr "コールバッククリックの確認ボタン"
+msgstr "チェックボタンがクリック時コールバック"
 
 #: ../api.rst:309
 msgid "Default value."
@@ -487,11 +485,11 @@ msgstr "初期値"
 
 #: ../api.rst:310
 msgid "CheckButton widget object"
-msgstr "ウェジットオブジェクトの確認ボタン"
+msgstr "チェックボタンウィジェットのオブジェクト"
 
 #: ../api.rst:315
 msgid "Select widget."
-msgstr "ウェジットの選択"
+msgstr "選択ウィジェット"
 
 #: ../api.rst:317
 msgid "Default value"
@@ -499,11 +497,11 @@ msgstr "初期値"
 
 #: ../api.rst:318
 msgid "on-selecting callback"
-msgstr "コールバックの選択"
+msgstr "選択時コールバック"
 
 #: ../api.rst:319
 msgid "Values to select"
-msgstr "値の選択"
+msgstr "選択される値のリスト"
 
 #: ../api.rst:320
 msgid "Inline mode"
@@ -511,11 +509,11 @@ msgstr "インラインモード"
 
 #: ../api.rst:321
 msgid "Select label(on left)"
-msgstr ""
+msgstr "選択ウィジェットのラベル"
 
 #: ../api.rst:322
 msgid "Select widget object"
-msgstr "ウェジットオブジェクトの選択"
+msgstr "選択ウィジェットのオブジェクト"
 
 #: ../api.rst:327
 msgid "Logger"
@@ -523,5 +521,5 @@ msgstr "ロガー"
 
 #: ../api.rst:329
 msgid "Now writing....."
-msgstr "書き込み中…"
+msgstr "編集中…"
 

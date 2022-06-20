@@ -23,11 +23,11 @@ msgstr "アドオンAPIのリファレンス"
 
 #: ../api.rst:3
 msgid "Addon API has some useful API."
-msgstr "アドオンAPIは複数あり、どれも便利なものです。"
+msgstr "アドオンAPIは、多くの便利なAPIを持ち合わせています。"
 
 #: ../api.rst
 msgid "canonical"
-msgstr "標準機能"
+msgstr "完全名"
 
 #: ../api.rst:7
 msgid "libmarusoftware.addon.AddonAPI"
@@ -43,7 +43,7 @@ msgstr "アドオンAPIのマイナーバージョン"
 
 #: ../api.rst:22
 msgid "Addon Name"
-msgstr "アドオン Name"
+msgstr "アドオンの名前"
 
 #: ../api.rst:28
 msgid "Logger object for addon"
@@ -51,11 +51,11 @@ msgstr "アドオン用ロガーオブジェクト"
 
 #: ../api.rst:33
 msgid "Marutools runtime infomation"
-msgstr "Marutoolsの駆動時間情報"
+msgstr "Marutoolsの動作環境情報"
 
 #: ../api.rst:38
 msgid "Open file extention"
-msgstr "ファイルを開く"
+msgstr "開くことのできるファイル拡張子"
 
 #: ../api.rst:44
 msgid "UI controler"
@@ -67,7 +67,7 @@ msgstr "Marutoolsコア"
 
 #: ../api.rst:54
 msgid "Flag for is saved file."
-msgstr "フラグ:ファイルの保存"
+msgstr "ファイルが保存されているかどうかのフラグ"
 
 #: ../api.rst:58
 msgid "UI"
@@ -83,40 +83,40 @@ msgid ""
 " Widget object. To control Widget, you have to use function in Widget "
 "object."
 msgstr ""
-"関数を作るウェジットのみあります。ウェジットは関数の返り値を作成します。"
-"ウェジットオブジェクト。ウェジットを使うために、ウェジットの中に使わなければならない関数を入れてください。"
+"ここにあるのはウェジットを作成する関数のみです。"
+"ウェジットに対して操作を行うにはウェジットオブジェクト下にある関数を使用する必要があります。"
 
 #: ../api.rst:71
 msgid "Parent UI object. If not having, it is `None`."
-msgstr "親UIオブジェクト。ない場合は「None」"
+msgstr "親UIオブジェクト。ない場合は`None`"
 
 #: ../api.rst:76
 msgid "UI object type. UI object is showing Frame widget or window."
-msgstr "UIオブジェクトの型。UIオブジェクトはウィジットのフレームかウィンドウを表示"
+msgstr "UIオブジェクトの種類。UIオブジェクトはフレームウィジェットかウィンドウを示します。"
 
 #: ../api.rst:77
 msgid "``main``: Main window"
-msgstr "メインウィンドウ"
+msgstr "``main``:メインウィンドウ"
 
 #: ../api.rst:78
 msgid "``frame``: Frame widget"
-msgstr "「フレーム」:フレームウェジット"
+msgstr "``frame``:フレームウェジット"
 
 #: ../api.rst:79
 msgid "``dialog``: Dialog widget(like Warning window...)"
-msgstr "「ダイアログ」:ダイアログウェジット(ウィンドウの警告と同じ可能性)"
+msgstr "``dialog``:ダイアログウェジット(ウィンドウの警告と同じ可能性)"
 
 #: ../api.rst:80
 msgid "``sub``: Sub window"
-msgstr "「sub」:サブウィンドウ"
+msgstr "``sub``:サブウィンドウ"
 
 #: ../api.rst:85
 msgid "Backend name."
-msgstr "「バックエンドの名前」"
+msgstr "バックエンドの名前"
 
 #: ../api.rst:86
 msgid "``tkinter``:tkinter GUI library"
-msgstr "「tkinter」:tkinter(GUIライブラリー)"
+msgstr "``tkinter``:tkinter(GUIライブラリー)"
 
 #: ../api.rst:90
 msgid "Change window title."
@@ -124,7 +124,7 @@ msgstr "ウィンドウのタイトル変更"
 
 #: ../api.rst:93 ../api.rst:102 ../api.rst:111 ../api.rst:120 ../api.rst:156
 msgid "This works successfully only when UI object type is ``main`` or ``sub``"
-msgstr "UIオブジェクトの型が「main」か「sub」の時のみ、正常終了"
+msgstr "UIオブジェクトの型が「main」か「sub」の時のみ、正常に動作します。"
 
 #: ../api.rst
 msgid "Parameters"
@@ -132,19 +132,19 @@ msgstr "パラメーター"
 
 #: ../api.rst:95
 msgid "Title to set."
-msgstr "タイトルの設定"
+msgstr "設定するタイトル"
 
 #: ../api.rst:99
 msgid "Change window icon(it's on title bar and task bar)."
-msgstr "ウィンドウのアイコン(タイトルとタスクバーの)を変更"
+msgstr "ウィンドウのアイコン(タイトルバーとタスクバーの)を変更"
 
 #: ../api.rst:104
 msgid "Icon file path to set."
-msgstr "アイコンのファイルパスを設定"
+msgstr "設定するアイコンのファイルパス"
 
 #: ../api.rst:108
 msgid "Change window to fullscreen."
-msgstr "ウィンドウをフルスクリーンに"
+msgstr "ウィンドウをフルスクリーンに展開する"
 
 #: ../api.rst:113
 msgid "True to fullscreen. False to fullscreen. default(None) to nomal size."

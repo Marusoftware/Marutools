@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Marutools \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-29 21:03+0900\n"
+"POT-Creation-Date: 2022-06-21 14:29+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Maruo.S, Marusoftware <raspi-maru2004@outlook.jp>\n"
 "Language-Team: Marusoftware <marusoftware@outlook.jp>\n"
@@ -53,16 +53,14 @@ msgid ""
 " hard."
 msgstr ""
 "まず、大きなアドオンか小さなアドオンのどちらを作成するか選びます。 大きなアドオンは "
-"フォルダー内にいくつものPythonスクリプトを作成し(Pythonパッケージと同じ)、それらによって一つのアドオンを構成します。 小さいアドオンは "
-"単一のPythonスクリプトのみで構成されます。 後で変更することもできますが、移行作業は"
-"いばらの道かもしれません。"
+"フォルダー内にいくつものPythonスクリプトを作成し(Pythonパッケージと同じ)、それらによって一つのアドオンを構成します。 "
+"小さいアドオンは 単一のPythonスクリプトのみで構成されます。 後で変更することもできますが、移行作業はいばらの道かもしれません。"
 
 #: ../dev.rst:23
 msgid ""
 "Now, Marutools contain only Marueditor. So, you can make addon only for "
 "editor."
-msgstr ""
-"現在、MarutoolsにはMarueditorのみが入っています。そのため、Marueditor向けアドオンのみ"
+msgstr "現在、MarutoolsにはMarueditorのみが入っています。そのため、Marueditor向けアドオンのみ"
 
 #: ../dev.rst:26
 msgid "This is base code:"
@@ -70,7 +68,7 @@ msgstr "これが基本のコードです:"
 
 #: ../dev.rst:33
 msgid ":download:`addon_base.py <_static/addon_base.py>`"
-msgstr :download:`addon_base.py <_static/addon_base.py>`"
+msgstr ":download:`addon_base.py <_static/addon_base.py>`"
 
 #: ../dev.rst:40
 msgid "Addon name."
@@ -82,11 +80,11 @@ msgstr "アドオンの説明文"
 
 #: ../dev.rst:50
 msgid "You can write like this: ``[\"txt\",\"py\", ....]``"
-msgstr "``[\"txt\",\"py\", ....]``のように書くことができます。"
+msgstr "``[\"txt\",\"py\", ....]`` のように書くことができます。"
 
 #: ../dev.rst:54
 msgid "Calls on file open. ``self`` will share."
-msgstr "ファイルを開く際に呼び出されます。``self``は一つのファイルに対して共有されます。"
+msgstr "ファイルを開く際に呼び出されます。``self`` は一つのファイルに対して共有されます。"
 
 #: ../dev.rst
 msgid "Parameters"
@@ -97,7 +95,8 @@ msgid ""
 "AddonAPI. You will use this to control UI, settings, and etc... **Please "
 "keep this for later**"
 msgstr ""
-"アドオンAPI。これを使用することで、UIや設定などを操作することができます。 **後々のためにこれをインスタンス内に保持することをおすすめします。**"
+"アドオンAPI。これを使用することで、UIや設定などを操作することができます。 "
+"**後々のためにこれをインスタンス内に保持することをおすすめします。**"
 
 #: ../dev.rst:60
 msgid "Calls on file saving."
@@ -118,9 +117,10 @@ msgstr "ファイルを閉じる際に呼び出されます。"
 #: ../dev.rst:73
 msgid ""
 "On ``__init__``, api object will pass. api object has many api. Please "
-"see :doc:`Addon API Reference</api>`."
-msgstr "``__init__``関数が実行されるとき、apiオブジェクトが渡されます。apiオブジェクトは多くのAPIを持っています。詳しくは"
-":doc:`Addon API Reference</api>`をご覧ください."
+"see :doc:`api`."
+msgstr ""
+"``__init__`` 関数が実行されるとき、api オブジェクトが引数として渡されます。apiオブジェクトは多くのAPIを持っています。"
+"詳細は、 :doc:`api` をご覧ください。"
 
 #: ../dev.rst:76
 msgid "You can write just as python. Happy coding!!"

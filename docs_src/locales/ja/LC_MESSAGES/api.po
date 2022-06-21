@@ -88,7 +88,7 @@ msgstr ""
 
 #: ../api.rst:71
 msgid "Parent UI object. If not having, it is `None`."
-msgstr "親UIオブジェクト。ない場合は`None`"
+msgstr "親UIオブジェクト。ない場合は `None`"
 
 #: ../api.rst:76
 msgid "UI object type. UI object is showing Frame widget or window."
@@ -124,7 +124,7 @@ msgstr "ウィンドウのタイトル変更"
 
 #: ../api.rst:93 ../api.rst:102 ../api.rst:111 ../api.rst:120 ../api.rst:156
 msgid "This works successfully only when UI object type is ``main`` or ``sub``"
-msgstr "UIオブジェクトの型が「main」か「sub」の時のみ、正常に動作します。"
+msgstr "UIオブジェクトの型が ``main`` か ``sub`` の時のみ、正常に動作します。"
 
 #: ../api.rst
 msgid "Parameters"
@@ -148,7 +148,7 @@ msgstr "ウィンドウをフルスクリーンに展開する"
 
 #: ../api.rst:113
 msgid "True to fullscreen. False to fullscreen. default(None) to nomal size."
-msgstr "Trueならフルスクリーンに、Falseなら通常のスクリーンに、何も指定しなかった場合は、通常のスクリーンサイズになります。"
+msgstr "``True`` ならフルスクリーンに、``False`` なら通常のスクリーンに、何も指定しなかった場合は、通常のスクリーンサイズになります。"
 
 #: ../api.rst:117
 msgid "Change window size."
@@ -242,7 +242,7 @@ msgid ""
 "This works successfully only when UI object type is ``main``. And also, "
 "must NOT BE run twice or above."
 msgstr ""
-"UIオブジェクトの型が「main」の時のみ、正常に動作します。 また、"
+"UIオブジェクトの型が ``main`` の時のみ、正常に動作します。 また、"
 "二回以上同時に実行することはできません。"
 
 #: ../api.rst:175
@@ -347,7 +347,7 @@ msgstr "質問の種類"
 msgid ""
 "``okcancel``: select \"ok\"(return ``True``) or \"cancel\"(return "
 "``False``)"
-msgstr "``okcancel``: \"ok\"(``True``を返す)と\"cancel\"(``False``を返す)から選ぶ"
+msgstr "``okcancel``: \"ok\"(``True`` を返す)と\"cancel\"(``False`` を返す)から選ぶ"
 
 #: ../api.rst
 msgid "``retrycancel``: select \"retry\"(``True``) or \"cancel\"(``False``)"
@@ -365,7 +365,7 @@ msgstr "``yesnocancel``: \"yes\"(``True``)と\"no\"(``False``)と\"cancel\"(``No
 
 #: ../api.rst
 msgid "``text``: Input text. If cancel, return ``None``"
-msgstr "``text``: テキスト入力。 もし、キャンセルされたときは、``None``を返す。"
+msgstr "``text``: テキスト入力。 もし、キャンセルされたときは、``None`` を返す。"
 
 #: ../api.rst:255
 msgid "Dialog title"
@@ -445,7 +445,7 @@ msgstr "``filesavemulti``: 保存するファイルを尋ねる (複数選択可
 
 #: ../api.rst:289
 msgid "Form on-changing callback"
-msgstr "フォーム変更時コールバック"
+msgstr "フォームのテキストが変更された時のコールバック"
 
 #: ../api.rst:290
 msgid "Form widget object."
@@ -457,11 +457,11 @@ msgstr "テキスト入力ウェジット(複数行)。"
 
 #: ../api.rst:297
 msgid "Scrollbar"
-msgstr "スクロールバー"
+msgstr "スクロールバーの有無"
 
 #: ../api.rst:298
 msgid "Text on-changing callback"
-msgstr "テキスト変更時コールバック"
+msgstr "テキストが変更された時のコールバック"
 
 #: ../api.rst:299
 msgid "Readonly"
@@ -477,7 +477,7 @@ msgstr "チェックボタンウィジェット"
 
 #: ../api.rst:308
 msgid "CheckButton on-clicking callback"
-msgstr "チェックボタンがクリック時コールバック"
+msgstr "チェックボタンがクリックされた時のコールバック"
 
 #: ../api.rst:309
 msgid "Default value."
@@ -497,7 +497,7 @@ msgstr "初期値"
 
 #: ../api.rst:318
 msgid "on-selecting callback"
-msgstr "選択時コールバック"
+msgstr "要素が選択された時のコールバック"
 
 #: ../api.rst:319
 msgid "Values to select"

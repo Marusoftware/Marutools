@@ -23,23 +23,23 @@ msgstr "ユーザードキュメント"
 
 #: ../user.rst:6
 msgid "Introduction"
-msgstr "紹介"
+msgstr "はじめに"
 
 #: ../user.rst:7
 msgid ""
 "Marutools is the collection of addonable tools. And also, it made fastly,"
 " lightly, and freely."
 msgstr ""
-"Marutoolsは拡張可能な機能です。その上、高速で使えるようになり、"
-" 軽量かつなんと無料です"
+"Marutoolsは拡張可能なツールの集まりです。その上、動作は高速で、"
+"軽量かつなんと無料です"
 
 #: ../user.rst:11
 msgid "Now, this contain these tools:"
-msgstr "現在のツール一覧"
+msgstr "現在のツール一覧:"
 
 #: ../user.rst:11
 msgid "Marueditor - Edit many files."
-msgstr "Marueditor - 文章を描くことができます。"
+msgstr "Marueditor - 様々なファイルを編集できます。"
 
 #: ../user.rst:15
 msgid "Addon"
@@ -50,14 +50,14 @@ msgid ""
 "As I say in introduction, Marutools has addon feature. You can use addons"
 " by put files on \"addons\" folder."
 msgstr ""
-" はじめに述べたように、Marutoolsにはアドオン機能が搭載されています。これらは、フォルダーに"
-"  \"addons\" ファイルを置くことで使用できます。"
+"初めに述べたように、Marutoolsにはアドオン機能が搭載されています。これらは、"
+"\"addons\" フォルダにアドオンファイルを置くことで使用できます。"
 
 #: ../user.rst:19
 msgid ""
 "Now, we are making addon manager. So, please install by yourself... We "
 "are sorry for that."
 msgstr ""
-"現在、Marusoftwareではアドオンマネージャーを作成中です。 申し訳ありませんが、アドオンマネージャーは "
-"''自力''で入れてください。"
+"現在、Marusoftwareではアドオンマネージャーを作成中です。 申し訳ありませんが、アドオンは "
+"手動で入れてください。"
 

@@ -30,7 +30,7 @@ And...
 You will think "fmm...How to use...".   
 I know. I'm sorry for that.   
 Now this is in developping......   
-Read [documentation]("https://marusoftware.github.io/Marutools/master/index.html") and if you can't find answer for your question, please contact to me...!(You can contact me with discord, mail, twitter... could join from [my homepage](https://marusoftware.net)) 
+Read [documentation](https://marusoftware.github.io/Marutools/master/index.html) and if you can't find answer for your question, please contact to me...!(You can contact me with discord, mail, twitter... could join from [my homepage](https://marusoftware.net)) 
 
 ## Contribute
 Thank you!!!!!!

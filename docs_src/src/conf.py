@@ -48,7 +48,7 @@ templates_path = ['_templates']
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
 language = 'en'
-locale_dirs = ['locales/']
+locale_dirs = ['../locales/']
 langs=os.listdir("../locales/")
 html_context = {'default_lang':language, 'langs':langs}
 

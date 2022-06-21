@@ -27,11 +27,11 @@ msgstr "開発者用ガイド"
 
 #: ../dev.rst:7
 msgid "Introduction"
-msgstr "イントロ"
+msgstr "概要"
 
 #: ../dev.rst:8
 msgid "First, Marutools has addon system. You can make addon in very easy steps."
-msgstr "まず、Marutoolsにはアドオンシステムがあり、これらは簡単に使えます"
+msgstr "Marutoolsにはアドオンシステムがあり、アドオンを開発することは簡単なステップを踏むだけで良いようになっています。"
 
 #: ../dev.rst:13
 msgid "Tutorial"

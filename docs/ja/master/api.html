@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Addon API Reference &mdash; Marutools b1.0.0 ドキュメント</title>
+  <title>アドオンAPIのリファレンス &mdash; Marutools b1.0.0 ドキュメント</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
-    <link rel="prev" title="Document for Developer" href="dev.html" /> 
+    <link rel="prev" title="開発者用ドキュメント" href="dev.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,22 +37,22 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">ガイド:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="user.html">User guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">ユーザーガイド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">開発者ガイド</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">References:</span></p>
+<p class="caption" role="heading"><span class="caption-text">リファレンス:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Addon API Reference</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">アドオンAPIリファレンス</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#logger">Logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logger">ロガー</a></li>
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<p class="caption" role="heading"><span class="caption-text">関連リンク:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://marusoftware.net/documents/marutools.html">Marusoftware Homepage Document</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://marusoftware.net/documents/marutools.html">Marusoftwareホームページドキュメント</a></li>
 </ul>
 
         </div>
@@ -69,7 +69,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Addon API Reference</li>
+      <li>アドオンAPIのリファレンス</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,80 +80,78 @@
            <div itemprop="articleBody">
              
   <section id="addon-api-reference">
-<h1>Addon API Reference<a class="headerlink" href="#addon-api-reference" title="このヘッドラインへのパーマリンク"></a></h1>
-<p>Addon API has some useful API.</p>
+<h1>アドオンAPIのリファレンス<a class="headerlink" href="#addon-api-reference" title="このヘッドラインへのパーマリンク"></a></h1>
+<p>アドオンAPIは、多くの便利なAPIを持ち合わせています。</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="AddonAPI">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AddonAPI</span></span><a class="headerlink" href="#AddonAPI" title="この定義へのパーマリンク"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Canonical</dt>
+<dt class="field-odd">完全名</dt>
 <dd class="field-odd"><p>libmarusoftware.addon.AddonAPI</p>
 </dd>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.api_ver">
 <span class="sig-name descname"><span class="pre">api_ver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#AddonAPI.api_ver" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Addon API Version</p>
+<dd><p>アドオンAPIのバージョン</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.api_ver_minor">
 <span class="sig-name descname"><span class="pre">api_ver_minor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#AddonAPI.api_ver_minor" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Addon API Minor Version</p>
+<dd><p>アドオンAPIのマイナーバージョン</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#AddonAPI.name" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Addon Name</p>
+<dd><p>アドオンの名前</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.logger">
 <span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#Logger" title="Logger"><span class="pre">Logger</span></a></em><a class="headerlink" href="#AddonAPI.logger" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Logger object for addon</p>
+<dd><p>アドオン用ロガーオブジェクト</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.appinfo">
 <span class="sig-name descname"><span class="pre">appinfo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><span class="pre">dict</span></a></em><a class="headerlink" href="#AddonAPI.appinfo" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Marutools runtime infomation</p>
+<dd><p>Marutoolsの動作環境情報</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.ext">
 <span class="sig-name descname"><span class="pre">ext</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#AddonAPI.ext" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Open file extention</p>
+<dd><p>開くことのできるファイル拡張子</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.ui">
 <span class="sig-name descname"><span class="pre">ui</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#UI" title="UI"><span class="pre">UI</span></a></em><a class="headerlink" href="#AddonAPI.ui" title="この定義へのパーマリンク"></a></dt>
-<dd><p>UI controler</p>
+<dd><p>UIコントローラー</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.app">
 <span class="sig-name descname"><span class="pre">app</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Core</span></em><a class="headerlink" href="#AddonAPI.app" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Marutools Core</p>
+<dd><p>Marutoolsコア</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="AddonAPI.saved">
 <span class="sig-name descname"><span class="pre">saved</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></em><a class="headerlink" href="#AddonAPI.saved" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Flag for is saved file.</p>
+<dd><p>ファイルが保存されているかどうかのフラグ</p>
 </dd></dl>
 
 </dd></dl>
 
 <section id="ui">
 <h2>UI<a class="headerlink" href="#ui" title="このヘッドラインへのパーマリンク"></a></h2>
-<p>UI controling classes</p>
+<p>UIコントローラークラス</p>
 <div class="admonition note">
 <p class="admonition-title">注釈</p>
-<p>These are only Widget creation function.
-Widget creation function returns Widget object.
-To control Widget, you have to use function in Widget object.</p>
+<p>ここにあるのはウェジットを作成する関数のみです。ウェジットに対して操作を行うにはウェジットオブジェクト下にある関数を使用する必要があります。</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="UI">
@@ -161,18 +159,18 @@ To control Widget, you have to use function in Widget object.</p>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="UI.parent">
 <span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#UI.parent" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Parent UI object. If not having, it is <cite>None</cite>.</p>
+<dd><p>親UIオブジェクト。ない場合は <cite>None</cite></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="UI.type">
 <span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#UI.type" title="この定義へのパーマリンク"></a></dt>
 <dd><div class="line-block">
-<div class="line">UI object type. UI object is showing Frame widget or window.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">main</span></code>: Main window</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">frame</span></code>: Frame widget</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">dialog</span></code>: Dialog widget(like Warning window...)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">sub</span></code>: Sub window</div>
+<div class="line">UIオブジェクトの種類。UIオブジェクトはフレームウィジェットかウィンドウを示します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">main</span></code>:メインウィンドウ</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">frame</span></code>:フレームウェジット</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dialog</span></code>:ダイアログウェジット(警告ウィンドウのようなもの)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sub</span></code>:サブウィンドウ</div>
 </div>
 </dd></dl>
 
@@ -180,22 +178,22 @@ To control Widget, you have to use function in Widget object.</p>
 <dt class="sig sig-object py" id="UI.backend">
 <span class="sig-name descname"><span class="pre">backend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#UI.backend" title="この定義へのパーマリンク"></a></dt>
 <dd><div class="line-block">
-<div class="line">Backend name.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">tkinter</span></code>:tkinter GUI library</div>
+<div class="line">バックエンドの名前</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tkinter</span></code>:tkinter(GUIライブラリー)</div>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.changeTitle">
 <span class="sig-name descname"><span class="pre">changeTitle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeTitle" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Change window title.</p>
+<dd><p>ウィンドウのタイトル変更</p>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+<p>UIオブジェクトの型が <code class="docutils literal notranslate"><span class="pre">main</span></code> か <code class="docutils literal notranslate"><span class="pre">sub</span></code> の時のみ、正常に動作します。</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
-<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Title to set.</p>
+<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- 設定するタイトル</p>
 </dd>
 </dl>
 </dd></dl>
@@ -203,14 +201,14 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.changeIcon">
 <span class="sig-name descname"><span class="pre">changeIcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeIcon" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Change window icon(it's on title bar and task bar).</p>
+<dd><p>ウィンドウのアイコン(タイトルバーとタスクバーの)を変更</p>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+<p>UIオブジェクトの型が <code class="docutils literal notranslate"><span class="pre">main</span></code> か <code class="docutils literal notranslate"><span class="pre">sub</span></code> の時のみ、正常に動作します。</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
-<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Icon file path to set.</p>
+<dd class="field-odd"><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- 設定するアイコンのファイルパス</p>
 </dd>
 </dl>
 </dd></dl>
@@ -218,14 +216,14 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.fullscreen">
 <span class="sig-name descname"><span class="pre">fullscreen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.fullscreen" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Change window to fullscreen.</p>
+<dd><p>ウィンドウをフルスクリーンに展開する</p>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+<p>UIオブジェクトの型が <code class="docutils literal notranslate"><span class="pre">main</span></code> か <code class="docutils literal notranslate"><span class="pre">sub</span></code> の時のみ、正常に動作します。</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
-<dd class="field-odd"><p><strong>tf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- True to fullscreen. False to fullscreen. default(None) to nomal size.</p>
+<dd class="field-odd"><p><strong>tf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- <code class="docutils literal notranslate"><span class="pre">True</span></code> ならフルスクリーンに、<code class="docutils literal notranslate"><span class="pre">False</span></code> なら通常のスクリーンに、何も指定しなかった場合は、通常のスクリーンサイズになります。</p>
 </dd>
 </dl>
 </dd></dl>
@@ -233,14 +231,14 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.changeSize">
 <span class="sig-name descname"><span class="pre">changeSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.changeSize" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Change window size.</p>
+<dd><p>ウィンドウのサイズを変更</p>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+<p>UIオブジェクトの型が <code class="docutils literal notranslate"><span class="pre">main</span></code> か <code class="docutils literal notranslate"><span class="pre">sub</span></code> の時のみ、正常に動作します。</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
-<dd class="field-odd"><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <code class="docutils literal notranslate"><span class="pre">{width}x{height}+{x}+{y}</span></code></p>
+<dd class="field-odd"><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <code class="docutils literal notranslate"><span class="pre">{横}x{縦}+{x}+{y}</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -248,12 +246,12 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.uisetting">
 <span class="sig-name descname"><span class="pre">uisetting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.uisetting" title="この定義へのパーマリンク"></a></dt>
-<dd><p>The widget for UI setting.</p>
+<dd><p>UIの設定のウェジット</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>frame</strong> (<em>libmarusoftware.Frame</em>) -- Frame to show settings.</p></li>
-<li><p><strong>txt</strong> (<em>Lang</em>) -- l10n text in dict like object</p></li>
+<li><p><strong>frame</strong> (<em>libmarusoftware.Frame</em>) -- フレームの設定表示</p></li>
+<li><p><strong>txt</strong> (<em>Lang</em>) -- 翻訳されたテキストを格納するdictに似たオブジェクト</p></li>
 </ul>
 </dd>
 </dl>
@@ -262,18 +260,18 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.setcallback">
 <span class="sig-name descname"><span class="pre">setcallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.setcallback" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Set callback.</p>
+<dd><p>コールバックを設定する</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <div class="line-block">
-<div class="line">Callback name.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">close</span></code>: Fire on close window.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_help</span></code>: Click help menu button on Macos</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_settings</span></code>:Click settings menu button on Macos</div>
+<div class="line">コールバック名</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">close</span></code>:ウィンドウが閉じられたとき</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_help</span></code>:Macosでヘルプメニューボタンが押されたとき</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">macos_settings</span></code>:Macosで設定ボタンが押されたとき。</div>
 </div>
 </p></li>
-<li><p><strong>callback</strong> (<em>callable</em>) -- Callback function.</p></li>
+<li><p><strong>callback</strong> (<em>callable</em>) -- コールバック関数</p></li>
 </ul>
 </dd>
 </dl>
@@ -282,10 +280,10 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.makeSubwindow">
 <span class="sig-name descname"><span class="pre">makeSubwindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dialog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.makeSubwindow" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Make Subwindow</p>
+<dd><p>サブウィンドウを作成</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
-<dd class="field-odd"><p><strong>dialog</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Dialog mode.</p>
+<dd class="field-odd"><p><strong>dialog</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- ダイアログモード</p>
 </dd>
 </dl>
 </dd></dl>
@@ -293,26 +291,26 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.close" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Close window/frame.</p>
+<dd><p>ウィンドウまたはフレームを閉じる</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.wait">
 <span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.wait" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Wait until close window.</p>
+<dd><p>ウィンドウが閉じられるまで待機</p>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">sub</span></code></p>
+<p>UIオブジェクトの型が <code class="docutils literal notranslate"><span class="pre">main</span></code> か <code class="docutils literal notranslate"><span class="pre">sub</span></code> の時のみ、正常に動作します。</p>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.exist">
 <span class="sig-name descname"><span class="pre">exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.exist" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Return whether the window/frame is open.</p>
+<dd><p>ウィンドウ・フレームを開かれているかどうかを返します。</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>whether the window/frame is open.</p>
+<dd class="field-odd"><p>ウィンドウ・フレームが開かれているかどうか</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
@@ -323,21 +321,20 @@ To control Widget, you have to use function in Widget object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.mainloop">
 <span class="sig-name descname"><span class="pre">mainloop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.mainloop" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Window Mainloop.</p>
+<dd><p>ウィンドウのメインループ</p>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>This works successfully only when UI object type is <code class="docutils literal notranslate"><span class="pre">main</span></code>.
-And also, must NOT BE run twice or above.</p>
+<p>UIオブジェクトの型が <code class="docutils literal notranslate"><span class="pre">main</span></code> の時のみ、正常に動作します。 また、二回以上同時に実行することはできません。</p>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Frame">
 <span class="sig-name descname"><span class="pre">Frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Frame" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Frame widget.</p>
+<dd><p>フレームウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>Frame widget object</p>
+<dd class="field-odd"><p>フレームウェジットのオブジェクト</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p><a class="reference internal" href="#UI" title="UI">UI</a></p>
@@ -348,13 +345,13 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Label">
 <span class="sig-name descname"><span class="pre">Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.Label" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Label widget.</p>
+<dd><p>ラベルウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
-<dd class="field-odd"><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Label text</p>
+<dd class="field-odd"><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- ラベルテキスト</p>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Label widget object</p>
+<dd class="field-even"><p>ラベルウェジットのオブジェクト</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p>WidgetBase</p>
@@ -365,10 +362,10 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Image">
 <span class="sig-name descname"><span class="pre">Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.Image" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Image widget.</p>
+<dd><p>画像ウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>Image widget object</p>
+<dd class="field-odd"><p>画像ウェジットのオブジェクト</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p>WidgetBase</p>
@@ -379,10 +376,10 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Menu">
 <span class="sig-name descname"><span class="pre">Menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Menu" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Menu widget.</p>
+<dd><p>メニューウェジット</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>Menu widget object</p>
+<dd class="field-odd"><p>メニューウェジットのオブジェクト</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p>Menu</p>
@@ -393,10 +390,10 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Notebook">
 <span class="sig-name descname"><span class="pre">Notebook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Notebook" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Notebook widget.</p>
+<dd><p>タブ切り替えウェジット</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>Notebook widget object</p>
+<dd class="field-odd"><p>タブ切り替えウェジットのオブジェクト</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p>Notebook</p>
@@ -422,16 +419,16 @@ And also, must NOT BE run twice or above.</p>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="Dialog.askfile">
 <span class="sig-name descname"><span class="pre">askfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.askfile" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Ask filepath Dialog.</p>
+<dd><p>ファイルパスを尋ねるダイアログ</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>multi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Multi selection enable/disable</p></li>
-<li><p><strong>save</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Save filepath(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or Open filepath(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+<li><p><strong>multi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- 複数選択の可否</p></li>
+<li><p><strong>save</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- 保存するファイルのパス(<code class="docutils literal notranslate"><span class="pre">true</span></code>)か開くファイルのパス(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Filepath</p>
+<dd class="field-even"><p>ファイルパス</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
@@ -442,10 +439,10 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Dialog.askdir">
 <span class="sig-name descname"><span class="pre">askdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.askdir" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Ask directory(folder) path Dialog.</p>
+<dd><p>ディレクトリ(フォルダ)を尋ねるダイアログ</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>Directory path</p>
+<dd class="field-odd"><p>ディレクトリのパス</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
@@ -456,43 +453,43 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Dialog.error">
 <span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.error" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Show error Dialog.</p>
+<dd><p>エラーダイアログを表示</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Dialog.info">
 <span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.info" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Show infomation Dialog.</p>
+<dd><p>情報ダイアログを表示</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Dialog.warn">
 <span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.warn" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Show warning Dialog.</p>
+<dd><p>警告ダイアログの表示</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Dialog.question">
 <span class="sig-name descname"><span class="pre">question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Dialog.question" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Asking Dialog.</p>
+<dd><p>確認ダイアログ</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <div class="line-block">
-<div class="line">Ask type.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">okcancel</span></code>: select &quot;ok&quot;(return <code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;cancel&quot;(return <code class="docutils literal notranslate"><span class="pre">False</span></code>)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">retrycancel</span></code>: select &quot;retry&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">yesno</span></code>: select &quot;yes&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;no&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">yesnocancel</span></code>: select &quot;yes&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>) or &quot;no&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>) or &quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">None</span></code>)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">text</span></code>: Input text. If cancel, return <code class="docutils literal notranslate"><span class="pre">None</span></code></div>
+<div class="line">質問の種類</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">okcancel</span></code>: &quot;ok&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code> を返す)と&quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code> を返す)から選ぶ</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">retrycancel</span></code>: &quot;retry&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>)と&quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>) から選ぶ</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">yesno</span></code>: &quot;yes&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>)と&quot;no&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>)から選ぶ</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">yesnocancel</span></code>: &quot;yes&quot;(<code class="docutils literal notranslate"><span class="pre">True</span></code>)と&quot;no&quot;(<code class="docutils literal notranslate"><span class="pre">False</span></code>)と&quot;cancel&quot;(<code class="docutils literal notranslate"><span class="pre">None</span></code>)から選ぶ</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">text</span></code>: テキスト入力。 もし、キャンセルされたときは、<code class="docutils literal notranslate"><span class="pre">None</span></code> を返す。</div>
 </div>
 </p></li>
-<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Dialog title</p></li>
-<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Dialog message</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- ダイアログのタイトル</p></li>
+<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- ダイアログのメッセージ</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Selected (or Inputed) value.</p>
+<dd class="field-even"><p>選択(または入力)された値</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
@@ -508,16 +505,16 @@ And also, must NOT BE run twice or above.</p>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="Input.Button">
 <span class="sig-name descname"><span class="pre">Button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Button" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Button widget.</p>
+<dd><p>ボタンウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Button label.</p></li>
-<li><p><strong>command</strong> (<em>callable</em>) -- Button on-clicking callback</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- ボタンのラベル</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- ボタンが押されたときのコールバック</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Button widget object</p>
+<dd class="field-even"><p>ボタンウィジェットのオブジェクト</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p>Button</p>
@@ -528,10 +525,10 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Input.List">
 <span class="sig-name descname"><span class="pre">List</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Input.List" title="この定義へのパーマリンク"></a></dt>
-<dd><p>List widget.</p>
+<dd><p>表ウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値</dt>
-<dd class="field-odd"><p>List widget object</p>
+<dd class="field-odd"><p>表ウェジットのオブジェクト</p>
 </dd>
 <dt class="field-even">戻り値の型</dt>
 <dd class="field-even"><p>List</p>
@@ -542,25 +539,25 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Input.Form">
 <span class="sig-name descname"><span class="pre">Form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'text'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Form" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Text inputting widget.(just one line)</p>
+<dd><p>一行テキスト入力ウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- <div class="line-block">
-<div class="line">Form type.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">text</span></code>: Normal plain text input.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">password</span></code>: Password input.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">filesave</span></code>: Save file asking.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">fileopen</span></code>: Open file asking.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">fileopenmulti</span></code>: Open file asking (multiple).</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">filesavemulti</span></code>: Save file asking (multiple).</div>
+<div class="line">フォームの種類</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">text</span></code>: 通常のプレーンテキストの入力</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">password</span></code>: パスワードの入力.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">filesave</span></code>: 保存するファイルを尋ねる</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fileopen</span></code>: 開くファイルを尋ねる</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fileopenmulti</span></code>: 開くファイルを尋ねる (複数選択可)。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">filesavemulti</span></code>: 保存するファイルを尋ねる (複数選択可)。</div>
 </div>
 </p></li>
-<li><p><strong>command</strong> (<em>callable</em>) -- Form on-changing callback</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- フォームのテキストが変更された時のコールバック</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Form widget object.</p>
+<dd class="field-even"><p>フォームウェジットのオブジェクト</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p>Form</p>
@@ -571,17 +568,17 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Input.Text">
 <span class="sig-name descname"><span class="pre">Text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scroll</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Text" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Text inputting widget.(multi line)</p>
+<dd><p>テキスト入力ウェジット(複数行)。</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scroll</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Scrollbar</p></li>
-<li><p><strong>command</strong> (<em>callable</em>) -- Text on-changing callback</p></li>
-<li><p><strong>readonly</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Readonly</p></li>
+<li><p><strong>scroll</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- スクロールバーの有無</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- テキストが変更された時のコールバック</p></li>
+<li><p><strong>readonly</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- 読み取り専用</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Text widget object</p>
+<dd class="field-even"><p>テキストウェジットのオブジェクト(複数行入力)</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p>Text</p>
@@ -592,17 +589,17 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Input.CheckButton">
 <span class="sig-name descname"><span class="pre">CheckButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.CheckButton" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Check button widget.</p>
+<dd><p>チェックボタンウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Button label.</p></li>
-<li><p><strong>command</strong> (<em>callable</em>) -- CheckButton on-clicking callback</p></li>
-<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Default value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- ボタンのラベル</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- チェックボタンがクリックされた時のコールバック</p></li>
+<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- 初期値</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>CheckButton widget object</p>
+<dd class="field-even"><p>チェックボタンウィジェットのオブジェクト</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p>CheckButton</p>
@@ -613,19 +610,19 @@ And also, must NOT BE run twice or above.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Input.Select">
 <span class="sig-name descname"><span class="pre">Select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Input.Select" title="この定義へのパーマリンク"></a></dt>
-<dd><p>Select widget.</p>
+<dd><p>選択ウィジェット</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Default value</p></li>
-<li><p><strong>command</strong> (<em>callable</em>) -- on-selecting callback</p></li>
-<li><p><strong>values</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) -- Values to select</p></li>
-<li><p><strong>inline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Inline mode</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Select label(on left)</p></li>
+<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- 初期値</p></li>
+<li><p><strong>command</strong> (<em>callable</em>) -- 要素が選択された時のコールバック</p></li>
+<li><p><strong>values</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) -- 選択される値のリスト</p></li>
+<li><p><strong>inline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- インラインモード</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- 選択ウィジェットのラベル</p></li>
 </ul>
 </dd>
 <dt class="field-even">戻り値</dt>
-<dd class="field-even"><p>Select widget object</p>
+<dd class="field-even"><p>選択ウィジェットのオブジェクト</p>
 </dd>
 <dt class="field-odd">戻り値の型</dt>
 <dd class="field-odd"><p>Select</p>
@@ -637,8 +634,8 @@ And also, must NOT BE run twice or above.</p>
 
 </section>
 <section id="logger">
-<h2>Logger<a class="headerlink" href="#logger" title="このヘッドラインへのパーマリンク"></a></h2>
-<p>Now writing.....</p>
+<h2>ロガー<a class="headerlink" href="#logger" title="このヘッドラインへのパーマリンク"></a></h2>
+<p>編集中…</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="Logger">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Logger</span></span><a class="headerlink" href="#Logger" title="この定義へのパーマリンク"></a></dt>
@@ -651,7 +648,7 @@ And also, must NOT BE run twice or above.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="dev.html" class="btn btn-neutral float-left" title="Document for Developer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dev.html" class="btn btn-neutral float-left" title="開発者用ドキュメント" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

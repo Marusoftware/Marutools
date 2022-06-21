@@ -27,7 +27,7 @@ msgstr "開発者ガイド"
 
 #: ../index.rst:9
 msgid "Guides:"
-msgstr "ガイド"
+msgstr "ガイド:"
 
 #: ../index.rst:16
 msgid "Addon API Reference"
@@ -35,7 +35,7 @@ msgstr "アドオンAPIリファレンス"
 
 #: ../index.rst:16
 msgid "References:"
-msgstr "リファレンス"
+msgstr "リファレンス:"
 
 #: ../index.rst:22
 msgid "Marusoftware Homepage Document"
@@ -43,7 +43,7 @@ msgstr "Marusoftwareホームページドキュメント"
 
 #: ../index.rst:22
 msgid "Links:"
-msgstr "関連リンク"
+msgstr "関連リンク:"
 
 #: ../index.rst:7
 msgid "Welcome to Marutools's documentation!"

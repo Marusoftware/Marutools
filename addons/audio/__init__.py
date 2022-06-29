@@ -4,8 +4,6 @@ class Edit():
     file_types=["wav","mp3"]
     def __init__(self, api):
         self.api=api
-    def on_modify(self):
-        pass
     def save(self, file=None):
         pass
     def new(self):

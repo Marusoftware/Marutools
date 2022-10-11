@@ -38,10 +38,11 @@ class Edit():
         else:
             self.api.saved=False
     def on_modify(self):
+        self.api.logger.debug("modify")
         if self.orig == self.text.get('1.0', 'end -1c'):
             return
         self.api.saved=False
-        self.api.logger.debug("modify")
+        self.api.logger.debug("change")
     def save(self, file=None):
         if file is None:
             file=self.api.filepath

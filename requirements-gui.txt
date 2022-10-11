@@ -1,6 +1,0 @@
-tkfilebrowser
-ttkthemes
-Pillow
-chardet
-babel
-https://marusoftware.net/downloads/marutools/gttk-0.6.1-py3-none-any.whl

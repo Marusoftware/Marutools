@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "marutools"
+version = "1.0.0b"
+description = "Marutools is collection of tools(editor, player, convertor...)."
+authors = ["Maruo.S <raspi-maru2004@outlook.jp>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+chardet = "^5.0.0"
+Babel = "^2.10.3"
+gttk = {url = "https://marusoftware.net/downloads/marutools/gttk-0.6.1-py3-none-any.whl"}
+
+
+[tool.poetry.group.tkgui.dependencies]
+tkfilebrowser = "^2.3.2"
+ttkthemes = "^3.2.2"
+Pillow = "^9.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

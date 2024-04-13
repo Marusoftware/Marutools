@@ -16,7 +16,7 @@ gttk = {url = "https://marusoftware.net/downloads/marutools/gttk-0.6.1-py3-none-
 [tool.poetry.group.tkgui.dependencies]
 tkfilebrowser = "^2.3.2"
 ttkthemes = "^3.2.2"
-Pillow = "^10.2.0"
+Pillow = "^10.3.0"
 
 [build-system]
 requires = ["poetry-core"]

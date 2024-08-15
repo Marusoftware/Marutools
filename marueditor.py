@@ -156,7 +156,6 @@ class Editor():
         self.ui.notebook.select_tab(tab)
         ctx=self.addon.getAddon(addon, file, ext, tab.frame, self, self.update_state)
         tab.addon=ctx
-        ctx.saved=False
     def save(self, tab=None, as_other=False):
         if tab is  None:
             tab=self.ui.notebook.value
@@ -250,19 +249,23 @@ class Editor():
             self.ui.notebook.del_tab(tab)
         else:
             self.logger.info(f"Closing file '{tab.addon.filepath}'")
+            if hasattr(tab.addon.addon, "preclose"):
+                tab.addon.addon.preclose()
             if not tab.addon.saved:
                 if question == -1:
                     question=self.ui.Dialog.question("yesnocancel", self.txt["check"], f"{self.txt['save_check']}\n{self.txt['file']}:{tab.addon.filepath}")
-                    self.ui.notebook.del_tab(tab)
                 if question == True:
                     self.save(tab)
                     self.ui.notebook.del_tab(tab)
-                elif question != False:
-                    pass
+                elif question == False:
+                    self.ui.notebook.del_tab(tab)
+                else:
+                    return
             else:
                 self.ui.notebook.del_tab(tab)
             tab.addon.addon.close()
         if autodelete and len(self.ui.notebook.list_tab())==0:
+            self.logger.info("Exiting...")
             self.ui.close()
     def exit(self):
         self.logger.info("Exiting...")

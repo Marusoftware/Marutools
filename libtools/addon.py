@@ -78,7 +78,7 @@ class AddonAPI(object):
         return self._saved
     @saved.setter
     def saved(self, value):
-        if self._saved == value:
+        if self._saved != value:
             self._saved=value
             self._callback[0](self)
     def getConfig(self, module="main", default_conf={}):

@@ -268,7 +268,6 @@ class Editor():
             self.logger.info("Exiting...")
             self.ui.close()
     def exit(self):
-        self.logger.info("Exiting...")
         for tab in self.ui.notebook.list_tab().copy():
             self.close(tab)
     def update_state(self, addon):

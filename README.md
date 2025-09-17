@@ -12,7 +12,7 @@ More detail is [here](https://marusoftware.net/documents/marutools.html).
 
 How to use Marutools...?
 Yeah, it is very easy.
-If you want to use stable one, download from [github release page](https://github.com/Marusoftware/tkmedia3/releases).
+If you want to use stable one, download from [github release page](https://github.com/Marusoftware/Marutools/releases).
 And if it is on-Windows, install msi package. If not, download archive file and run with these steps:
 1. download archive   
 Want to try Developing most-latest one...?

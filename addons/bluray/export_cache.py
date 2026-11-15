@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 from .assets import media_kind
 
 # Increment when title preprocessing, resolution, codecs or encoding options change.
-CACHE_VERSION = 1
+CACHE_VERSION = 2
 
 
 def file_stamp(path):
@@ -25,6 +25,8 @@ def clip_key(title, chapters, encoding="libx264"):
     else:
         source = file_stamp(title["media"])
     identity = [CACHE_VERSION, media_kind(title), source, chapters]
+    identity.extend([[file_stamp(track["path"]) for track in title.get(key, [])]
+                     for key in ("audio_tracks", "subtitle_tracks")])
     if encoding != "libx264":
         identity.append(encoding)
     return hashlib.sha256(json.dumps(identity, ensure_ascii=True).encode("ascii")).hexdigest()

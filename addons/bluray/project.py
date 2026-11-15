@@ -7,6 +7,8 @@ import tempfile
 from pathlib import Path
 from uuid import uuid4
 
+from .l10n import tr
+
 VERSION = 1
 
 
@@ -30,7 +32,7 @@ def make_title(name, media, chapters):
 def parse_time(value):
     match = re.fullmatch(r"([0-9]{2,}):([0-5][0-9]):([0-5][0-9])(?:\.([0-9]{1,3}))?", value.strip())
     if match is None:
-        raise ValueError("時刻は HH:MM:SS または HH:MM:SS.mmm で入力してください。")
+        raise ValueError(tr("時刻は HH:MM:SS または HH:MM:SS.mmm で入力してください。"))
     hours, minutes, seconds, fraction = match.groups()
     return (int(hours) * 3600 + int(minutes) * 60 + int(seconds)) * 1000 + int((fraction or "0").ljust(3, "0"))
 
@@ -95,12 +97,16 @@ def map_paths(project, convert):
 
     update(result, "source_bdmv")
     update(result["menu"], "background")
+    update(result["menu"], "motion")
+    update(result["menu"], "music")
     for item in result["menu"].get("elements", []) + result["menu"]["buttons"]:
         update(item, "image")
         update(item, "font_file")
     for title in result["titles"]:
         update(title, "media")
         update(title, "playlist")
+        for track in title.get("audio_tracks", []) + title.get("subtitle_tracks", []):
+            update(track, "path")
         for segment in title.get("segments", []):
             update(segment, "media")
     for inventory in [result.get("bdmv_inventory") or {}, *result.get("bdmv_imports", [])]:

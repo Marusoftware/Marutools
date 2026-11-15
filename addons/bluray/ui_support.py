@@ -3,6 +3,8 @@
 from copy import copy
 
 
+from .l10n import localized, tr, use_language
+
 def tk_theme_colors(widget):
     from tkinter.ttk import Style
 
@@ -49,14 +51,28 @@ def frame_parent(parent, widget):
     return wrapper
 
 
+def form_choice(window, default, values):
+    if getattr(window, "backend", None) == "tkinter":
+        from tkinter.ttk import Combobox
+
+        choice = Combobox(window.root, values=values, state="readonly", height=10, width=46)
+        choice.set(default)
+        choice.pack(fill="x", padx=12)
+        return choice.get
+
+    choice = window.Input.Select(default=default, command=lambda: None, values=values, inline=True)
+    choice.pack(fill="x", padx=12)
+    return lambda: choice.value
+
+
 def project_tabs(parent):
     if not callable(getattr(parent, "Notebook", None)):
         return parent, parent
     notebook = parent.Notebook()
     if getattr(notebook, "backend", None) == "tkinter":
         notebook.parent = frame_parent(parent, notebook.widget)
-    media = notebook.add_tab(label="素材")
-    menu = notebook.add_tab(label="メニュー")
+    media = notebook.add_tab(label=tr("素材"))
+    menu = notebook.add_tab(label=tr("メニュー"))
     notebook.pack(fill="both", expand=True)
     return media.frame, menu.frame
 
@@ -96,13 +112,14 @@ class HistoryMenu:
     def run(self, action):
         editor = self.active_editor()
         if editor is not None:
-            getattr(editor, action)()
+            with use_language(editor.locale):
+                getattr(editor, action)()
 
     def refresh(self, event=None):
         editor = self.active_editor()
         if not self.commands and editor is not None:
-            for action, label in (("undo", "元に戻す"), ("redo", "やり直す")):
-                self.menu.add_command(label=label, command=lambda action=action: self.run(action))
+            for action in ("undo", "redo"):
+                self.menu.add_command(command=lambda action=action: self.run(action))
                 self.commands[self.menu.entrycget("end", "command")] = action
 
         if not self.commands:
@@ -118,20 +135,30 @@ class HistoryMenu:
                 self.menu.delete(index)
             else:
                 entries = editor.history.past if action == "undo" else editor.history.future
-                self.menu.entryconfigure(index, state="normal" if entries else "disabled")
+                with use_language(editor.locale):
+                    label = tr("元に戻す") if action == "undo" else tr("やり直す")
+                self.menu.entryconfigure(index, label=label, state="normal" if entries else "disabled")
         if editor is None:
             self.commands.clear()
 
 
 class SelectionList:
-    def __init__(self, frame, height, width, on_select=None):
+    def __init__(self, frame, height, width, on_select=None, *, on_files=None):
         self.control = frame.Input.List(height=height, selectmode="browse")
         self.control.pack(fill="both", expand=True)
         # Input.List exposes insertion and selection, with no removal or event hook.
         self.widget = self.control.widget
         self.widget.column("#0", width=width, minwidth=90)
         if on_select:
-            self.widget.bind("<<TreeviewSelect>>", lambda event: on_select(), add="+")
+            self.widget.bind("<<TreeviewSelect>>", localized(lambda event: on_select()), add="+")
+        if on_files and getattr(frame, "dnd", False):
+            def drop(event):
+                paths = event.data
+                if isinstance(paths, str):
+                    paths = self.widget.tk.splitlist(paths)
+                return "copy" if paths and on_files(paths) else "refuse_drop"
+
+            frame_parent(frame, self.widget).setup_dnd(localized(drop), "file")
 
     @property
     def selected(self):
@@ -171,7 +198,7 @@ class SeekBar:
             if not self.updating:
                 on_change(int(float(value)))
 
-        self.widget = Scale(frame.widget, orient="horizontal", from_=0, to=1, command=change, state="disabled")
+        self.widget = Scale(frame.widget, orient="horizontal", from_=0, to=1, command=localized(change), state="disabled")
         def release(event):
             if self.dragging:
                 self.dragging = False
@@ -181,10 +208,10 @@ class SeekBar:
             self.dragging = self.widget.instate(["!disabled"])
 
         self.widget.bind("<ButtonPress-1>", press)
-        self.widget.bind("<ButtonRelease-1>", release)
-        self.widget.bind("<KeyRelease-Left>", lambda event: on_seek())
-        self.widget.bind("<KeyRelease-Right>", lambda event: on_seek())
-        self.widget.bind("<Return>", lambda event: on_seek())
+        self.widget.bind("<ButtonRelease-1>", localized(release))
+        self.widget.bind("<KeyRelease-Left>", localized(lambda event: on_seek()))
+        self.widget.bind("<KeyRelease-Right>", localized(lambda event: on_seek()))
+        self.widget.bind("<Return>", localized(lambda event: on_seek()))
         self.widget.pack(fill="x", padx=8, pady=(4, 0))
 
     def update(self, position, duration):

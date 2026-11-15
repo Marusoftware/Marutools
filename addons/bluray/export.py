@@ -5,11 +5,13 @@ from pathlib import Path
 from tempfile import TemporaryDirectory, TemporaryFile
 from threading import Event, Lock, Timer
 
+from .l10n import tr
 from .assets import media_kind
 from .bdmv import TICKS_PER_SECOND
+from .disc_tracks import popup_entries, source_audio_languages, write_subtitle
 from .export_cache import clip_key, restore_clip, store_clip
 from .menu_navigation import HEIGHT, WIDTH, button_caption, element_geometry, initial_focus, navigation
-from .menu_navigation import page_buttons, page_count, position
+from .menu_navigation import page_buttons, page_count, page_elements, position
 from .menu_objects import fit_object_image, menu_font, render_object_image, render_text
 from .preflight import check_project
 from .project import parse_time
@@ -30,9 +32,9 @@ def available_encoders():
         listing = subprocess.run(["ffmpeg", "-hide_banner", "-encoders"], capture_output=True,
                                  text=True, timeout=5, check=True).stdout
     except (OSError, subprocess.SubprocessError):
-        return {"CPU（libx264）": "libx264"}
+        return {tr("CPU（libx264）"): "libx264"}
     names = {parts[1] for line in listing.splitlines() if len(parts := line.split()) > 1}
-    return {label: encoder for label, encoder in ENCODERS.items() if encoder in names}
+    return {tr(label): encoder for label, encoder in ENCODERS.items() if encoder in names}
 
 
 class ExportCancelled(Exception):
@@ -84,15 +86,15 @@ def check_tools(*, iso=False):
         from bdmvkit.encode import encode_clip
         from PIL import Image, ImageFont
     except ImportError as exc:
-        raise RuntimeError("書き出しには bdmvkit 0.7 と Pillow が必要です。README の導入手順を確認してください。") from exc
+        raise RuntimeError(tr("書き出しには bdmvkit 0.7 と Pillow が必要です。README の導入手順を確認してください。")) from exc
     for tool in ("ffmpeg", "ffprobe"):
         if not shutil.which(tool):
-            raise RuntimeError(f"{tool} が見つかりません。")
+            raise RuntimeError(tr("{0} が見つかりません。", tool))
     if iso:
         try:
             from udfkit.bluray import write_image
         except ImportError as exc:
-            raise RuntimeError("ISO 出力には udfkit 0.2.0 が必要です。README の導入手順を確認してください。") from exc
+            raise RuntimeError(tr("ISO 出力には udfkit 0.2.0 が必要です。README の導入手順を確認してください。")) from exc
 
 
 def run_ffmpeg(*args, duration=None, on_progress=None, cancellation=None):
@@ -128,7 +130,7 @@ def run_ffmpeg(*args, duration=None, on_progress=None, cancellation=None):
             cancellation.check()
         if result:
             errors.seek(max(0, errors.tell() - 8192))
-            raise RuntimeError(errors.read().decode(errors="replace").strip() or "FFmpeg の変換に失敗しました。")
+            raise RuntimeError(errors.read().decode(errors="replace").strip() or tr("FFmpeg の変換に失敗しました。"))
     if on_progress is not None and duration:
         on_progress(100)
 
@@ -144,7 +146,7 @@ def probe_duration(source):
             continue
         if duration > 0:
             return duration
-    raise ValueError(f"素材の再生時間を取得できません。 {source}")
+    raise ValueError(tr("素材の再生時間を取得できません。 {0}", source))
 
 
 def title_encoder(encoder, fps, chapters, vaapi_device):
@@ -156,7 +158,7 @@ def title_encoder(encoder, fps, chapters, vaapi_device):
     if encoder == "libx264":
         return [], filters, video_args(fps, keys=keys)
     if encoder not in ENCODERS.values():
-        raise ValueError("映像エンコーダーを確認してください。")
+        raise ValueError(tr("映像エンコーダーを確認してください。"))
     common = ["-c:v", encoder, "-profile:v", "high", "-level:v", "4.1",
               "-g", "24", "-bf", "0", "-b:v", "12000k", "-maxrate", str(MAX_VIDEO_BPS),
               "-bufsize", str(VBV_BUFFER), "-color_primaries", "bt709", "-color_trc", "bt709",
@@ -180,29 +182,46 @@ def title_encoder(encoder, fps, chapters, vaapi_device):
 
 
 def encode_title(source, clip, chapters, progress, cancellation, *, encoder="libx264",
-                 vaapi_device="/dev/dri/renderD128"):
+                 vaapi_device="/dev/dri/renderD128", internal_audio=1, audio_tracks=(), subtitle_tracks=()):
     from bdmvkit.encode import audio_args
-    from bdmvkit.formats import AUDIO_PID, PMT_PID, VIDEO_PID
+    from bdmvkit.formats import AUDIO_PID, PG_PID, PMT_PID, VIDEO_PID
 
     duration = probe_duration(source)
-    audio = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0",
-                            "-show_entries", "stream=index", "-of", "csv=p=0", str(source)],
-                           capture_output=True, check=True).stdout.strip()
     fps = (24000, 1001)
     args = ["-i", source]
-    if audio:
-        args += ["-map", "0:v:0", "-map", "0:a:0", "-af", "apad"]
-    else:
-        args += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-map", "0:v:0", "-map", "1:a:0"]
+    maps = ["-map", "0:v:0"]
+    inputs = 1
+    audio = [f"0:a:{index}" for index in range(internal_audio)]
+    for track in audio_tracks:
+        args += ["-i", track["path"]]
+        audio.append(f"{inputs}:a:0")
+        inputs += 1
+    if not audio:
+        args += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
+        audio.append(f"{inputs}:a:0")
+        inputs += 1
+    streams = ["-streamid", f"0:{VIDEO_PID}"]
+    for index, audio_map in enumerate(audio):
+        maps += ["-map", audio_map]
+        streams += ["-streamid", f"{index + 1}:{AUDIO_PID + index}"]
+    for index, track in enumerate(subtitle_tracks):
+        sup = write_subtitle(track["path"], clip.with_suffix(f".{index}.sup"), duration, cancellation.check)
+        args += ["-f", "sup", "-i", sup]
+        maps += ["-map", f"{inputs}:s:0"]
+        streams += ["-streamid", f"{1 + len(audio) + index}:{PG_PID + index}"]
+        inputs += 1
+    sound = ["-af", "apad"]
+    for index in range(len(audio)):
+        sound += audio_args(k=index)
     device_args, filters, video_options = title_encoder(encoder, fps, chapters, vaapi_device)
-    run_ffmpeg(*device_args, *args, "-vf", filters, *video_options,
-               *audio_args(), "-streamid", f"0:{VIDEO_PID}", "-streamid", f"1:{AUDIO_PID}",
+    run_ffmpeg(*device_args, *args, *maps, "-vf", filters, *video_options, *sound,
+               "-c:s", "copy", *streams,
                "-t", f"{duration:.6f}", "-f", "mpegts", "-mpegts_m2ts_mode", 1,
                "-mpegts_pmt_start_pid", PMT_PID, clip, duration=duration, on_progress=progress,
                cancellation=cancellation)
 
 
-def import_segments(segments, work, number, progress, cancellation):
+def import_segments(segments, work, number, progress, cancellation, internal_audio):
     import av
 
     files = []
@@ -212,13 +231,17 @@ def import_segments(segments, work, number, progress, cancellation):
         with av.open(source) as container:
             video = container.streams.video[0]
             start = float((video.start_time or 0) * video.time_base)
-            audio = "0:a:0" if container.streams.audio else "1:a:0"
+            available_audio = len(container.streams.audio)
         offset = max(0, segment["in_tick"] / TICKS_PER_SECOND - start)
         length = (segment["out_tick"] - segment["in_tick"]) / TICKS_PER_SECOND
         piece = work / f"{number}-{index}.mkv"
-        message = f"区間を変換中 {index + 1}/{len(segments)}"
+        message = tr("区間を変換中 {0}/{1}", index + 1, len(segments))
+        audio = ["-map", "1:a:0"]
+        if internal_audio:
+            audio = [part for track in range(internal_audio)
+                     for part in ("-map", f"0:a:{track}" if track < available_audio else "1:a:0")]
         run_ffmpeg("-ss", f"{offset:.6f}", "-i", source, "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
-                   "-t", f"{length:.6f}", "-map", "0:v:0", "-map", audio,
+                   "-t", f"{length:.6f}", "-map", "0:v:0", *audio,
                    "-vf", "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1",
                    "-r", "24000/1001", "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
                    "-c:a", "ac3", "-ac", "2", "-ar", "48000", "-af", "apad", piece,
@@ -229,14 +252,14 @@ def import_segments(segments, work, number, progress, cancellation):
     source = work / f"{number}-assembled.mkv"
     length = sum((part["out_tick"] - part["in_tick"]) / TICKS_PER_SECOND for part in segments)
     run_ffmpeg("-f", "concat", "-safe", "1", "-i", concat, "-c", "copy", source,
-               duration=length, on_progress=lambda value: progress("区間を結合中", value), cancellation=cancellation)
+               duration=length, on_progress=lambda value: progress(tr("区間を結合中"), value), cancellation=cancellation)
     return source
 
 
-def title_source(title, work, number, progress, cancellation):
+def title_source(title, work, number, progress, cancellation, internal_audio):
     kind = media_kind(title)
     if title.get("segments"):
-        return import_segments(title["segments"], work, number, progress, cancellation)
+        return import_segments(title["segments"], work, number, progress, cancellation, internal_audio)
     if kind == "video":
         return title["media"]
     source = work / f"{number}-source.mkv"
@@ -248,13 +271,13 @@ def title_source(title, work, number, progress, cancellation):
             ImageOps.exif_transpose(image).convert("RGB").save(still)
         run_ffmpeg("-loop", "1", "-i", still, "-t", "5", "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",
                    "-c:v", "libx264", "-pix_fmt", "yuv420p", source, duration=5,
-                   on_progress=lambda value: progress("静止画を動画に変換中", value), cancellation=cancellation)
+                   on_progress=lambda value: progress(tr("静止画を動画に変換中"), value), cancellation=cancellation)
     else:
         run_ffmpeg("-f", "lavfi", "-i", "color=c=black:s=1920x1080:r=24000/1001",
-                   "-i", title["media"], "-map", "0:v", "-map", "1:a:0", "-shortest",
+                   "-i", title["media"], "-map", "0:v", "-map", "1:a", "-shortest",
                    "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "ac3", "-ac", "2", source,
                    duration=probe_duration(title["media"]),
-                   on_progress=lambda value: progress("音声素材の映像を生成中", value), cancellation=cancellation)
+                   on_progress=lambda value: progress(tr("音声素材の映像を生成中"), value), cancellation=cancellation)
     return source
 
 
@@ -303,18 +326,21 @@ def label(draw, text, area, font, centered=False):
                   anchor="mt" if centered else "lt")
 
 
-def render_background(menu, work, title_names=None):
+def render_background(menu, work, title_names=None, *, page=0):
     from PIL import Image
 
     size = scaled((WIDTH, HEIGHT))
-    background = (fit_background(menu["background"], size) if menu["background"]
-                  else Image.new("RGBA", size, "#20242b"))
-    for index, item in enumerate(menu.get("elements", [])):
+    if menu.get("motion"):
+        background = Image.new("RGBA", size)
+    else:
+        background = (fit_background(menu["background"], size) if menu["background"]
+                      else Image.new("RGBA", size, "#20242b"))
+    for index, item in page_elements(menu, page):
         default, size = element_geometry(item, index)
         x, y = scaled(position(item, default, size))
         background.alpha_composite(render_object(item, size, title_names), (x, y))
-    path = work / "menu-background.png"
-    background.convert("RGB").save(path)
+    path = work / f"menu-background-{page}.png"
+    (background if menu.get("motion") else background.convert("RGB")).save(path)
     return str(path)
 
 
@@ -365,14 +391,32 @@ def render_focus(work, key, entry, size):
     return str(path)
 
 
-def add_menus(disc, project, actions, work, cancellation):
+def menu_background(menu, page, work, names, cancellation, progress):
+    background = render_background(menu, work, names, page=page)
+    if menu.get("motion"):
+        motion = work / f"menu-motion-{page}.mkv"
+        duration = probe_duration(menu["motion"])
+        graph = ("[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,"
+                 "setsar=1,fps=24000/1001[base];[base][1:v]overlay")
+        run_ffmpeg("-i", menu["motion"], "-i", background, "-filter_complex", graph,
+                   "-an", "-t", f"{duration:.6f}", "-c:v", "libx264", "-preset", "fast",
+                   "-crf", "16", motion, duration=duration, cancellation=cancellation,
+                   on_progress=lambda percent: progress(tr("メニュー背景動画を変換中…"), percent))
+        background = str(motion)
+    return background
+
+
+def add_menus(disc, project, actions, work, cancellation, progress):
     from bdmvkit import MenuButton
 
     menu = project["menu"]
     names = {title["id"]: title["name"] for title in project["titles"]}
-    background = render_background(menu, work, names)
+    backgrounds = {}
     for page in range(page_count(menu)):
         cancellation.check()
+        visible = tuple(index for index, _ in page_elements(menu, page))
+        if visible not in backgrounds:
+            backgrounds[visible] = menu_background(menu, page, work, names, cancellation, progress)
         items = page_buttons(menu, page, project["titles"][0]["id"])
         moves = navigation(items, page)
         keys = {item.key: f"page{page}-button{index}" for index, item in enumerate(items)}
@@ -387,13 +431,37 @@ def add_menus(disc, project, actions, work, cancellation):
             else:
                 selected = render_button(work, key, entry, item.size, True)
                 normal = render_button(work, key, entry, item.size, False)
-            if item.next_page is not None:
-                action = f"menu:page{item.next_page}"
+            destination = item.destination_page
+            streams = {}
+            if destination is not None:
+                action = f"menu:page{destination}"
+            elif item.target.get("play_all") is True:
+                action = "playall"
             else:
                 action = actions[(item.target["title"], item.target.get("chapter"))]
+                if "audio" in item.target:
+                    streams = {"audio": item.target["audio"], "subtitle": item.target["subtitle"]}
             nav = {direction: keys[destination] for direction, destination in moves[item.key].items()}
-            buttons.append(MenuButton(key, x, y, selected, normal=normal, action=action, nav=nav))
-        disc.add_menu(f"page{page}", background, buttons, default=keys[initial_focus(menu, page, items)])
+            buttons.append(MenuButton(key, x, y, selected, normal=normal, action=action, nav=nav, **streams))
+        disc.add_menu(f"page{page}", backgrounds[visible], buttons, default=keys[initial_focus(menu, page, items)],
+                      music=menu.get("music") or None)
+
+
+def add_popup(disc, number, entries, work, cancellation):
+    from bdmvkit import MenuButton
+
+    buttons = []
+    for index, (caption, action) in enumerate(entries):
+        cancellation.check()
+        row, col = divmod(index, 4)
+        key = f"popup{number}-{index}"
+        entry = {"label": caption}
+        size = (150, 26)
+        selected = render_button(work, key, entry, size, True)
+        normal = render_button(work, key, entry, size, False)
+        buttons.append(MenuButton(key, *scaled((12 + col * 155, 12 + row * 28)),
+                                  selected, normal=normal, action=action))
+    disc.add_popup(number, buttons)
 
 
 def write_iso(disc_folder, target, progress, cancellation):
@@ -401,7 +469,7 @@ def write_iso(disc_folder, target, progress, cancellation):
 
     def update(fraction):
         cancellation.check()
-        progress("Blu-ray ISO を生成中…", min(99, int(fraction * 100)))
+        progress(tr("Blu-ray ISO を生成中…"), min(99, int(fraction * 100)))
 
     image = disc_folder.parent / "disc.iso"
     update(0)
@@ -416,7 +484,7 @@ def write_iso(disc_folder, target, progress, cancellation):
     except (OSError, ExportCancelled):
         target.unlink()
         raise
-    progress("Blu-ray ISO を生成しました。", 100)
+    progress(tr("Blu-ray ISO を生成しました。"), 100)
 
 
 def export_disc(project, target, progress, cancellation=None, *, cache_dir=None, iso=False,
@@ -428,9 +496,9 @@ def export_disc(project, target, progress, cancellation=None, *, cache_dir=None,
 
     target = Path(target)
     if target.exists():
-        raise FileExistsError(f"書き出し先が既にあります。 {target}")
+        raise FileExistsError(tr("書き出し先が既にあります。 {0}", target))
     if not project["titles"]:
-        raise ValueError("書き出す素材を追加してください。")
+        raise ValueError(tr("書き出す素材を追加してください。"))
     errors, _ = check_project(project)
     if errors:
         raise ValueError("\n".join(errors))
@@ -439,20 +507,39 @@ def export_disc(project, target, progress, cancellation=None, *, cache_dir=None,
         work = Path(directory)
         disc = Disc()
         chapter_counts = []
+        plans = []
         for index, title in enumerate(project["titles"], 1):
             cancellation.check()
-            prefix = f"素材 {index}/{len(project['titles'])}　{title['name']}"
+            internal = source_audio_languages(title)
+            audio_tracks = title.get("audio_tracks", [])
+            subtitles = title.get("subtitle_tracks", [])
+            audio = internal + [track["language"] for track in audio_tracks] or ["und"]
+            languages = [track["language"] for track in subtitles]
+            chapters, _ = chapter_times(title)
+            popup = popup_entries(index, chapters, audio, languages) if title.get("popup_menu") else []
+            if len(popup) > 48:
+                raise ValueError(tr("「{0}」のポップアップ項目が48個を超えています。", title['name']))
+            plans.append((internal, audio_tracks, subtitles, audio, languages, chapters, popup))
+        audio_counts = {title["id"]: len(plan[3]) for title, plan in zip(project["titles"], plans)}
+        menu = project["menu"]
+        for entry in menu["buttons"] + menu["elements"]:
+            link = entry.get("target") or {}
+            if "audio" in link and link["audio"] > audio_counts[link["title"]]:
+                raise ValueError(tr("メニューの音声トラックが見つかりません。音声・字幕設定を作り直してください。"))
+        for index, (title, plan) in enumerate(zip(project["titles"], plans), 1):
+            internal, audio_tracks, subtitles, audio, languages, chapters, popup = plan
+            cancellation.check()
+            prefix = tr("素材 {0}/{1}　{2}", index, len(project['titles']), title['name'])
 
             def update(stage, percent):
                 progress(f"{prefix}\n{stage}", percent)
 
-            update("準備中…", None)
+            update(tr("準備中…"), None)
             clip = work / f"{index}.m2ts"
-            chapters, _ = chapter_times(title)
             encoding = encoder if encoder != "h264_vaapi" else (encoder, vaapi_device)
             cached = Path(cache_dir) / (clip_key(title, chapters, encoding) + ".m2ts") if cache_dir is not None else None
             if cached is not None:
-                update("キャッシュを確認中…", None)
+                update(tr("キャッシュを確認中…"), None)
             restored = False
             if cached is not None:
                 try:
@@ -461,27 +548,33 @@ def export_disc(project, target, progress, cancellation=None, *, cache_dir=None,
                     clip.unlink(missing_ok=True)
                     cached = None
             if restored:
-                update("変換済み素材を再利用", 100)
+                update(tr("変換済み素材を再利用"), 100)
             else:
-                source = title_source(title, work, index, update, cancellation)
-                encode_title(source, clip, chapters, lambda percent: update(f"Blu-ray 用に変換中 ({encoder})", percent),
-                             cancellation, encoder=encoder, vaapi_device=vaapi_device)
+                source = title_source(title, work, index, update, cancellation, len(internal))
+                encode_title(source, clip, chapters, lambda percent: update(tr("Blu-ray 用に変換中 ({0})", encoder), percent),
+                             cancellation, encoder=encoder, vaapi_device=vaapi_device,
+                             internal_audio=len(internal), audio_tracks=audio_tracks, subtitle_tracks=subtitles)
                 if cached is not None and cached.stem == clip_key(title, chapters, encoding):
-                    update("変換済み素材をキャッシュに保存中…", None)
+                    update(tr("変換済み素材をキャッシュに保存中…"), None)
                     try:
                         store_clip(clip, cached, cancellation.check)
                     except OSError as exc:
-                        progress(f"キャッシュを保存できませんでした。書き出しを続けます。\n{exc}", None)
-            disc.add_title(str(clip), chapters=chapters, end="lastmenu")
+                        progress(tr("キャッシュを保存できませんでした。書き出しを続けます。\n{0}", exc), None)
+            end = f"title:{index + 1}" if title.get("playback_end") == "next" and index < len(plans) else "lastmenu"
+            disc.add_title(str(clip), chapters=chapters, end=end,
+                           audio=[("ac3", 2, language) for language in audio], subtitles=languages)
+            if popup:
+                add_popup(disc, index, popup, work, cancellation)
             chapter_counts.append(len(chapters))
-        progress("HDMV メニューと BDMV を生成中…", None)
-        add_menus(disc, project, actions, work, cancellation)
+        progress(tr("HDMV メニューと BDMV を生成中…"), None)
+        add_menus(disc, project, actions, work, cancellation, progress)
+        progress(tr("HDMV メニューと BDMV を生成中…"), None)
         output = work / "disc"
         cancellation.check()
         result = disc.write(str(output), move=True, play_all=False)
         cancellation.check()
         if result["chapters"] != chapter_counts:
-            raise ValueError("近接したチャプターが同じキーフレームに重なっています。チャプターの時刻を調整してください。")
+            raise ValueError(tr("近接したチャプターが同じキーフレームに重なっています。チャプターの時刻を調整してください。"))
         if iso:
             write_iso(output, target, progress, cancellation)
             return result

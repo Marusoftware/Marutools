@@ -7,9 +7,16 @@ from queue import Empty, SimpleQueue
 from threading import Thread
 from time import monotonic
 
+from .l10n import localized, tr
 from .assets import media_kind
 from .bdmv import TICKS_PER_SECOND
 from .ui_support import tk_theme_colors
+
+PREVIEW_BORDER = 1
+
+
+def preview_size(width, height):
+    return max(1, width - 2 * PREVIEW_BORDER), max(1, height - 2 * PREVIEW_BORDER)
 
 
 class AudioOutputUnavailable(RuntimeError):
@@ -26,7 +33,7 @@ def playback_source(title, milliseconds):
         offset = tick - segment["start_tick"]
         if 0 <= offset < segment["out_tick"] - segment["in_tick"]:
             return segment["media"], (segment["in_tick"] + offset) / TICKS_PER_SECOND, segment
-    raise ValueError("この時刻はタイトルの再生範囲外です。")
+    raise ValueError(tr("この時刻はタイトルの再生範囲外です。"))
 
 
 class PlaybackSurface:
@@ -52,7 +59,7 @@ class PlaybackSurface:
             cnf = None
         image = options.get("image")
         if self.fit_frames and image and hasattr(image, "width") and hasattr(image, "height"):
-            width, height = self.widget.winfo_width(), self.widget.winfo_height()
+            width, height = preview_size(self.widget.winfo_width(), self.widget.winfo_height())
             if width > 1 and height > 1:
                 step = max(ceil(image.width() / width), ceil(image.height() / height))
                 if step > 1:
@@ -97,7 +104,7 @@ class PlaybackSurface:
                 if self.active and self.is_current():
                     self.on_closed_image()
 
-        return self.widget.after(delay, draw)
+        return self.widget.after(delay, localized(draw))
 
 
 class Preview:
@@ -123,7 +130,7 @@ class Preview:
         self.pending = 0
         self.poll_id = None
         self.wait_until = None
-        self.reason = "動画プレビューには Tkinter が必要です。"
+        self.reason = tr("動画プレビューには Tkinter が必要です。")
         if getattr(host, "backend", None) != "tkinter":
             return
         from tkinter import Label
@@ -131,12 +138,13 @@ class Preview:
         # Place the image surface over a fixed-size request so video frames
         # cannot resize the editor. The parent still expands with the window.
         host.widget.configure(height=162, width=276)
-        self.target = Label(host.widget, text="▶", font=("TkDefaultFont", 18))
+        self.target = Label(host.widget, text="▶", font=("TkDefaultFont", 18), highlightthickness=PREVIEW_BORDER,
+                            borderwidth=0, padx=0, pady=0)
         self.update_theme()
         self.target.bind("<<ThemeChanged>>", self.update_theme, add="+")
         self.target.place(relwidth=1, relheight=1)
-        self.target.bind("<Configure>", self.resize, add="+")
-        self.reason = "tkmedia3 を読み込めません。"
+        self.target.bind("<Configure>", localized(self.resize), add="+")
+        self.reason = tr("tkmedia3 を読み込めません。")
         for module in ("tkmedia3", "tkmedia", "media"):
             try:
                 self.media_class = getattr(import_module(module), "Media")
@@ -145,7 +153,7 @@ class Preview:
                 continue
             self.reason = ""
             break
-        self.target.bind("<Button-1>", self.click_surface)
+        self.target.bind("<Button-1>", localized(self.click_surface))
 
     def click_surface(self, event=None):
         if self.playback_state == "active":
@@ -159,7 +167,8 @@ class Preview:
 
     def update_theme(self, event=None):
         background, foreground = tk_theme_colors(self.target)
-        self.target.configure(bg=background, fg=foreground)
+        self.target.configure(bg=background, fg=foreground,
+                              highlightbackground=foreground, highlightcolor=foreground)
 
     @staticmethod
     def audio_outputs():
@@ -182,7 +191,7 @@ class Preview:
         if not self.available:
             raise RuntimeError(self.reason)
         if kind == "audio" and audio_output == "mute":
-            raise RuntimeError("音声出力がミュートに設定されています。")
+            raise RuntimeError(tr("音声出力がミュートに設定されています。"))
         path, seconds, segment = playback_source(title, milliseconds)
         if not os.path.isfile(path):
             raise FileNotFoundError(path)
@@ -191,7 +200,7 @@ class Preview:
             seek = False
         self.still_path = None
         self.still_image = None
-        self.target.configure(image="", text="読み込み中…")
+        self.target.configure(image="", text=tr("読み込み中…"))
         self.clock = None
         self.playback_state = "loading"
         self.submit(self.start_player, path, seconds, segment, self.generation, kind, milliseconds, audio_output, seek)
@@ -210,13 +219,13 @@ class Preview:
 
         with Image.open(self.still_path) as image:
             frame = ImageOps.exif_transpose(image)
-            size = (max(1, self.target.winfo_width()), max(1, self.target.winfo_height()))
+            size = self.video_size
             frame.thumbnail(size, Image.Resampling.LANCZOS)
             self.still_image = ImageTk.PhotoImage(frame, master=self.target)
         self.target.configure(image=self.still_image, text="")
 
     def resize(self, event):
-        self.video_size = (max(1, event.width), max(1, event.height))
+        self.video_size = preview_size(event.width, event.height)
         if self.still_path:
             try:
                 self.render_still()
@@ -228,7 +237,7 @@ class Preview:
         # This callback runs on Tk's thread. Retire this playback before
         # asking the worker to close it so queued frames cannot draw again.
         self.close()
-        self.on_error("動画フレームを表示できなかったため、再生を停止しました。再生ボタンで再試行できます。")
+        self.on_error(tr("動画フレームを表示できなかったため、再生を停止しました。再生ボタンで再試行できます。"))
 
     def pause_resume(self):
         if not self.available:
@@ -257,13 +266,13 @@ class Preview:
 
     def submit(self, operation, *args):
         if self.worker is None:
-            self.worker = Thread(target=self.run, daemon=True, name="Blu-ray preview")
+            self.worker = Thread(target=localized(self.run), daemon=True, name="Blu-ray preview")
             self.worker.start()
         self.pending += 1
         self.wait_until = monotonic() + 5
         self.commands.put((self.generation, operation, args))
         if self.poll_id is None:
-            self.poll_id = self.target.after(40, self.poll)
+            self.poll_id = self.target.after(40, localized(self.poll))
 
     def run(self):
         # Media may wait for a decoder or an in-flight Tk image update during
@@ -302,7 +311,7 @@ class Preview:
             elif operation == self.start_player:
                 kind, self.clock, warning = result
                 self.playback_state = "active"
-                self.target.configure(text="音声を再生中" if kind == "audio" else "")
+                self.target.configure(text=tr("音声を再生中") if kind == "audio" else "")
                 if warning:
                     self.on_error(warning)
                 else:
@@ -313,8 +322,8 @@ class Preview:
         if self.pending or self.clock is not None:
             if self.wait_until is not None and monotonic() >= self.wait_until:
                 self.wait_until = None
-                self.on_error("動画処理の応答を待っています。編集と保存は引き続き使えます。")
-            self.poll_id = self.target.after(40, self.poll)
+                self.on_error(tr("動画処理の応答を待っています。編集と保存は引き続き使えます。"))
+            self.poll_id = self.target.after(40, localized(self.poll))
 
     def start_player(self, path, seconds, segment, generation, kind, milliseconds=0, audio_output=None, seek=False):
         source = (path, segment, kind, audio_output)
@@ -380,7 +389,7 @@ class Preview:
                     self.player = player
                     options["videoFrame"] = new_surface()
                     player.play(audio=None, **options)
-                    warning = f"音声出力を開けなかったため、映像のみ再生します。 {exc}"
+                    warning = tr("音声出力を開けなかったため、映像のみ再生します。 {0}", exc)
             else:
                 player.play(audio=None, **options)
             seek_seconds = max(0.0, seconds)
@@ -407,17 +416,17 @@ class Preview:
         matches = [index for name, index in outputs if name == saved[0]]
         if len(matches) == 1:
             return matches[0]
-        raise AudioOutputUnavailable("設定された機器を確認してください。")
+        raise AudioOutputUnavailable(tr("設定された機器を確認してください。"))
 
     def toggle_player(self):
         if self.player is None:
-            raise RuntimeError("先にプレビューを再生してください。")
+            raise RuntimeError(tr("先にプレビューを再生してください。"))
         if self.player.status == "play":
             self.player.pause()
         elif self.player.status == "pause":
             self.player.resume()
         else:
-            raise RuntimeError("プレビューは停止しています。")
+            raise RuntimeError(tr("プレビューは停止しています。"))
 
     def close_player(self):
         self.source = None

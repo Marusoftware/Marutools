@@ -4,20 +4,21 @@ from pathlib import Path
 from queue import Empty, SimpleQueue
 from threading import Thread
 
+from .l10n import localized, tr
 from .export import ExportCancellation, ExportCancelled, available_encoders, check_tools, export_disc
 from .preflight import check_project, issue_message
 
 
 def export_target(parent, name, *, iso=False):
     if not parent or not Path(parent).is_dir():
-        raise ValueError("書き出し先の親フォルダを選んでください。")
+        raise ValueError(tr("書き出し先の親フォルダを選んでください。"))
     if not name or name in (".", "..") or any(char in name for char in '/\\:*?"<>|'):
-        raise ValueError("出力名を確認してください。")
+        raise ValueError(tr("出力名を確認してください。"))
     if iso and not name.lower().endswith(".iso"):
         name += ".iso"
     target = Path(parent).absolute() / name
     if target.exists():
-        raise ValueError("その名前のフォルダまたはファイルが既にあります。")
+        raise ValueError(tr("その名前のフォルダまたはファイルが既にあります。"))
     return target
 
 
@@ -26,7 +27,7 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
     from tkinter.ttk import Checkbutton, Combobox, Label, Progressbar
 
     window = ui.makeSubWindow(dialog=True)
-    window.changeTitle("Blu-ray 書き出し設定")
+    window.changeTitle(tr("Blu-ray 書き出し設定"))
     settings = window.Frame()
     settings.pack(fill="x", padx=12, pady=(12, 4))
 
@@ -42,28 +43,28 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
         entry.pack(side="left", fill="x", expand=True)
         return inputs, entry
 
-    path_row, parent = field("書き出し先の親フォルダ", str(Path(project_path).absolute().parent) if project_path else "")
+    path_row, parent = field(tr("書き出し先の親フォルダ"), str(Path(project_path).absolute().parent) if project_path else "")
 
     def browse():
-        path = window.Dialog.askdir(title="書き出し先の親フォルダを選択")
+        path = window.Dialog.askdir(title=tr("書き出し先の親フォルダを選択"))
         if path:
             parent.set(path)
 
-    browse_button = path_row.Input.Button(label="参照…", command=browse, width=0)
+    browse_button = path_row.Input.Button(label=tr("参照…"), command=localized(browse), width=0)
     browse_button.pack(side="left", padx=(6, 0))
-    _, name = field("出力名", "Blu-ray")
-    formats = ("BDMV フォルダ", "Blu-ray ISO（UDF 2.50）")
+    _, name = field(tr("出力名"), "Blu-ray")
+    formats = (tr("BDMV フォルダ"), "Blu-ray ISO（UDF 2.50）")
     output_format = StringVar(master=settings.widget, value=formats[0])
-    Label(settings.widget, text="出力形式").pack(fill="x", pady=(4, 2))
+    Label(settings.widget, text=tr("出力形式")).pack(fill="x", pady=(4, 2))
     format_picker = Combobox(settings.widget, state="readonly", textvariable=output_format, values=formats)
     format_picker.pack(fill="x")
     encoders = available_encoders()
     default_encoder = next(iter(encoders), "")
     encoder_var = StringVar(master=settings.widget, value=default_encoder)
-    Label(settings.widget, text="映像エンコーダー").pack(fill="x", pady=(4, 2))
+    Label(settings.widget, text=tr("映像エンコーダー")).pack(fill="x", pady=(4, 2))
     encoder_picker = Combobox(settings.widget, state="readonly", textvariable=encoder_var, values=list(encoders))
     encoder_picker.pack(fill="x")
-    _, device = field("VAAPI デバイス", "/dev/dri/renderD128")
+    _, device = field(tr("VAAPI デバイス"), "/dev/dri/renderD128")
 
     def show_device(event=None):
         device.configure(state="normal" if encoders.get(encoder_var.get()) == "h264_vaapi" else "disabled")
@@ -71,7 +72,7 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
     encoder_picker.bind("<<ComboboxSelected>>", show_device)
     show_device()
     cache_enabled = BooleanVar(master=settings.widget, value=True)
-    cache_button = Checkbutton(settings.widget, text="変換済み素材を再利用", variable=cache_enabled)
+    cache_button = Checkbutton(settings.widget, text=tr("変換済み素材を再利用"), variable=cache_enabled)
     cache_button.pack(anchor="w", pady=(6, 0))
     progress_area = window.Frame()
     progress_area.pack(fill="x", padx=12, pady=(4, 0))
@@ -119,19 +120,19 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
             show_device()
             cancel_button.configure(state="disabled")
             if event == "error":
-                display("書き出しに失敗しました。", 0)
-                report("BDMV の書き出しに失敗しました。")
-                window.Dialog.error(title="BDMV の書き出し", message=message)
+                display(tr("書き出しに失敗しました。"), 0)
+                report(tr("BDMV の書き出しに失敗しました。"))
+                window.Dialog.error(title=tr("BDMV の書き出し"), message=message)
             elif event == "cancelled":
-                display("書き出しを中止しました。", 0)
-                report("BDMV の書き出しを中止しました。")
+                display(tr("書き出しを中止しました。"), 0)
+                report(tr("BDMV の書き出しを中止しました。"))
             else:
-                display(f"書き出しが完了しました。\n{message}", 100)
-                report(f"BDMV を書き出しました。 {message}")
+                display(tr("書き出しが完了しました。\n{0}", message), 100)
+                report(tr("BDMV を書き出しました。 {0}", message))
             return
         if latest is not None:
             display(*latest)
-        bar.after(100, poll)
+        bar.after(100, localized(poll))
 
     def start():
         nonlocal running, cancellation
@@ -142,18 +143,18 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
             target = export_target(parent.value.strip(), name.value.strip(), iso=iso)
             check_tools(iso=iso)
             if encoder is None:
-                raise ValueError("使用できる H.264 エンコーダーがありません。")
+                raise ValueError(tr("使用できる H.264 エンコーダーがありません。"))
             if encoder == "h264_vaapi" and not vaapi_device:
-                raise ValueError("VAAPI デバイスを指定してください。")
+                raise ValueError(tr("VAAPI デバイスを指定してください。"))
         except (ValueError, RuntimeError) as exc:
-            window.Dialog.error(title="書き出し設定", message=str(exc))
+            window.Dialog.error(title=tr("書き出し設定"), message=str(exc))
             return
         errors, warnings = check_project(project)
         if errors:
-            window.Dialog.error(title="書き出し前チェック", message=issue_message(errors))
+            window.Dialog.error(title=tr("書き出し前チェック"), message=issue_message(errors))
             return
         if warnings and not window.Dialog.question(
-            "yesno", "書き出し前チェック", issue_message(warnings) + "\n\n書き出しを続けますか？",
+            "yesno", tr("書き出し前チェック"), issue_message(warnings) + tr("\n\n書き出しを続けますか？"),
         ):
             return
         snapshot = deepcopy(project)
@@ -180,9 +181,9 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
         encoder_picker.configure(state="disabled")
         device.configure(state="disabled")
         cancel_button.configure(state="normal")
-        display("BDMV の書き出しを準備中…", None)
-        Thread(target=run, name="Blu-ray export").start()
-        bar.after(100, poll)
+        display(tr("BDMV の書き出しを準備中…"), None)
+        Thread(target=localized(run), name="Blu-ray export").start()
+        bar.after(100, localized(poll))
 
     def close():
         if not running:
@@ -191,14 +192,14 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
     def cancel():
         if running and not cancellation.requested.is_set():
             cancel_button.configure(state="disabled")
-            display("中止処理中…", None)
+            display(tr("中止処理中…"), None)
             cancellation.cancel()
 
-    close_button = actions.Input.Button(label="閉じる", command=close)
+    close_button = actions.Input.Button(label=tr("閉じる"), command=close)
     close_button.pack(side="right", padx=(4, 0))
-    start_button = actions.Input.Button(label="書き出し", command=start)
+    start_button = actions.Input.Button(label=tr("書き出し"), command=localized(start))
     start_button.pack(side="right")
-    cancel_button = actions.Input.Button(label="中止", command=cancel, state="disabled")
+    cancel_button = actions.Input.Button(label=tr("中止"), command=localized(cancel), state="disabled")
     cancel_button.pack(side="right", padx=(0, 4))
     window.setcallback("close", close)
     window.wait()

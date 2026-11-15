@@ -2,11 +2,14 @@
 from copy import deepcopy
 from functools import partial
 
+from .assets import media_kind
+from .l10n import localized, tr
 from .menu_navigation import (
     BUTTONS_PER_PAGE, HEIGHT, UNLINKED, WIDTH, button_caption, button_geometry,
-    clamp_position, element_geometry, page_count, position,
+    clamp_position, element_geometry, page_count, page_elements, position, remove_menu_page, target_page,
 )
-from .menu_objects import object_caption, render_object_image, render_text
+from .menu_objects import capture_thumbnail, object_caption, open_object_image, render_object_image, render_text
+from .menu_template import THUMBNAIL_COUNTS, generate_standard_menu
 from .ui_support import SelectionList, tk_theme_colors
 
 
@@ -22,27 +25,31 @@ class MenuLayout:
         stage.pack(side="left", fill="both", expand=True)
         self.surface = MenuSurface(stage, self.select_item, self.commit)
         for caption, action in (
-            ("背景…", editor.edit_menu),
-            ("画像を追加", partial(self.change, "image")),
-            ("テキストを追加", partial(self.change, "text")),
-            ("図形を追加", partial(self.change, "shape")),
-            ("動画サムネイルを追加", partial(self.change, "thumbnail")),
-            ("選択項目を編集", self.change),
-            ("削除", self.remove),
-            ("リモコン操作…", self.remote_settings),
+            (tr("標準レイアウトを生成…"), self.apply_standard_layout),
+            (tr("背景・BGM…"), editor.edit_menu),
+            (tr("画像を追加"), partial(self.change, "image")),
+            (tr("テキストを追加"), partial(self.change, "text")),
+            (tr("図形を追加"), partial(self.change, "shape")),
+            (tr("動画サムネイルを追加"), partial(self.change, "thumbnail")),
+            (tr("選択項目を編集"), self.change),
+            (tr("削除"), self.remove),
+            (tr("リモコン操作…"), self.remote_settings),
         ):
-            sidebar.Input.Button(label=caption, command=action).pack(fill="x", pady=1)
+            sidebar.Input.Button(label=caption, command=localized(action)).pack(fill="x", pady=1)
         self.items = SelectionList(sidebar, height=6, width=155, on_select=self.highlight)
 
         row = parent.Frame()
         row.pack(fill="x", padx=8, pady=(0, 6))
-        self.previous = row.Input.Button(label="‹ 前へ", command=partial(self.go, -1))
+        self.previous = row.Input.Button(label=tr("‹ 前へ"), command=localized(partial(self.go, -1)))
         self.page_label = row.Label(label="")
         self.page_label.configure(wraplength=0)
-        self.following = row.Input.Button(label="次へ ›", command=partial(self.go, 1))
+        self.following = row.Input.Button(label=tr("次へ ›"), command=localized(partial(self.go, 1)))
         for widget in (self.previous, self.page_label, self.following):
             widget.pack(side="left", padx=(0, 6))
-        row.Input.Button(label="初期配置に戻す", command=self.reset).pack(side="right")
+        row.Input.Button(label=tr("ページを追加"), command=localized(self.add_page)).pack(side="left", padx=(0, 6))
+        self.delete_page = row.Input.Button(label=tr("ページを削除"), command=localized(self.remove_page))
+        self.delete_page.pack(side="left", padx=(0, 6))
+        row.Input.Button(label=tr("初期配置に戻す"), command=localized(self.reset)).pack(side="right")
         self.background_status = row.Label(label="")
         self.background_status.pack(side="left", fill="x", expand=True, padx=6)
 
@@ -57,13 +64,21 @@ class MenuLayout:
         entries = [(entry, index, self.editor.link_label(entry.get("target")))
                    for index, entry in enumerate(self.menu["buttons"][start:start + BUTTONS_PER_PAGE])]
         names = {title["id"]: title["name"] for title in self.editor.project["titles"]}
-        self.surface.draw(self.menu, entries, names)
-        rows = [(f"element{i}", object_caption(entry)) for i, entry in enumerate(self.menu["elements"])]
+        elements = page_elements(self.menu, self.page)
+        self.surface.draw(self.menu, elements, entries, names)
+        rows = []
+        for index, entry in elements:
+            caption = object_caption(entry)
+            target = entry.get("target")
+            if target_page(target) is not None:
+                caption = f"{caption} → {self.editor.link_label(target)}"
+            rows.append((f"element{index}", caption))
         rows.extend((f"button{i}", button_caption(entry)) for entry, i, _ in entries)
         self.items.replace(rows, selected or self.items.selected)
         self.highlight()
         self.previous.configure(state="normal" if self.page else "disabled")
         self.following.configure(state="normal" if self.page + 1 < count else "disabled")
+        self.delete_page.configure(state="normal" if count > 1 else "disabled")
         self.page_label.configure(label=f"{self.page + 1} / {count}")
         self.background_status.configure(label=self.surface.background_error)
 
@@ -77,6 +92,47 @@ class MenuLayout:
     def go(self, offset):
         self.page += offset
         self.draw()
+
+    def add_page(self):
+        if self.editor.edit_allowed():
+            self.page = page_count(self.menu)
+            self.menu["page_count"] = self.page + 1
+            self.commit()
+
+    def apply_standard_layout(self):
+        if not self.editor.edit_allowed():
+            return
+        titles = self.editor.project["titles"]
+        if not any(media_kind(title) == "video" for title in titles):
+            self.editor.report(tr("先に動画素材を追加してください。"))
+            return
+        caption = tr("標準レイアウトを生成…")
+        field = tr("1ページのサムネイル数")
+        result = self.editor.form(caption, [], choices=(field, "6", tuple(map(str, THUMBNAIL_COUNTS))),
+                                  note=tr("既存のメニューページと項目を置き換えます。背景とBGMは引き継ぎます。"))
+        if not result:
+            return
+        has_layout = bool(self.menu["elements"] or self.menu["buttons"] or page_count(self.menu) > 1)
+        if has_layout and not self.editor.dialog.question(
+            "yesno", caption, tr("現在のメニューページと項目を標準レイアウトで置き換えますか？"), default="no",
+        ):
+            return
+        updated = generate_standard_menu(self.editor.api.ui, deepcopy(self.menu), deepcopy(titles), int(result[field]))
+        if updated is not None:
+            self.menu = updated
+            self.page = 0
+            self.commit()
+
+    def remove_page(self):
+        count = page_count(self.menu)
+        if count <= 1 or not self.editor.edit_allowed():
+            return
+        message = tr("ページ {0} と、このページだけに表示される項目を削除しますか？", self.page + 1)
+        message += "\n" + tr("このページへのリンクも解除されます。")
+        if self.editor.dialog.question("yesno", tr("ページを削除"), message):
+            remove_menu_page(self.menu, self.page)
+            self.page = min(self.page, count - 2)
+            self.commit()
 
     def commit(self, selected=None):
         self.editor.update_menu_layout(self.menu, selected)
@@ -94,15 +150,23 @@ class MenuLayout:
             return
         group, index = self.selected_index()
         if kind is not None:
-            added = self.editor.change_menu_element(kind, draft=self.menu)
+            added = self.editor.change_menu_element(kind, draft=self.menu, page=self.page)
             if added is not None:
-                self.commit(f"element{added}")
+                self.commit_element(added)
         elif group == "buttons":
             self.editor.change_button(index, draft=self.menu)
             self.commit(self.items.selected)
         elif group == "elements":
-            self.editor.change_menu_element(self.menu[group][index]["kind"], index, draft=self.menu)
-            self.commit(self.items.selected)
+            changed = self.editor.change_menu_element(self.menu[group][index]["kind"], index,
+                                                      draft=self.menu, page=self.page)
+            if changed is not None:
+                self.commit_element(changed)
+
+    def commit_element(self, index):
+        page = self.menu["elements"][index].get("page")
+        if page is not None:
+            self.page = page
+        self.commit(f"element{index}")
 
     def remove(self):
         group, index = self.selected_index()
@@ -117,7 +181,9 @@ class MenuLayout:
 
     def reset(self):
         if self.editor.edit_allowed():
-            for entry in self.menu["buttons"] + self.menu["elements"]:
+            start = self.page * BUTTONS_PER_PAGE
+            buttons = self.menu["buttons"][start:start + BUTTONS_PER_PAGE]
+            for entry in buttons + [entry for _, entry in page_elements(self.menu, self.page)]:
                 entry.pop("position", None)
             self.commit()
 
@@ -135,8 +201,8 @@ class MenuSurface:
         self.elements = {}
         self.select_item = select_item
         self.on_change = on_change
-        self.canvas = Canvas(stage.widget, width=WIDTH, height=HEIGHT, highlightthickness=0,
-                             scrollregion=(0, 0, WIDTH, HEIGHT))
+        self.canvas = Canvas(stage.widget, width=WIDTH + 4, height=HEIGHT + 4, highlightthickness=0,
+                             scrollregion=(-2, -2, WIDTH + 2, HEIGHT + 2))
         horizontal = Scrollbar(stage.widget, orient="horizontal", command=self.canvas.xview)
         vertical = Scrollbar(stage.widget, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(xscrollcommand=horizontal.set, yscrollcommand=vertical.set)
@@ -148,31 +214,33 @@ class MenuSurface:
         self.update_theme()
         self.canvas.bind("<<ThemeChanged>>", self.update_theme, add="+")
         self.canvas.bind("<B1-Motion>", self.move)
-        self.canvas.bind("<ButtonRelease-1>", self.end_drag)
+        self.canvas.bind("<ButtonRelease-1>", localized(self.end_drag))
         self.background_path = None
         self.background_error = ""
         self.image = None
         self.item_images = []
         self.controls = []
 
-    def load_background(self, background):
-        if background == self.background_path:
+    def load_background(self, background, motion):
+        key = (background, motion)
+        if key == self.background_path:
             return
-        self.background_path = background
+        self.background_path = key
         self.background_error = ""
         self.image = None
-        if background:
+        if background or motion:
             try:
                 from PIL import Image, ImageOps, ImageTk
 
-                with Image.open(background) as image:
+                item = {"thumbnail": capture_thumbnail({"media": motion}, 0)} if motion else {"image": background}
+                with open_object_image(item) as image:
                     frame = ImageOps.exif_transpose(image).convert("RGB")
                     frame = ImageOps.fit(frame, (WIDTH, HEIGHT), method=Image.Resampling.LANCZOS)
                     self.image = ImageTk.PhotoImage(frame, master=self.canvas)
             except ImportError:
-                self.background_error = "背景の表示には Pillow が必要です。"
+                self.background_error = tr("背景の表示には Pillow が必要です。")
             except (OSError, ValueError, Image.DecompressionBombError):
-                self.background_error = "背景画像を読み込めませんでした。"
+                self.background_error = tr("メニュー背景を読み込めませんでした。")
 
     def update_theme(self, event=None):
         self.background, self.foreground = tk_theme_colors(self.canvas)
@@ -181,7 +249,7 @@ class MenuSurface:
         self.canvas.itemconfigure("theme-text", fill=self.foreground)
         self.canvas.itemconfigure("theme-outline", outline=self.foreground)
 
-    def draw(self, menu, entries, title_names):
+    def draw(self, menu, elements, entries, title_names):
         self.drag = None
         self.resizing = None
         self.elements.clear()
@@ -190,11 +258,13 @@ class MenuSurface:
         self.controls.clear()
         self.canvas.delete("all")
         self.item_images.clear()
-        self.load_background(menu["background"])
+        self.load_background(menu["background"], menu.get("motion"))
         if self.image is not None:
             self.canvas.create_image(0, 0, image=self.image, anchor="nw")
+        self.canvas.create_rectangle(-1, -1, WIDTH, HEIGHT, outline=self.foreground,
+                                     tags=("theme-outline",))
 
-        for index, entry in enumerate(menu.get("elements", [])):
+        for index, entry in elements:
             self.draw_element(entry, index, title_names)
         for entry, index, destination in entries:
             self.draw_button(entry, index, destination)
@@ -210,7 +280,7 @@ class MenuSurface:
                 self.canvas.create_image(x, y, image=image, anchor="nw", tags=(tag,))
             else:
                 self.draw_backing(x, y, size, tag)
-                self.canvas.create_text(x + 8, y + 8, text="画像を表示できません", anchor="nw",
+                self.canvas.create_text(x + 8, y + 8, text=tr("画像を表示できません"), anchor="nw",
                                         fill=self.foreground, tags=(tag, "theme-text"))
         elif entry["kind"] == "shape":
             shape = self.canvas.create_oval if entry.get("shape") == "ellipse" else self.canvas.create_rectangle
@@ -266,17 +336,17 @@ class MenuSurface:
         default, size = button_geometry(entry, index)
         x, y = position(entry, default, size)
         tag = f"button{index}"
-        unlinked = destination == UNLINKED
+        unlinked = destination == tr(UNLINKED)
         caption = shorten(button_caption(entry), 18)
         if unlinked:
-            caption += " （リンク未設定）"
+            caption += tr(" （リンク未設定）")
         options = {}
         if has_image:
             image = self.load_item_image(entry, (size[0] - 12, size[1] - 37))
             if image is not None:
                 options.update(image=image, compound="top")
             else:
-                caption = "画像を表示できません"
+                caption = tr("画像を表示できません")
         button = self.stage.Input.Button(label=caption, command=lambda: None, **options)
         self.controls.append(button)
         self.canvas.create_window(x, y, anchor="nw", width=size[0], height=size[1] if has_image else 27,
@@ -291,7 +361,7 @@ class MenuSurface:
         button.widget.configure(cursor="fleur", takefocus=False)
         button.widget.bind("<Button-1>", begin)
         button.widget.bind("<B1-Motion>", self.move)
-        button.widget.bind("<ButtonRelease-1>", self.end_drag)
+        button.widget.bind("<ButtonRelease-1>", localized(self.end_drag))
 
     def begin_drag(self, tag, entry, default, size, event):
         self.select_item(tag)

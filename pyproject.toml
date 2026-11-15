@@ -8,10 +8,13 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.12"
 chardet = "^5.0.0"
 Babel = "^2.10.3"
-gttk = {url = "https://marusoftware.net/downloads/marutools/gttk-0.6.1-py3-none-any.whl"}
+gttk = "^0.6.1"
+tkmedia = "^0.1.3"
+bdmvkit = "^0.7.0"
+udfkit = "^0.2.0"
 
 
 [tool.poetry.group.tkgui.dependencies]

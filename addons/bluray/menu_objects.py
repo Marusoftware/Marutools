@@ -8,6 +8,7 @@ import shutil
 from pathlib import Path
 import subprocess
 
+from .l10n import tr
 from .preview import playback_source
 
 SHAPES = {"長方形": "rectangle", "楕円": "ellipse"}
@@ -20,7 +21,7 @@ def object_caption(item):
     if item["kind"] == "image":
         return item.get("thumbnail_name") or Path(item["image"]).name
     if item["kind"] == "shape":
-        return next((name for name, kind in SHAPES.items() if kind == item.get("shape")), "長方形")
+        return tr(next((name for name, kind in SHAPES.items() if kind == item.get("shape")), "長方形"))
     return item["text"]
 
 
@@ -92,9 +93,9 @@ def capture_thumbnail(title, milliseconds):
             capture_output=True, timeout=20, check=True,
         ).stdout
     except (OSError, subprocess.SubprocessError) as exc:
-        raise ValueError("動画から画像を取り出せませんでした。FFmpeg と素材を確認してください。") from exc
+        raise ValueError(tr("動画から画像を取り出せませんでした。FFmpeg と素材を確認してください。")) from exc
     if not frame:
-        raise ValueError("指定時刻にフレームがありません。時刻を少し前にしてください。")
+        raise ValueError(tr("指定時刻にフレームがありません。時刻を少し前にしてください。"))
     return b64encode(frame).decode("ascii")
 
 

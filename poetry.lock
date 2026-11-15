@@ -447,13 +447,13 @@ tk-8-6-0 = ["Pillow"]
 
 [[package]]
 name = "tkmedia"
-version = "0.1.3"
+version = "0.1.4"
 description = "Tkinter Media Support."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "tkmedia-0.1.3-py3-none-any.whl", hash = "sha256:0b49ac62be6c85671b273f566d9c1942656d5c0b45930bc107ef01e7c6dcff53"},
-    {file = "tkmedia-0.1.3.tar.gz", hash = "sha256:63945b7ed51ffe6250864d5ab7bacba66c1ac343c655158b531ee915e26c7592"},
+    {file = "tkmedia-0.1.4-py3-none-any.whl", hash = "sha256:99e03a3d7ab0cc7835efa5f6c13927f0d8cb3720340c0c7dc057aa6fe1a20baa"},
+    {file = "tkmedia-0.1.4.tar.gz", hash = "sha256:5f997a1ad7eac24d8f5c563d13616434657acb6bdbff40fb6d48c752f6ee5cca"},
 ]
 
 [package.dependencies]
@@ -489,4 +489,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "ef64ebb404c0ef9127e44c388c9cf23782b5eaf30c6dfefd1605a5dabf0d09d9"
+content-hash = "67d92b978e90dd9cb34c3469e5e54d202347aca5366309444d4fb9f14fc95e68"

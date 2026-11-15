@@ -1,61 +1,63 @@
-# Marutools Blu-ray アドオン v0.5
+# Marutools Blu-ray Add-on v0.5
 
-この作業コピーでは `addons/bluray/` に導入済みです。別の Marutools に入れる場合は、v0.5 ZIP を `addons/` に展開して `addons/bluray/__init__.py` がある状態にし、Marutools を再起動してください。
+This checkout already includes the add-on in `addons/bluray/`. To install it in another copy of Marutools, extract the v0.5 ZIP into `addons/`, check that `addons/bluray/__init__.py` is present, and restart Marutools.
 
-- Marutools で Blu-ray エディターを選び、`.marubd` を新規作成するか、既存のプロジェクトを開きます。
-- 「素材を追加」で画像・音声・動画を複数選択できます。ファイルマネージャーから素材一覧へのドラッグ＆ドロップでも一括登録できます（Marutools で TkDND が有効な場合）。「BDMVを開く」で BDMV を取り込みます。BDMV の MPLS から主映像の再生区間とチャプターを読み取り、タイトルとして現在のプロジェクトに追加します。取り込み元のファイルは読み取り専用です。
-- 左側で素材を選び、名前と順序を編集します。素材一覧とプレビューの境界をドラッグして幅を調整できます。元に戻す・やり直すは Marutools の「編集」メニューから実行します。プレビュー下のシークバーは再生位置に追従します。位置を選んで「この位置にチャプターを追加」を押します。「チャプター一覧」で名前・時刻の編集、削除、移動ができます。
-- 「素材」タブには素材一覧・動画プレビュー・チャプター操作があります。「メニュー」タブでは背景と配置キャンバスを直接編集できます。背景画像の表示には Pillow が必要です。
-- 「素材」タブでタイトルを選び、「再生後の動作…」で「メニューに戻る」（既定）か「次のタイトルを再生」を指定できます。書き出した BDMV／ISO では、タイトル先頭・チャプターのどちらから再生しても、タイトルの終わりでこの設定が使われます。次のタイトルは素材一覧の順番に従います。最後まで進むとメニューに戻ります。
-- 「メニュー」タブでは、図形（長方形・楕円）、テキスト、画像を追加してドラッグで配置できます。各オブジェクトに任意でタイトル・チャプターへのリンクを付けられます。メニューの画像・背景には「素材を追加」で登録した画像を選びます。「動画サムネイルを追加」では登録済み動画と時刻を選び、そのフレームを画像として配置できます。画像はプロジェクトに埋め込まれ、初期リンク先は元の動画です。追加・編集時に「動画タイトルを表示」を選ぶと、画像の下にタイトルが表示されます。以前のメニュータイトルはテキストとして編集できます。選択枠の右下をドラッグすると大きさを変えられます。「選択項目を編集」では図形の種類を選択し、塗り色と線の色を指定できます。テキストにはフォントファイル（TTF・OTF・TTC）、文字サイズ、文字色、背景色を指定できます。フォントファイルはプロジェクトから参照します。配置と書式の変更はすぐにプロジェクトに反映されます。Marutools の保存操作で記録できます。
-- 「メニュー」タブの「ページを追加」でページを増やせます。配置画面の下にある「‹ 前へ」「次へ ›」で編集するページを切り替えます。各オブジェクトの「表示ページ」で表示先を選べます。書き出すと、隣のページに移動する「前へ」「次へ」が画面上部に自動で入ります。
-- 手動でページ移動ボタンを作るには、テキスト・図形・画像を置き、「リンク先」で移動先の「メニューページ」を選びます。たとえば、2ページ目の「トップへ」というテキストに「メニューページ 1」を指定できます。書き出した BDMV／ISO でこのリンクを使えます。
-- 「標準レイアウトを生成…」は、素材からトップ、チャプター、音声・字幕設定のページを作成します。トップの左側に画像を置けます。チャプターは各動画の先頭と登録済みのチャプターをサムネイルにし、1ページあたり2〜16の偶数で並べます。音声・字幕設定では組み合わせを選んで対象タイトルを再生します。既存のページや項目がある場合は、置き換えの確認が出ます。背景とBGMは引き継ぎ、生成前の配置には「元に戻す」で戻せます。
-- 「ページを削除」で、表示中のページとそのページ専用の項目を削除できます。削除したページへのリンクは解除されます。全ページ共通の項目は残り、メニューは最低1ページ残ります。削除は「編集」メニューから元に戻せます。
-- 「メニュー」タブでリンク付き項目を選んで「リモコン操作…」を開くと、ページの初期選択と、その項目の上下左右の移動先を指定できます。設定は BDMV／ISO 書き出しに反映されます。リンク先の候補が多い場合は、選択欄を開いてスクロールできます。
-- 「チェック」または書き出し開始時に、リンク切れ、ファイル不足、既知の再生時間を超えるチャプター、ボタンの操作範囲の重なりを確認します。エラーは修正が必要です。警告がある場合は確認してから書き出しを続行できます。
-- 「別名で保存」を使うと、保存先を基準に素材、BDMV、メニュー画像の参照が付け替わります。v0.4 の `.marubd` も開けます。
+- Select the Blu-ray editor in Marutools and create a new `.marubd` project or open an existing one.
+- Use **Add Media** to select multiple images, audio files, or videos. You can also drag files from your file manager onto the media list when TkDND is enabled. **Open BDMV** reads the main video segments and chapter marks from the BDMV playlist files (MPLS) and adds them as titles to the current project. The import reads the source files without modifying them.
+- Select media in the left pane to rename or reorder it. Drag the divider between the media list and the preview to adjust their widths. Use the Marutools **Edit** menu to undo or redo changes. The seek bar below the preview follows playback. Move to a position and select **Add Chapter Here**. Use **Chapters** to edit chapter names and times, delete chapters, or seek to them.
+- The **Media** tab contains the media list, video preview, and chapter controls. The **Menu** tab has a canvas for editing the menu background and layout. Displaying background images requires Pillow.
+- Select a title in the **Media** tab and open **After Playback…** to choose **Return to menu** (the default) or **Play next title**. In the exported BDMV or ISO, this setting applies at the end of the title whether playback started at the beginning or from a chapter. The next title follows the order of the media list. After the final title, playback returns to the menu.
+- In the **Menu** tab, add rectangles, ellipses, text, and images, then drag them into position. You can link each object to a title or chapter. Menu images and backgrounds can use images registered through **Add Media**. **Add Video Thumbnail** captures a frame from a registered video at the time you choose. The thumbnail is embedded in the project and initially links to the source video. Enable **Show video title** when adding or editing the thumbnail to display the title beneath the image. You can edit menu titles from earlier versions as text. Drag the lower-right corner of the selection box to resize an object. Use **Edit Selected Item** to choose a shape and set its fill and outline colors. For text, you can set a font file (TTF, OTF, or TTC), font size, text color, and background color. The project references the font file. Layout and formatting changes appear immediately. Save the project in Marutools to keep them.
+- Use **Add Page** in the **Menu** tab to create pages. Use **‹ Previous** and **Next ›** below the canvas to switch between pages while editing. Use **Visible on** to choose where an object appears. With the default navigation, export adds **Previous** and **Next** buttons at the top of the menu where adjacent pages are available.
+- To create a page navigation button manually, add text, a shape, or an image and choose the destination **Menu Page** under **Link target**. For example, link a **Back to Top** text object on page 2 to **Menu Page 1**. These links work in the exported BDMV or ISO.
+- **Generate Standard Layout…** creates a top menu, chapter pages, and audio and subtitle settings pages from your media. The left side of the top menu has room for an image. The chapter pages show thumbnails for the start of each video and its saved chapter marks. Choose an even number from 2 to 16 for thumbnails per page. The audio and subtitle settings pages let viewers choose a track combination and play the corresponding title. If the menu already has pages or objects, Marutools asks before replacing them. The generated layout keeps the background and music. Use **Undo** to restore the previous layout.
+- **Delete Page** removes the current page and objects specific to it. Links to the deleted page are cleared. Objects shared across all pages are kept, and the menu always has at least one page. You can undo a page deletion from the **Edit** menu.
+- Select a linked object in the **Menu** tab and open **Remote Navigation…** to set which button is selected initially on the page and where the remote's directional buttons move from the selected object. These settings apply to the exported BDMV or ISO. Open the link target list and scroll when there are many choices.
+- **Check** and the export preflight look for broken links, missing files, chapter marks beyond the known duration, and overlapping button areas. Fix errors before exporting. If only warnings remain, you can review them and continue.
+- **Save As** updates references to media, BDMV sources, and menu images relative to the new project location. The editor also opens v0.4 `.marubd` projects.
 
-## 表示言語 / Interface language
+## Interface language
 
-Marutools の言語設定に従って日本語と英語を切り替えます。設定を変えた後は Blu-ray プロジェクトを開き直してください。翻訳を追加するには、`en.json` と同じ形式の JSON をこのフォルダに置きます（例 `fr.json`）。未翻訳の項目には英語を使います。`{0}` などの差し込み位置は翻訳にも残してください。
+The add-on follows the Marutools language setting. Reopen the Blu-ray project after changing the language. Japanese and English are included, and English is the fallback for untranslated strings. To add a translation, place a JSON file such as `fr.json` next to `en.json`, using the same format. Preserve placeholders such as `{0}` in the translated strings.
 
-The addon follows the Marutools language setting. Reopen the project after changing the language. Japanese and English are included, with English used for untranslated languages.
+## Preview requirements and limitations
 
-## 制約
+Video and audio previews with sound require Tkinter and a compatible tkmedia3 installation. The add-on recognizes the `tkmedia` and `media` import names. Use **Audio Output** at the bottom of the window to select the system default, mute sound, or choose a device. The add-on saves this setting separately and applies it the next time playback starts. Image previews use Pillow.
 
-Tkinter と利用可能な tkmedia3（tkmedia / media の import 名も検出）がある場合、動画・音声素材を音声付きでプレビューできます。画面下部の「音声出力」でシステム既定・ミュート・出力機器を選べます。設定はアドオン別に保存され、次の再生から適用されます。画像表示には Pillow を使用します。動画サイズ指定に対応した tkmedia では、デコード側でプレビュー枠に合わせて拡大・縮小します。旧版では Tk 側で縮小します。シークバーには PyAV で取得できる再生時間が必要です。チャプターへの移動は選択した区間のクリップから再生を開始します。クリップ間の自動連結と区間終端での自動停止は未実装です。チャプターへの移動の精度はデコーダーに依存します。暗号化された素材は再生できません。プレビューなしでも編集と保存を使えます。
+When the installed tkmedia supports setting the video size, it scales decoded video to fit the preview. Older versions use Tk to downscale it. The seek bar requires PyAV to determine the playback duration. Seeking to a chapter starts at the corresponding clip, with accuracy depending on the decoder. Move between clips manually when previewing segmented titles. Playback may continue past a segment's endpoint within the source clip. Playback requires unencrypted media. Editing and saving are available even if the preview is unavailable.
 
-## メニュー付き BDMV の書き出し
+## Exporting BDMV with menus
 
-Marutools の Python 環境に [bdmvkit](https://pypi.org/project/bdmvkit/) 0.7 と Pillow を用意し、`ffmpeg`（libx264 対応）と `ffprobe` に PATH を通してください。Poetry で起動している場合は、Marutools フォルダで次を実行します。
+Install [bdmvkit](https://pypi.org/project/bdmvkit/) 0.7 and Pillow in the Python environment Marutools uses. Put `ffmpeg` (with libx264 support) and `ffprobe` on your PATH. If you run Marutools with Poetry, install bdmvkit from the Marutools folder:
 
 ```bash
 poetry run python -m pip install 'bdmvkit==0.7.0'
 ```
 
-「書き出し」から開く設定画面で、親フォルダと新しいフォルダ名を指定します。同じ画面で素材ごとの変換進捗と完了を確認できます。メニューと BDMV の生成中は処理中のバーを表示します。「中止」を押すと素材の FFmpeg 変換を止めます。メニューと BDMV の最終生成中は、その処理が戻ってから一時ファイルを片付けます。既存フォルダは上書きしません。現在の素材の順序、チャプター、メニューの背景・配置・画像・テキスト・リンクを使って HDMV の BDMV フォルダを生成します。旧形式のメニューボタンは4個ごとにページが分かれます。リンクの未設定は書き出し前に解消してください。先頭ページにリンク付きの項目がない場合は、最初の素材へ進む「再生」ボタンを追加します。
+Open **Export** and choose a parent folder and a name for the new output folder. The same window shows conversion progress for each media item and reports when export completes. An activity bar appears while the menu and BDMV structure are being generated. **Stop Export** stops FFmpeg during media conversion. During final menu and BDMV generation, cleanup takes place once the current operation finishes. Export requires an unused destination name.
 
-映像は 1080p/23.976 fps と AC-3 ステレオに変換します。静止画素材は 5 秒表示し、音声素材には黒画面が付きます。チャプターは書き出し映像のキーフレームに合わせます。日本語のメニューには、日本語を描画できるシステムフォントが必要です。ディスクへの書き込みは未対応です。
+The exporter generates an HDMV BDMV folder from the current media order, chapters, menu backgrounds, layout, images, text, and links. Legacy menu buttons are grouped into pages of four. Assign any missing button links before export. If the first page has no linked items, export adds a **Play** button that opens the first title.
 
-「変換済み素材を再利用」は既定で有効です。キャッシュは `.marubd` と同じフォルダの `.marubd-cache/` に保存します。未保存の場合は書き出し先の親フォルダに作ります。メニューだけを変更した場合も、条件が同じ素材の変換結果を再利用します。途中で中止しても、保存が完了した素材は次回使えます。容量を空けるには、書き出しを終えてから `.marubd-cache/` を削除してください。
+Export uses 1080p video at 23.976 fps and AC-3 stereo audio. Still images are displayed for five seconds, and audio-only media plays over a black screen. Chapter marks align with keyframes in the exported video. Japanese menu text requires a system font with Japanese glyphs. Burning to a physical disc is currently unsupported.
 
-### 動画背景・BGM、音声・字幕、ポップアップ
+**Reuse Encoded Media** is enabled by default. Encoded files are cached in `.marubd-cache/` next to the project, or in the chosen parent folder if the project has not been saved. Changing only the menu allows export to reuse media encoded with the same settings. Files that finished encoding and were saved to the cache before cancellation can be reused on the next export. To reclaim disk space, delete `.marubd-cache/` after export has finished.
 
-- 「メニュー」タブの「背景・BGM…」で、素材一覧に登録した動画を背景に、音声ファイルを BGM に選べます。配置画面では背景動画の先頭フレームを表示します。書き出すメニューは背景動画の長さでループします。静止画背景のときは BGM の長さでループします。背景動画自身の音声はミュートです。
-- 「素材」タブでタイトルを選び、「音声・字幕・ポップアップ…」を開きます。素材内の音声は収録され、外部音声と UTF-8 の SRT または Blu-ray PGS（SUP）字幕を追加できます。音声は各トラックを AC-3 ステレオに変換します。字幕は書き出し時に PGS として収録されます。元動画に埋め込まれた字幕は、字幕ファイルとして追加してください。
-- 同じ画面で「再生中のポップアップメニューを付ける」を有効にします。再生中にプレーヤーの Pop-up Menu キーを押すと、トップメニュー、チャプター移動、複数音声の切り替え、字幕のオン／オフを選べます。各タイトルの項目から最大 48 個のボタンを自動配置します。
+### Video backgrounds, music, audio, subtitles, and pop-up menus
+
+- In the **Menu** tab, open **Background and Music…**. Select a registered video as the background or an audio file as the music. The layout canvas shows the first frame of a background video. The exported menu loops at the end of the background video, or at the end of the music if the background is a still image. Audio from the background video is muted.
+- Select a title in the **Media** tab and open **Audio, Subtitles and Pop-up…**. The source audio is included. You can also add external audio and UTF-8 SRT or Blu-ray PGS (SUP) subtitles. Each audio track is encoded as AC-3 stereo. Subtitles are included as PGS. To include subtitles embedded in the source video, add them as separate subtitle files.
+- Enable **Add an in-playback pop-up menu** in the same dialog. During playback, use the player's **Pop-up Menu** key to return to the top menu, jump to a chapter, switch audio tracks, or turn subtitles on or off. The add-on lays out up to 48 buttons per title from the available options.
 
 ### Blu-ray ISO
 
-[udfkit](https://pypi.org/project/udfkit/0.2.0/) 0.2.0 を同じ Python 環境に追加します。
+Install [udfkit](https://pypi.org/project/udfkit/0.2.0/) 0.2.0 in the same Python environment:
 
 ```bash
 poetry run python -m pip install 'udfkit==0.2.0'
 ```
 
-書き出し設定の「出力形式」で「Blu-ray ISO（UDF 2.50）」を選びます。編集済みのメニューを含む `.iso` が生成されます。素材変換キャッシュは BDMV フォルダ出力と共通です。
+In the export settings, set **Output format** to **Blu-ray ISO (UDF 2.50)**. This creates an `.iso` file containing the edited menus. ISO and BDMV folder exports share the encoded media cache.
 
-### 映像エンコーダー
+### Video encoder
 
-書き出し設定の「映像エンコーダー」で、FFmpeg に組み込まれている CPU / ハードウェア H.264 エンコーダーを選べます。CPU（libx264）が利用できる環境では既定です。ハードウェアでの変換には対応する GPU・ドライバーが必要です。VAAPI ではデバイスも指定します。選択は素材の最終 H.264 エンコードに適用され、キャッシュはエンコーダー別です。デコード・一部の前処理・メニューのエンコードは CPU で行います。
+Use **Video encoder** in the export settings to choose among the CPU and hardware H.264 encoders built into FFmpeg. CPU encoding with libx264 is the default when available. Hardware encoding requires a compatible GPU and driver. With VAAPI, specify the device as well. The selected encoder is used for final H.264 encoding of title video, and the cache is kept per encoder. Decoding, some preprocessing, and menu encoding use the CPU.

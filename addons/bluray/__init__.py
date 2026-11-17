@@ -1,4 +1,4 @@
-"""Marutools Blu-ray project editor."""
+"""Marutools Blu-ray and DVD project editor."""
 import copy
 import os
 from pathlib import Path
@@ -16,7 +16,8 @@ from .menu_navigation import UNLINKED, page_buttons, page_count, target_page
 from .menu_layout import MenuLayout
 from .preflight import check_project, issue_message
 from .preview import Preview
-from .project import History, empty_project, format_time, load, make_chapter, make_title, parse_time
+from .project import (PROJECT_EXTENSIONS, History, convert_project, empty_project, format_time, load,
+                      make_chapter, make_title, parse_time)
 from .project import save as save_project
 from .ui_support import SeekBar, SelectionList, form_choice, install_history_menu, project_tabs, split_frames
 
@@ -24,9 +25,9 @@ __version__ = "0.5"
 
 
 class Edit:
-    name = "Blu-ray"
-    description = "Blu-ray project editor v" + __version__
-    file_types = ["marubd"]
+    name = "Blu-ray and DVD"
+    description = "Blu-ray and DVD project editor v" + __version__
+    file_types = [extension[1:] for extension in PROJECT_EXTENSIONS.values()]
 
     def __init__(self, api):
         self.locale = host_language(api)
@@ -36,7 +37,8 @@ class Edit:
     def initialize(self, api):
         self.api = api
         self.dialog = api.ui.Dialog
-        self.project = empty_project()
+        self.disc_kind = "dvd" if api.ext.lower() == "marudvd" else "bluray"
+        self.project = empty_project(self.disc_kind)
         self.saved_project = None
         self.history = History()
         self.active_title = None
@@ -49,7 +51,7 @@ class Edit:
         self.load_error = None
         if api.filepath and os.path.isfile(api.filepath):
             try:
-                self.project = load(api.filepath)
+                self.project = load(api.filepath, self.disc_kind)
             except (OSError, ValueError, TypeError, AttributeError, KeyError) as exc:
                 self.load_error = str(exc)
             else:
@@ -86,7 +88,8 @@ class Edit:
     def build_ui(self):
         root = self.api.ui.Frame()
         root.pack(fill="both", expand=True)
-        self.buttons(root, (tr("書き出し"), self.export_bdmv))
+        convert_label = tr("Blu-ray プロジェクトに変換…") if self.disc_kind == "dvd" else tr("DVD プロジェクトに変換…")
+        self.buttons(root, (tr("書き出し"), self.export_disc), (convert_label, self.save_converted_copy))
         self.history_buttons = []
         self.history_menu = install_history_menu(self.api, Edit)
         if self.history_menu is None:
@@ -116,7 +119,8 @@ class Edit:
         self.titles = SelectionList(left, 3, 245, self.title_selected, on_files=self.add_assets)
         self.buttons(left, (tr("名前変更"), self.rename_title), (tr("削除"), self.delete_title),
                      ("↑", lambda: self.move_title(-1)), ("↓", lambda: self.move_title(1)))
-        self.buttons(left, (tr("音声・字幕・ポップアップ…"), self.edit_disc_tracks),
+        track_settings = tr("音声・字幕…") if self.disc_kind == "dvd" else tr("音声・字幕・ポップアップ…")
+        self.buttons(left, (track_settings, self.edit_disc_tracks),
                      (tr("再生後の動作…"), self.edit_playback_end))
         self.preview = Preview(
             self.frame(right, fill="both", expand=True), self.play,
@@ -621,10 +625,13 @@ class Edit:
         window.changeTitle(tr("ディスクのトラック · {0}", title['name']))
         self.label(window, tr("素材に含まれる音声を収録します。ここでは外部音声と字幕を追加できます。"))
         rows = SelectionList(window, 7, 335)
-        popup_default = bool(title.get("popup_menu"))
-        popup = window.Input.CheckButton(label=tr("再生中のポップアップメニューを付ける"), default=popup_default)
-        popup.pack(anchor="w", padx=8, pady=3)
-        self.label(window, tr("ポップアップではチャプター、音声・字幕を切り替えられます。"))
+        dvd = self.disc_kind == "dvd"
+        popup = None
+        if not dvd:
+            popup_default = bool(title.get("popup_menu"))
+            popup = window.Input.CheckButton(label=tr("再生中のポップアップメニューを付ける"), default=popup_default)
+            popup.pack(anchor="w", padx=8, pady=3)
+            self.label(window, tr("ポップアップではチャプター、音声・字幕を切り替えられます。"))
 
         def redraw(selected=None):
             rows.replace([(f"{kind}:{i}", f"{name} · {track['language']} · {Path(track['path']).name}")
@@ -635,13 +642,15 @@ class Edit:
             is_audio = kind == "audio"
             tracks = audio if is_audio else subtitles
             caption = tr("追加音声") if is_audio else tr("字幕")
-            extensions = file_pattern(AUDIO_TYPES) if is_audio else "*.srt *.sup"
+            allowed = (".srt",) if dvd else (".srt", ".sup")
+            extensions = file_pattern(AUDIO_TYPES if is_audio else allowed)
             path = (tracks[index]["path"] if index is not None else
                     window.Dialog.askfile(title=tr("{0}ファイルを選択", caption), filetypes=[(caption, extensions)]))
             if not path:
                 return
-            if not is_audio and Path(path).suffix.lower() not in (".srt", ".sup"):
-                window.Dialog.error(title=caption, message=tr("UTF-8 の SRT または PGS の SUP を選んでください。"))
+            if not is_audio and Path(path).suffix.lower() not in allowed:
+                message = tr("UTF-8 の SRT を選んでください。") if dvd else tr("UTF-8 の SRT または PGS の SUP を選んでください。")
+                window.Dialog.error(title=caption, message=message)
                 return
             language = window.Dialog.question("text", caption, tr("言語コード（例: jpn、eng、und）"),
                                               initialvalue=tracks[index]["language"] if index is not None else "und")
@@ -678,8 +687,10 @@ class Edit:
 
         def apply():
             updated = dict(title)
-            enabled = popup_default if popup.value == "" else bool(popup.value)
-            for key, value in (("audio_tracks", audio), ("subtitle_tracks", subtitles), ("popup_menu", enabled)):
+            values = {"audio_tracks": audio, "subtitle_tracks": subtitles}
+            if popup is not None:
+                values["popup_menu"] = popup_default if popup.value == "" else bool(popup.value)
+            for key, value in values.items():
                 if value:
                     updated[key] = value
                 else:
@@ -958,7 +969,12 @@ class Edit:
     def validate(self):
         if not self.edit_allowed():
             return
-        errors, warnings = check_project(self.project)
+        if self.disc_kind == "dvd":
+            from .dvd_export import check_dvd_project
+
+            errors, warnings = check_dvd_project(self.project)
+        else:
+            errors, warnings = check_project(self.project)
         if errors or warnings:
             self.report(tr("書き出し前チェック　エラー {0} 件・警告 {1} 件", len(errors), len(warnings)))
             details = []
@@ -970,12 +986,13 @@ class Edit:
         else:
             self.report(tr("書き出し前チェックに問題はありません。"))
 
-    def export_bdmv(self):
+    def export_disc(self):
         if not self.edit_allowed():
             return
         if not self.project["titles"]:
             return self.report(tr("書き出す素材を追加してください。"))
-        show_export_dialog(self.api.ui, self.project, self.api.filepath, self.stop, self.report)
+        show_export_dialog(self.api.ui, self.project, self.api.filepath, self.stop, self.report,
+                           dvd=self.disc_kind == "dvd")
 
     def audio_settings(self):
         host = getattr(self.api, "app", None)
@@ -987,7 +1004,7 @@ class Edit:
             if getattr(self.api, "appinfo", {}).get("conf"):
                 from libmarusoftware import Config
 
-                settings = Config(appname=self.name, module="preview",
+                settings = Config(appname="Blu-ray", module="preview",
                                   default_conf=settings, addon=dict(self.api.appinfo))
             self.audio_preferences = settings
             if host is not None:
@@ -1003,7 +1020,8 @@ class Edit:
         choices = {tr("システム既定"): None, tr("ミュート"): "mute", **outputs}
         current = settings["audio_output"]
         default = next((label for label, device in choices.items() if device == current), tr("システム既定"))
-        values = self.form(tr("Blu-ray プレビューの音声出力"), [],
+        caption = tr("DVD プレビューの音声出力") if self.disc_kind == "dvd" else tr("Blu-ray プレビューの音声出力")
+        values = self.form(caption, [],
                            choices=(tr("出力先"), default, list(choices)),
                            note=tr("変更は次回の再生から適用されます。"))
         if values:
@@ -1056,12 +1074,44 @@ class Edit:
         self.stop_preview()
         self.update_time()
 
-    def choose_save_path(self):
+    def choose_save_path(self, kind=None):
         if not self.edit_allowed():
             return
-        path = self.dialog.askfile(save=True, title=tr("プロジェクトを保存"), defaultextension=".marubd",
-                                   filetypes=[(tr("Blu-ray プロジェクト"), "*.marubd")])
-        return path
+        kind = kind or self.disc_kind
+        extension = PROJECT_EXTENSIONS[kind]
+        description = tr("DVD プロジェクト") if kind == "dvd" else tr("Blu-ray プロジェクト")
+        options = {}
+        if kind != self.disc_kind and self.api.filepath:
+            source = Path(self.api.filepath)
+            options = {"initialdir": str(source.parent), "initialfile": source.stem + extension}
+        return self.dialog.askfile(save=True, title=tr("プロジェクトを保存"), defaultextension=extension,
+                                   filetypes=[(description, "*" + extension)], **options)
+
+    def save_converted_copy(self):
+        kind = "bluray" if self.disc_kind == "dvd" else "dvd"
+        path = self.choose_save_path(kind)
+        if not path:
+            return
+        extension = PROJECT_EXTENSIONS[kind]
+        destination = Path(path)
+        if not destination.suffix:
+            destination = destination.with_suffix(extension)
+        try:
+            if destination.suffix.lower() != extension:
+                raise ValueError(tr("保存先の拡張子に {0} を指定してください。", extension))
+            if self.api.filepath and destination.resolve() == Path(self.api.filepath).resolve():
+                raise ValueError(tr("変換先に別のファイルを指定してください。"))
+            save_project(destination, convert_project(self.project, kind))
+        except (OSError, ValueError) as exc:
+            self.dialog.error(title=tr("プロジェクトを保存"), message=str(exc))
+            return
+        self.report(tr("変換したプロジェクトを保存しました。 {0}", destination))
+        if kind == "dvd" and any(
+            Path(track["path"]).suffix.lower() != ".srt"
+            for title in self.project["titles"] for track in title.get("subtitle_tracks", [])
+        ):
+            self.dialog.warn(title=tr("DVD プロジェクトに変換…"),
+                             message=tr("字幕の参照は引き継ぎました。DVD に書き出すには SUP 字幕を SRT に置き換えてください。"))
 
     @editor_language
     def save(self, file=None):
@@ -1071,8 +1121,9 @@ class Edit:
         if not path:
             return
         path = os.path.abspath(path)
-        if not path.lower().endswith(".marubd"):
-            raise ValueError(tr("保存先の拡張子に .marubd を指定してください。"))
+        extension = PROJECT_EXTENSIONS[self.disc_kind]
+        if not path.lower().endswith(extension):
+            raise ValueError(tr("保存先の拡張子に {0} を指定してください。", extension))
         save_project(path, self.project)
         changed_path = path != self.api.filepath
         was_saved = self.api.saved
@@ -1088,7 +1139,7 @@ class Edit:
     @editor_language
     def new(self):
         self.stop_preview()
-        self.project = empty_project()
+        self.project = empty_project(self.disc_kind)
         self.saved_project = None
         self.history = History()
         self.load_error = None

@@ -1,4 +1,4 @@
-"""Version 1 .marubd projects and path-independent editing history."""
+"""Version 1 disc projects and path-independent editing history."""
 import copy
 import json
 import os
@@ -10,15 +10,27 @@ from uuid import uuid4
 from .l10n import tr
 
 VERSION = 1
+PROJECT_EXTENSIONS = {"bluray": ".marubd", "dvd": ".marudvd"}
+PROJECT_FORMATS = {"bluray": "marutools-bluray", "dvd": "marutools-dvd"}
 
 
-def empty_project():
+def empty_project(kind="bluray"):
+    settings = {"resolution": "1920x1080", "mode": "hdmv"} if kind == "bluray" else {"standard": "NTSC"}
     return {
-        "format": "marutools-bluray", "version": VERSION,
-        "name": "New Blu-ray", "source_bdmv": None, "titles": [],
+        "format": PROJECT_FORMATS[kind], "version": VERSION,
+        "name": "New Blu-ray" if kind == "bluray" else "New DVD", "source_bdmv": None, "titles": [],
         "menu": {"background": "", "buttons": [], "elements": []},
-        "settings": {"resolution": "1920x1080", "mode": "hdmv"},
+        "settings": settings,
     }
+
+
+def convert_project(project, kind):
+    converted = copy.deepcopy(project)
+    defaults = empty_project(kind)
+    converted["format"] = defaults["format"]
+    converted["version"] = defaults["version"]
+    converted["settings"] = defaults["settings"]
+    return converted
 
 
 def make_chapter(name, milliseconds):
@@ -45,15 +57,17 @@ def format_time(milliseconds):
     return f"{stamp}.{fraction:03}" if fraction else stamp
 
 
-def load(path):
+def load(path, kind=None):
     with open(path, encoding="utf-8") as stream:
         data = json.load(stream)
-    if not isinstance(data, dict) or data.get("format") != "marutools-bluray":
-        raise ValueError("Not a Marutools Blu-ray project")
+    kind = kind or next((name for name, extension in PROJECT_EXTENSIONS.items()
+                         if Path(path).suffix.lower() == extension), "bluray")
+    if not isinstance(data, dict) or data.get("format") != PROJECT_FORMATS[kind]:
+        raise ValueError(tr("ファイルの内容が {0} プロジェクト形式と一致しません。", PROJECT_EXTENSIONS[kind]))
     if data.get("version") != VERSION:
         raise ValueError("Unsupported project version: %r" % data.get("version"))
 
-    defaults = empty_project()
+    defaults = empty_project(kind)
     for key, value in defaults.items():
         data.setdefault(key, value)
     for key, value in defaults["menu"].items():
@@ -75,7 +89,7 @@ def save(path, data):
     target = Path(path)
     data = map_paths(data, lambda value: store_media(target, value))
     target.parent.mkdir(parents=True, exist_ok=True)
-    fd, temp = tempfile.mkstemp(prefix=".marubd-", suffix=".tmp", dir=target.parent)
+    fd, temp = tempfile.mkstemp(prefix=f"{target.suffix}-", suffix=".tmp", dir=target.parent)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as stream:
             json.dump(data, stream, indent=2, ensure_ascii=False)

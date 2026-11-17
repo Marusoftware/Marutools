@@ -22,12 +22,12 @@ def export_target(parent, name, *, iso=False):
     return target
 
 
-def show_export_dialog(ui, project, project_path, stop_preview, report):
+def show_export_dialog(ui, project, project_path, stop_preview, report, *, dvd=False):
     from tkinter import BooleanVar, StringVar
     from tkinter.ttk import Checkbutton, Combobox, Label, Progressbar
 
     window = ui.makeSubWindow(dialog=True)
-    window.changeTitle(tr("Blu-ray 書き出し設定"))
+    window.changeTitle(tr("DVD 書き出し設定") if dvd else tr("Blu-ray 書き出し設定"))
     settings = window.Frame()
     settings.pack(fill="x", padx=12, pady=(12, 4))
 
@@ -52,28 +52,42 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
 
     browse_button = path_row.Input.Button(label=tr("参照…"), command=localized(browse), width=0)
     browse_button.pack(side="left", padx=(6, 0))
-    _, name = field(tr("出力名"), "Blu-ray")
-    formats = (tr("BDMV フォルダ"), "Blu-ray ISO（UDF 2.50）")
+    _, name = field(tr("出力名"), "DVD-Video" if dvd else "Blu-ray")
+    formats = ((tr("VIDEO_TS フォルダ"), "DVD-Video ISO (UDF 1.02)") if dvd
+               else (tr("BDMV フォルダ"), "Blu-ray ISO（UDF 2.50）"))
     output_format = StringVar(master=settings.widget, value=formats[0])
     Label(settings.widget, text=tr("出力形式")).pack(fill="x", pady=(4, 2))
     format_picker = Combobox(settings.widget, state="readonly", textvariable=output_format, values=formats)
     format_picker.pack(fill="x")
-    encoders = available_encoders()
-    default_encoder = next(iter(encoders), "")
-    encoder_var = StringVar(master=settings.widget, value=default_encoder)
-    Label(settings.widget, text=tr("映像エンコーダー")).pack(fill="x", pady=(4, 2))
-    encoder_picker = Combobox(settings.widget, state="readonly", textvariable=encoder_var, values=list(encoders))
-    encoder_picker.pack(fill="x")
-    _, device = field(tr("VAAPI デバイス"), "/dev/dri/renderD128")
+    if dvd:
+        from .dvd_export import DVD_STANDARDS, check_dvd_project, check_dvd_tools, export_dvd
 
-    def show_device(event=None):
-        device.configure(state="normal" if encoders.get(encoder_var.get()) == "h264_vaapi" else "disabled")
+        preflight = check_dvd_project
+        Label(settings.widget, text=tr("テレビ方式")).pack(fill="x", pady=(4, 2))
+        standard = Combobox(settings.widget, state="readonly", values=tuple(DVD_STANDARDS))
+        standard.set(project["settings"].get("standard", "NTSC"))
+        standard.pack(fill="x")
+        readonly_fields = (standard,)
+        editable_fields = ()
+    else:
+        preflight = check_project
+        encoders = available_encoders()
+        encoder_var = StringVar(master=settings.widget, value=next(iter(encoders), ""))
+        Label(settings.widget, text=tr("映像エンコーダー")).pack(fill="x", pady=(4, 2))
+        encoder_picker = Combobox(settings.widget, state="readonly", textvariable=encoder_var, values=list(encoders))
+        encoder_picker.pack(fill="x")
+        _, device = field(tr("VAAPI デバイス"), "/dev/dri/renderD128")
+        cache_enabled = BooleanVar(master=settings.widget, value=True)
+        cache_button = Checkbutton(settings.widget, text=tr("変換済み素材を再利用"), variable=cache_enabled)
+        cache_button.pack(anchor="w", pady=(6, 0))
+        readonly_fields = (encoder_picker,)
+        editable_fields = (cache_button,)
 
-    encoder_picker.bind("<<ComboboxSelected>>", show_device)
-    show_device()
-    cache_enabled = BooleanVar(master=settings.widget, value=True)
-    cache_button = Checkbutton(settings.widget, text=tr("変換済み素材を再利用"), variable=cache_enabled)
-    cache_button.pack(anchor="w", pady=(6, 0))
+        def show_device(event=None):
+            device.configure(state="normal" if encoders.get(encoder_var.get()) == "h264_vaapi" else "disabled")
+
+        encoder_picker.bind("<<ComboboxSelected>>", show_device)
+        show_device()
     progress_area = window.Frame()
     progress_area.pack(fill="x", padx=12, pady=(4, 0))
     status = Label(progress_area.widget, text="", wraplength=380)
@@ -113,22 +127,23 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
                     latest = (message, percent)
                 continue
             running = False
-            for widget in (parent, name, browse_button, cache_button, start_button, close_button):
+            for widget in (parent, name, browse_button, start_button, close_button, *editable_fields):
                 widget.configure(state="normal")
-            format_picker.configure(state="readonly")
-            encoder_picker.configure(state="readonly")
-            show_device()
+            for widget in (format_picker, *readonly_fields):
+                widget.configure(state="readonly")
+            if not dvd:
+                show_device()
             cancel_button.configure(state="disabled")
             if event == "error":
                 display(tr("書き出しに失敗しました。"), 0)
-                report(tr("BDMV の書き出しに失敗しました。"))
-                window.Dialog.error(title=tr("BDMV の書き出し"), message=message)
+                report(tr("書き出しに失敗しました。"))
+                window.Dialog.error(title=tr("書き出し設定"), message=message)
             elif event == "cancelled":
                 display(tr("書き出しを中止しました。"), 0)
-                report(tr("BDMV の書き出しを中止しました。"))
+                report(tr("書き出しを中止しました。"))
             else:
                 display(tr("書き出しが完了しました。\n{0}", message), 100)
-                report(tr("BDMV を書き出しました。 {0}", message))
+                report(tr("書き出しが完了しました。\n{0}", message))
             return
         if latest is not None:
             display(*latest)
@@ -137,19 +152,29 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
     def start():
         nonlocal running, cancellation
         iso = output_format.get() == formats[1]
-        encoder = encoders.get(encoder_var.get())
-        vaapi_device = device.value.strip()
+        options = {"iso": iso}
         try:
             target = export_target(parent.value.strip(), name.value.strip(), iso=iso)
-            check_tools(iso=iso)
-            if encoder is None:
-                raise ValueError(tr("使用できる H.264 エンコーダーがありません。"))
-            if encoder == "h264_vaapi" and not vaapi_device:
-                raise ValueError(tr("VAAPI デバイスを指定してください。"))
+            if dvd:
+                check_dvd_tools(iso=iso)
+                exporter = export_dvd
+                options["standard"] = standard.get()
+            else:
+                check_tools(iso=iso)
+                encoder = encoders.get(encoder_var.get())
+                vaapi_device = device.value.strip()
+                if encoder is None:
+                    raise ValueError(tr("使用できる H.264 エンコーダーがありません。"))
+                if encoder == "h264_vaapi" and not vaapi_device:
+                    raise ValueError(tr("VAAPI デバイスを指定してください。"))
+                cache_parent = Path(project_path).absolute().parent if project_path else target.parent
+                cache_dir = cache_parent / ".marubd-cache" if cache_enabled.get() else None
+                exporter = export_disc
+                options.update(cache_dir=cache_dir, encoder=encoder, vaapi_device=vaapi_device)
         except (ValueError, RuntimeError) as exc:
             window.Dialog.error(title=tr("書き出し設定"), message=str(exc))
             return
-        errors, warnings = check_project(project)
+        errors, warnings = preflight(project)
         if errors:
             window.Dialog.error(title=tr("書き出し前チェック"), message=issue_message(errors))
             return
@@ -159,13 +184,10 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
             return
         snapshot = deepcopy(project)
         cancellation = ExportCancellation()
-        cache_parent = Path(project_path).absolute().parent if project_path else target.parent
-        cache_dir = cache_parent / ".marubd-cache" if cache_enabled.get() else None
-
         def run():
             try:
-                export_disc(snapshot, target, lambda message, percent: events.put(("progress", message, percent)),
-                            cancellation, cache_dir=cache_dir, iso=iso, encoder=encoder, vaapi_device=vaapi_device)
+                exporter(snapshot, target, lambda message, percent: events.put(("progress", message, percent)),
+                         cancellation, **options)
             except ExportCancelled:
                 events.put(("cancelled", "", None))
             except Exception as exc:
@@ -175,14 +197,14 @@ def show_export_dialog(ui, project, project_path, stop_preview, report):
 
         stop_preview()
         running = True
-        for widget in (parent, name, browse_button, cache_button, start_button, close_button):
+        for widget in (parent, name, browse_button, start_button, close_button, *editable_fields,
+                       format_picker, *readonly_fields):
             widget.configure(state="disabled")
-        format_picker.configure(state="disabled")
-        encoder_picker.configure(state="disabled")
-        device.configure(state="disabled")
+        if not dvd:
+            device.configure(state="disabled")
         cancel_button.configure(state="normal")
-        display(tr("BDMV の書き出しを準備中…"), None)
-        Thread(target=localized(run), name="Blu-ray export").start()
+        display(tr("書き出しを準備中…"), None)
+        Thread(target=localized(run), name="Disc export").start()
         bar.after(100, localized(poll))
 
     def close():

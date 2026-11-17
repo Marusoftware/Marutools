@@ -1,8 +1,8 @@
-# Marutools Blu-ray Add-on v0.5
+# Marutools Blu-ray and DVD Add-on v0.5
 
 This checkout already includes the add-on in `addons/bluray/`. To install it in another copy of Marutools, extract the v0.5 ZIP into `addons/`, check that `addons/bluray/__init__.py` is present, and restart Marutools.
 
-- Select the Blu-ray editor in Marutools and create a new `.marubd` project or open an existing one.
+- Select **Blu-ray and DVD** in Marutools and create or open a `.marubd` (Blu-ray) or `.marudvd` (DVD-Video) project.
 - Use **Add Media** to select multiple images, audio files, or videos. You can also drag files from your file manager onto the media list when TkDND is enabled. **Open BDMV** reads the main video segments and chapter marks from the BDMV playlist files (MPLS) and adds them as titles to the current project. The import reads the source files without modifying them.
 - Select media in the left pane to rename or reorder it. Drag the divider between the media list and the preview to adjust their widths. Use the Marutools **Edit** menu to undo or redo changes. The seek bar below the preview follows playback. Move to a position and select **Add Chapter Here**. Use **Chapters** to edit chapter names and times, delete chapters, or seek to them.
 - The **Media** tab contains the media list, video preview, and chapter controls. The **Menu** tab has a canvas for editing the menu background and layout. Displaying background images requires Pillow.
@@ -61,3 +61,15 @@ In the export settings, set **Output format** to **Blu-ray ISO (UDF 2.50)**. Thi
 ### Video encoder
 
 Use **Video encoder** in the export settings to choose among the CPU and hardware H.264 encoders built into FFmpeg. CPU encoding with libx264 is the default when available. Hardware encoding requires a compatible GPU and driver. With VAAPI, specify the device as well. The selected encoder is used for final H.264 encoding of title video, and the cache is kept per encoder. Decoding, some preprocessing, and menu encoding use the CPU.
+
+## DVD-Video export and project conversion
+
+DVD projects use the same media, chapter, and menu editors. Install [vtskit](https://pypi.org/project/vtskit/0.3.1/) 0.3.1 and Pillow in the Python environment Marutools uses. DVD-Video ISO export also requires udfkit 0.2.0. Put `ffmpeg` and `ffprobe` on your PATH. Preparing still images, audio-only titles, or imported BDMV segments uses FFmpeg's libx264 encoder. For a Poetry installation, run the following from the Marutools folder.
+
+```bash
+poetry run python -m pip install 'vtskit==0.3.1' 'udfkit==0.2.0'
+```
+
+From a `.marudvd` project, open **Export** and choose **VIDEO_TS Folder** or **DVD-Video ISO (UDF 1.02)**. The DVD encoder creates 16:9 MPEG-2 video in NTSC or PAL, with AC-3 audio and DVD subpictures for UTF-8 SRT subtitles. Chapter marks are placed on nearby DVD navigation points. Menus support links to pages, titles and chapters, remote navigation, Play All, video backgrounds, and background music. For DVD export, use up to 36 buttons per menu page.
+
+Use **Convert to DVD Project…** in Blu-ray or **Convert to Blu-ray Project…** in DVD to save a separate editable copy in the other format. The copy preserves media references, chapters, layout, navigation, and track selections, and starts with the destination format's output settings. To export a converted DVD project that uses Blu-ray SUP subtitles, replace those tracks with UTF-8 SRT files. Blu-ray playback pop-up menus are omitted from DVD output. Opening an existing `VIDEO_TS` as an editable project is currently unsupported.

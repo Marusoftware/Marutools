@@ -3,7 +3,8 @@ from pathlib import Path
 
 IMAGE_TYPES = (".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff")
 AUDIO_TYPES = (".wav", ".mp3", ".flac", ".aac", ".m4a", ".ogg", ".opus", ".wma", ".aiff")
-VIDEO_TYPES = (".mp4", ".mkv", ".mov", ".m2ts", ".mts", ".ts", ".avi", ".webm", ".mpg", ".mpeg", ".wmv", ".m4v")
+VIDEO_TYPES = (".mp4", ".mkv", ".mov", ".m2ts", ".mts", ".ts", ".avi", ".webm", ".mpg", ".mpeg", ".wmv", ".m4v",
+               ".maruvideo")
 MEDIA_LABELS = {"video": "動画", "audio": "音声", "image": "画像"}
 
 

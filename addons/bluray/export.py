@@ -186,12 +186,23 @@ def encode_title(source, clip, chapters, progress, cancellation, *, encoder="lib
     from bdmvkit.encode import audio_args
     from bdmvkit.formats import AUDIO_PID, PG_PID, PMT_PID, VIDEO_PID
 
-    duration = probe_duration(source)
     fps = (24000, 1001)
-    args = ["-i", source]
-    maps = ["-map", "0:v:0"]
-    inputs = 1
-    audio = [f"0:a:{index}" for index in range(internal_audio)]
+    timeline = isinstance(source, dict)
+    if timeline:
+        from addons.video.render import timeline_inputs
+
+        args, graph, video, sound_label, duration = timeline_inputs(source, (1920, 1080), "24000/1001")
+        maps = ["-map", "[discvideo]"]
+        inputs = sum(option == "-i" for option in args)
+        audio = [f"[{sound_label}]"]
+    else:
+        duration = probe_duration(source)
+        args = ["-i", source]
+        maps = ["-map", "0:v:0"]
+        inputs = 1
+        audio = [f"0:a:{index}" for index in range(internal_audio)]
+    if any(chapter >= duration for chapter in chapters):
+        raise ValueError(tr("チャプターが素材の再生範囲外です。"))
     for track in audio_tracks:
         args += ["-i", track["path"]]
         audio.append(f"{inputs}:a:0")
@@ -210,11 +221,20 @@ def encode_title(source, clip, chapters, progress, cancellation, *, encoder="lib
         maps += ["-map", f"{inputs}:s:0"]
         streams += ["-streamid", f"{1 + len(audio) + index}:{PG_PID + index}"]
         inputs += 1
-    sound = ["-af", "apad"]
+    sound = [] if timeline else ["-af", "apad"]
     for index in range(len(audio)):
         sound += audio_args(k=index)
+        if timeline and index > 0:
+            sound += [f"-filter:a:{index}", "apad"]
     device_args, filters, video_options = title_encoder(encoder, fps, chapters, vaapi_device)
-    run_ffmpeg(*device_args, *args, *maps, "-vf", filters, *video_options, *sound,
+    if timeline:
+        graph.append(f"[{video}]{filters}[discvideo]")
+        graph_path = clip.with_suffix(".filters.txt")
+        graph_path.write_text(";\n".join(graph), encoding="ascii")
+        filtering = ["-filter_complex_threads", "1", "-filter_complex_script", graph_path]
+    else:
+        filtering = ["-vf", filters]
+    run_ffmpeg(*device_args, *args, *maps, *filtering, *video_options, *sound,
                "-c:s", "copy", *streams,
                "-t", f"{duration:.6f}", "-f", "mpegts", "-mpegts_m2ts_mode", 1,
                "-mpegts_pmt_start_pid", PMT_PID, clip, duration=duration, on_progress=progress,
@@ -257,6 +277,10 @@ def import_segments(segments, work, number, progress, cancellation, internal_aud
 
 
 def title_source(title, work, number, progress, cancellation, internal_audio):
+    from .video_project import is_video_project, load_timeline
+
+    if is_video_project(title):
+        return load_timeline(title)
     kind = media_kind(title)
     if title.get("segments"):
         return import_segments(title["segments"], work, number, progress, cancellation, internal_audio)
@@ -491,6 +515,9 @@ def export_disc(project, target, progress, cancellation=None, *, cache_dir=None,
                 encoder="libx264", vaapi_device="/dev/dri/renderD128"):
     cancellation = cancellation or ExportCancellation()
     cancellation.check()
+    from .video_project import prepare_project
+
+    project = prepare_project(project)
     check_tools(iso=iso)
     from bdmvkit import Disc
 

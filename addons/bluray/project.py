@@ -117,6 +117,7 @@ def map_paths(project, convert):
         update(item, "image")
         update(item, "font_file")
     for title in result["titles"]:
+        title.pop("_timeline", None)
         update(title, "media")
         update(title, "playlist")
         for track in title.get("audio_tracks", []) + title.get("subtitle_tracks", []):

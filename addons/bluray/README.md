@@ -16,6 +16,14 @@ This checkout already includes the add-on in `addons/bluray/`. To install it in 
 - **Check** and the export preflight look for broken links, missing files, chapter marks beyond the known duration, and overlapping button areas. Fix errors before exporting. If only warnings remain, you can review them and continue.
 - **Save As** updates references to media, BDMV sources, and menu images relative to the new project location. The editor also opens v0.4 `.marubd` projects.
 
+### Using a Video timeline as a disc title
+
+Save your Video edit as a `.maruvideo` project, then select that file through **Add Media** or drop it on the disc editor's media list. Importing keeps a reference to the timeline. Disc export reads its saved edits, composites the video tracks and mixes the audio directly into the final Blu-ray or DVD title in one FFmpeg encoding step. The Video add-on must be installed alongside this add-on. Save changes in Video before previewing or exporting the disc.
+
+Select the timeline in the media list and choose **Edit in Video** to open its editing tab. If that file is already open, the editor switches to the existing tab. Save in Video and return to the disc tab to refresh the title's duration. The next preview or export uses the saved edits.
+
+The disc title can have its own chapters and menu links. Thumbnail capture uses the composed timeline. Playing a timeline in the disc editor generates a temporary 360p preview on demand. This preview is independent of the final export. Blu-ray's encode cache accounts for the saved timeline and all media used by its clips.
+
 ## Interface language
 
 The add-on follows the Marutools language setting. Reopen the Blu-ray project after changing the language. Japanese and English are included, and English is the fallback for untranslated strings. To add a translation, place a JSON file such as `fr.json` next to `en.json`, using the same format. Preserve placeholders such as `{0}` in the translated strings.

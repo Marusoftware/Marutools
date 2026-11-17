@@ -28,6 +28,10 @@ def audio_languages(path):
 
 
 def source_audio_languages(title):
+    from .video_project import is_video_project
+
+    if is_video_project(title):
+        return ["und"]  # The timeline mixes its unmuted tracks into one stereo stream.
     if media_kind(title) == "image":
         return []
     if title.get("segments"):

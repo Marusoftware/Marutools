@@ -22,6 +22,8 @@ def overlap(first, second):
 
 
 def check_project(project):
+    from .video_project import is_video_project, load_timeline, timeline_duration, timeline_files
+
     errors, warnings = [], []
     menu = project["menu"]
     titles = project["titles"]
@@ -32,6 +34,14 @@ def check_project(project):
     paths = set()
     subtitle_sources = set()
     for title in titles:
+        duration_ms = title.get("duration_ms")
+        if is_video_project(title):
+            try:
+                timeline = load_timeline(title)
+                paths.update(timeline_files(timeline))
+                duration_ms = timeline_duration({**title, "_timeline": timeline})
+            except (OSError, ValueError, TypeError, AttributeError, KeyError) as exc:
+                errors.append(tr("Video プロジェクトを読み込めません。 {0}\n{1}", title["name"], exc))
         targets.add((title["id"], None))
         paths.update(part["media"] for part in title.get("segments", []))
         paths.add(title["media"])
@@ -44,7 +54,7 @@ def check_project(project):
             targets.add((title["id"], chapter["id"]))
             try:
                 stamp = parse_time(chapter["time"])
-                if title.get("duration_ms") is not None and stamp >= title["duration_ms"]:
+                if duration_ms is not None and stamp >= duration_ms:
                     raise ValueError(tr("範囲外"))
             except ValueError:
                 errors.append(tr("チャプター時刻を確認してください。 {0} / {1}", title['name'], chapter['name']))

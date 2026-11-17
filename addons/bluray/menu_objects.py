@@ -77,6 +77,33 @@ def render_object_image(item, size, title_names=None, *, scale=1):
 
 
 def capture_thumbnail(title, milliseconds):
+    from .video_project import is_video_project, load_timeline
+
+    if is_video_project(title):
+        from tempfile import TemporaryDirectory
+        from addons.video.render import timeline_inputs
+
+        inputs, graph, video, audio, duration = timeline_inputs(load_timeline(title), (392, 220))
+        if not 0 <= milliseconds < duration * 1000:
+            raise ValueError(tr("指定時刻にフレームがありません。時刻を少し前にしてください。"))
+        graph.append(f"[{audio}]anullsink")
+        with TemporaryDirectory(prefix="maruvideo-thumbnail-") as directory:
+            script = Path(directory) / "filters.txt"
+            script.write_text(";\n".join(graph), encoding="ascii")
+            try:
+                result = subprocess.run(
+                    ["ffmpeg", "-v", "error", "-nostdin", *map(str, inputs),
+                     "-filter_complex_threads", "1", "-filter_complex_script", str(script),
+                     "-map", f"[{video}]" if video != "0:v" else video,
+                     "-ss", str(milliseconds / 1000), "-frames:v", "1", "-c:v", "png", "-threads:v", "1",
+                     "-f", "image2pipe", "pipe:1"],
+                    capture_output=True, timeout=30, check=True,
+                ).stdout
+            except (OSError, subprocess.SubprocessError) as exc:
+                raise ValueError(tr("動画から画像を取り出せませんでした。FFmpeg と素材を確認してください。")) from exc
+        if not result:
+            raise ValueError(tr("指定時刻にフレームがありません。時刻を少し前にしてください。"))
+        return b64encode(result).decode("ascii")
     path, seconds, segment = playback_source(title, milliseconds)
     if segment:
         import av

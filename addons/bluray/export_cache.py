@@ -19,8 +19,13 @@ def file_stamp(path):
 
 
 def clip_key(title, chapters, encoding="libx264"):
+    from .video_project import is_video_project, load_timeline, timeline_files
+
     segments = title.get("segments")
-    if segments:
+    if is_video_project(title):
+        timeline = load_timeline(title)
+        source = ["maruvideo-1", timeline, [file_stamp(path) for path in timeline_files(timeline)]]
+    elif segments:
         source = [[file_stamp(part["media"]), part["in_tick"], part["out_tick"]] for part in segments]
     else:
         source = file_stamp(title["media"])

@@ -334,5 +334,12 @@
   "変換先に別のファイルを指定してください。": "Choose a separate file for the converted project.",
   "字幕の参照は引き継ぎました。DVD に書き出すには SUP 字幕を SRT に置き換えてください。": "Subtitle references were preserved. Replace SUP subtitles with SRT before exporting to DVD.",
   "書き出しを準備中…": "Preparing export…",
-  "音声・字幕…": "Audio and Subtitles…"
+  "音声・字幕…": "Audio and Subtitles…",
+  "Video プロジェクトのタイムラインにクリップがありません。": "The Video project's timeline contains no clips.",
+  "Video プロジェクトを読み込めません。 {0}\n{1}": "Could not load Video project {0}.\n{1}",
+  "チャプターが素材の再生範囲外です。": "A chapter is outside the source playback range.",
+  "タイムラインのプレビューを準備中…": "Preparing Timeline Preview…",
+  "この素材を使うには Video アドオンもインストールしてください。": "Install the Video add-on to use this media.",
+  "Video で編集": "Edit in Video",
+  "この環境では Video の編集タブを開けません。": "This environment cannot open a Video editing tab."
 }

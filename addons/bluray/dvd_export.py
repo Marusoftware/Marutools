@@ -72,27 +72,45 @@ def dvd_mux_args(standard):
 
 
 def encode_dvd_title(source, output, chapters, audio_count, tracks, standard, cancellation, notify):
-    duration = probe_duration(source)
-    if any(chapter >= duration for chapter in chapters):
-        raise ValueError(tr("DVD のチャプターが素材の再生範囲外です。"))
     height, sar = DVD_STANDARDS[standard]
     display_width = round(height * 16 / 9 / 2) * 2
     filters = (f"scale=trunc(iw*sar/2)*2:ih,setsar=1,"
                f"scale={display_width}:{height}:force_original_aspect_ratio=decrease:force_divisible_by=2,"
                f"pad={display_width}:{height}:(ow-iw)/2:(oh-ih)/2,scale=720:{height},setsar={sar}")
-    inputs = ["-i", source]
-    maps = ["-map", "0:v:0"]
-    for index in range(audio_count):
-        maps.extend(("-map", f"0:a:{index}"))
-    for index, track in enumerate(tracks, 1):
+    timeline = isinstance(source, dict)
+    if timeline:
+        from addons.video.render import timeline_inputs
+
+        fps = "25" if standard == "PAL" else "30000/1001"
+        inputs, graph, video, audio, duration = timeline_inputs(source, (display_width, height), fps)
+        graph.append(f"[{video}]{filters}[dvdvideo]")
+        maps = ["-map", "[dvdvideo]", "-map", f"[{audio}]"]
+        next_input = sum(option == "-i" for option in inputs)
+        graph_path = output.with_suffix(".filters.txt")
+        graph_path.write_text(";\n".join(graph), encoding="ascii")
+        filtering = ["-filter_complex_threads", "1", "-filter_complex_script", graph_path]
+    else:
+        duration = probe_duration(source)
+        inputs = ["-i", source]
+        maps = ["-map", "0:v:0"]
+        for index in range(audio_count):
+            maps.extend(("-map", f"0:a:{index}"))
+        next_input = 1
+        filtering = ["-vf", filters, "-af", "apad"]
+    if any(chapter >= duration for chapter in chapters):
+        raise ValueError(tr("DVD のチャプターが素材の再生範囲外です。"))
+    for index, track in enumerate(tracks, next_input):
         inputs.extend(("-i", track["path"]))
         maps.extend(("-map", f"{index}:a:0"))
-    if not audio_count and not tracks:
+    if timeline:
+        for index in range(1, len(tracks) + 1):
+            filtering.extend((f"-filter:a:{index}", "apad"))
+    if not timeline and not audio_count and not tracks:
         inputs.extend(("-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"))
         maps.extend(("-map", "1:a:0"))
     keys = [f"{time:.6f}" for time in chapters if time]
     key_args = ("-force_key_frames", ",".join(keys)) if keys else ()
-    run_ffmpeg(*inputs, *maps, "-t", f"{duration:.6f}", "-filter_threads", "1", "-vf", filters, "-af", "apad",
+    run_ffmpeg(*inputs, *maps, "-t", f"{duration:.6f}", "-filter_threads", "1", *filtering,
                *dvd_mux_args(standard), *key_args, output, duration=duration,
                on_progress=notify, cancellation=cancellation)
     return duration
@@ -307,6 +325,9 @@ def author_dvd(project, work, folder, standard, progress, cancellation):
 def export_dvd(project, target, progress, cancellation=None, *, iso=False, standard="NTSC"):
     cancellation = cancellation or ExportCancellation()
     cancellation.check()
+    from .video_project import prepare_project
+
+    project = prepare_project(project)
     check_dvd_tools(iso=iso)
     if standard not in DVD_STANDARDS:
         raise ValueError(tr("DVD のテレビ方式を確認してください。"))

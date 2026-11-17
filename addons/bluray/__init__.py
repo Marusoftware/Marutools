@@ -2,6 +2,8 @@
 import copy
 import os
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from threading import Thread
 from uuid import uuid4
 
 from .l10n import editor_language, host_language, localized, tr
@@ -20,6 +22,7 @@ from .project import (PROJECT_EXTENSIONS, History, convert_project, empty_projec
                       make_chapter, make_title, parse_time)
 from .project import save as save_project
 from .ui_support import SeekBar, SelectionList, form_choice, install_history_menu, project_tabs, split_frames
+from .video_project import is_video_project, load_timeline, timeline_duration
 
 __version__ = "0.5"
 
@@ -49,6 +52,9 @@ class Edit:
         self.audio_preferences = None
         self.chapter_id = None
         self.load_error = None
+        self.video_workspace = None
+        self.video_proxies = {}
+        self.host_tab_binding = None
         if api.filepath and os.path.isfile(api.filepath):
             try:
                 self.project = load(api.filepath, self.disc_kind)
@@ -57,6 +63,10 @@ class Edit:
             else:
                 self.saved_project = copy.deepcopy(self.project)
         self.build_ui()
+        notebook = getattr(getattr(getattr(api, "app", None), "ui", None), "notebook", None)
+        if getattr(notebook, "backend", None) == "tkinter":
+            binding = notebook.widget.bind("<<NotebookTabChanged>>", localized(self.return_to_disc), add="+")
+            self.host_tab_binding = (notebook.widget, binding)
         self.refresh()
         if self.load_error:
             self.report(tr("プロジェクトを開けませんでした。 ") + self.load_error)
@@ -119,6 +129,7 @@ class Edit:
         self.titles = SelectionList(left, 3, 245, self.title_selected, on_files=self.add_assets)
         self.buttons(left, (tr("名前変更"), self.rename_title), (tr("削除"), self.delete_title),
                      ("↑", lambda: self.move_title(-1)), ("↓", lambda: self.move_title(1)))
+        self.edit_video_button = self.buttons(left, (tr("Video で編集"), self.edit_video_project))[0]
         track_settings = tr("音声・字幕…") if self.disc_kind == "dvd" else tr("音声・字幕・ポップアップ…")
         self.buttons(left, (track_settings, self.edit_disc_tracks),
                      (tr("再生後の動作…"), self.edit_playback_end))
@@ -248,6 +259,7 @@ class Edit:
     def title_selected(self, chapter_id=None, force=False):
         title = self.title
         title_id = title["id"] if title else None
+        self.edit_video_button.configure(state="normal" if title and is_video_project(title) else "disabled")
         if not force and title_id == self.active_title:
             return
         if title_id != self.active_title:
@@ -255,15 +267,57 @@ class Edit:
             self.duration = None
             self.chapter_id = None
             if title and media_kind(title) != "image":
-                self.duration = title.get("duration_ms")
-                if self.duration is None and os.path.isfile(title["media"]):
-                    self.duration = media_duration(title["media"])
+                if not is_video_project(title):
+                    self.duration = title.get("duration_ms")
+                    if self.duration is None and os.path.isfile(title["media"]):
+                        self.duration = media_duration(title["media"])
+        if title and is_video_project(title):
+            try:
+                self.duration = timeline_duration(title)
+                self.position = min(self.position, max(0, self.duration - 1))
+            except (OSError, ValueError, TypeError, AttributeError, KeyError) as exc:
+                self.duration = None
+                self.report(str(exc))
         self.active_title = title_id
         if chapter_id:
             self.chapter_id = chapter_id
         self.refresh_chapters()
         self.source_label.configure(label=os.path.basename(title["media"]) if title else tr("素材を追加してください"))
         self.update_time()
+
+    def edit_video_project(self):
+        title = self.title
+        if not title or not is_video_project(title):
+            return
+        path = os.path.abspath(title["media"])
+        if not os.path.isfile(path):
+            self.report(tr("素材ファイルが見つかりません。 {0}", path))
+            return
+        host = getattr(self.api, "app", None)
+        notebook = getattr(getattr(host, "ui", None), "notebook", None)
+        if notebook is None or not callable(getattr(host, "open", None)):
+            self.report(tr("この環境では Video の編集タブを開けません。"))
+            return
+        self.stop_preview()
+        for tab in notebook.list_tab():
+            context = getattr(tab, "addon", None)
+            opened_path = getattr(context, "filepath", None)
+            if (opened_path and getattr(context, "ext", "").lower() == "maruvideo"
+                    and os.path.normcase(os.path.realpath(opened_path)) == os.path.normcase(os.path.realpath(path))):
+                notebook.select_tab(tab)
+                return
+        extensions = getattr(getattr(host, "addon", None), "extdict", {})
+        if Path(path).suffix[1:] not in extensions:
+            self.report(tr("この素材を使うには Video アドオンもインストールしてください。"))
+            return
+        host.open(file=path)
+
+    def return_to_disc(self, event=None):
+        notebook = self.api.app.ui.notebook
+        selected = notebook.widget.select()
+        if any(tab.id == selected and getattr(tab, "addon", None) is self.api for tab in notebook.list_tab()):
+            if self.title and is_video_project(self.title):
+                self.title_selected(force=True)
 
     def refresh_chapters(self):
         if self.chapters is None:
@@ -341,6 +395,7 @@ class Edit:
             paths = (paths,)
         titles = []
         skipped = 0
+        failures = []
         for path in paths:
             if not path:
                 continue
@@ -351,9 +406,16 @@ class Edit:
             chapters = [] if kind == "image" else [make_chapter(tr("チャプター 1"), 0)]
             title = make_title(Path(path).stem, os.path.abspath(path), chapters)
             title["kind"] = kind
+            if is_video_project(title):
+                try:
+                    timeline_duration(title)
+                except (OSError, ValueError, TypeError, AttributeError, KeyError) as exc:
+                    failures.append(f"{path}\n{exc}")
+                    continue
             titles.append(title)
         if not titles:
-            self.report(tr("選択した素材が見つかりません。"))
+            self.report(tr("Video プロジェクトを読み込めません。 {0}\n{1}", "", failures[0]) if failures
+                        else tr("選択した素材が見つかりません。"))
             return False
         self.history.record(self.project)
         self.project["titles"].extend(titles)
@@ -361,6 +423,8 @@ class Edit:
         if skipped:
             message += " " + tr("見つからないファイルやフォルダを {0} 件スキップしました。", skipped)
         self.changed(message, title_id=titles[-1]["id"])
+        if failures:
+            self.dialog.warn(title=tr("素材を選択"), message="\n\n".join(failures))
         return True
 
     def import_bdmv(self):
@@ -552,7 +616,8 @@ class Edit:
         menu = self.project["menu"]
         backgrounds, default = self.menu_image_choices(menu["background"], empty=tr("背景なし"))
         videos = {tr("動画 {0}. {1}", index, title["name"]): title["media"]
-                  for index, title in enumerate(self.project["titles"], 1) if media_kind(title) == "video"}
+                  for index, title in enumerate(self.project["titles"], 1)
+                  if media_kind(title) == "video" and not is_video_project(title)}
         motion = menu.get("motion", "")
         music = menu.get("music", "")
         if motion:
@@ -1035,7 +1100,31 @@ class Edit:
         if not self.title:
             return self.report(tr("素材を選択してください。"))
         try:
-            self.preview.play(self.title, milliseconds, self.audio_settings()["audio_output"], seek=seek)
+            title = self.title
+            if is_video_project(title):
+                from addons.video.jobs import render_with_progress
+                from .export_cache import clip_key
+                from uuid import uuid4
+
+                timeline = load_timeline(title)
+                self.duration = timeline_duration({**title, "_timeline": timeline})
+                key = clip_key({**title, "_timeline": timeline}, [], "preview-360")
+                proxy = self.video_proxies.get(title["id"])
+                if proxy is None or proxy[0] != key:
+                    if self.video_workspace is None:
+                        self.video_workspace = TemporaryDirectory(prefix="marubd-video-preview-", ignore_cleanup_errors=True)
+                    self.stop_preview()
+                    path = Path(self.video_workspace.name) / (uuid4().hex + ".mp4")
+                    host = getattr(getattr(self.api, "app", None), "ui", None) or self.api.ui
+                    captions = {"Preparing Timeline Preview…": tr("タイムラインのプレビューを準備中…"),
+                                "Cancel": tr("中止"), "Cancelling…": tr("中止処理中…")}
+                    translate = lambda message: captions.get(message, message)
+                    if not render_with_progress(host, translate, timeline, path, size=(640, 360), proxy=True):
+                        return
+                    self.video_proxies[title["id"]] = (key, path)
+                    seek = False
+                title = {**title, "media": str(self.video_proxies[title["id"]][1])}
+            self.preview.play(title, milliseconds, self.audio_settings()["audio_output"], seek=seek)
         except Exception as exc:
             self.report(tr("プレビュー: {0}", exc))
             return
@@ -1146,6 +1235,18 @@ class Edit:
         self.changed(tr("新しいプロジェクトを作成しました。"))
 
     def close(self):
+        if self.host_tab_binding is not None:
+            widget, binding = self.host_tab_binding
+            widget.unbind("<<NotebookTabChanged>>", binding)
+            self.host_tab_binding = None
         if self.history_menu is not None:
             self.history_menu.refresh()
         self.preview.dispose()
+        if self.video_workspace is not None:
+            workspace, self.video_workspace = self.video_workspace, None
+            worker = self.preview.worker
+            def cleanup():
+                if worker is not None:
+                    worker.join()
+                workspace.cleanup()
+            Thread(target=cleanup, daemon=True, name="Disc timeline preview cleanup").start()
